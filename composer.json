@@ -7,5 +7,8 @@
             "email": "jan.vesely@databreakers.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "nette/tester": "~1.6"
+    }
 }

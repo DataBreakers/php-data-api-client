@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # current dir
+$DIR/../vendor/bin/tester -s --colors 1 $DIR
+exit 0
