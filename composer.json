@@ -10,5 +10,10 @@
     "require": {},
     "require-dev": {
         "nette/tester": "~1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "DataBreakers\\": "src/"
+        }
     }
 }
