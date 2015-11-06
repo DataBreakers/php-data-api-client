@@ -1,0 +1,11 @@
+{
+    "name": "databreakers/php-data-api-client",
+    "description": "PHP client for DataBreakers data API.",
+    "authors": [
+        {
+            "name": "Jan Veselý",
+            "email": "jan.vesely@databreakers.com"
+        }
+    ],
+    "require": {}
+}
