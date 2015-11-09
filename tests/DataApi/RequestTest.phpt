@@ -4,10 +4,8 @@ namespace DataBreakers\DataApi;
 
 use DataBreakers\TestCase;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use Mockery\MockInterface;
 use Psr\Http\Message\ResponseInterface;
-use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
 
@@ -88,9 +86,9 @@ class RequestTest extends TestCase
 	{
 		$options = $content !== [] ? ['json' => $content] : [];
 		$this->client->shouldReceive('request')
-				->once()
-				->with($method, $path, $options)
-				->andReturn($this->createMockResponse($this->responseBody));
+			->once()
+			->with($method, $path, $options)
+			->andReturn($this->createMockResponse($this->responseBody));
 	}
 
 	/**
@@ -104,9 +102,9 @@ class RequestTest extends TestCase
 		$requestException = \Mockery::mock('GuzzleHttp\Exception\RequestException');
 		$requestException->shouldReceive('getResponse')->andReturn($response);
 		$this->client->shouldReceive('request')
-				->once()
-				->with($method, $path, [])
-				->andThrow($requestException);
+			->once()
+			->with($method, $path, [])
+			->andThrow($requestException);
 	}
 
 	/**
