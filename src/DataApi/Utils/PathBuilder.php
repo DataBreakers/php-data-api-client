@@ -14,7 +14,7 @@ class PathBuilder
 	 * @param string $pathTemplate
 	 * @param Restriction $restriction
 	 * @returns string
-	 * @throws InvalidArgumentException when some mandatory parameter is missing
+	 * @throws InvalidArgumentException when some mandatory parameter is missing in restriction
 	 */
 	public function build($pathTemplate, Restriction $restriction)
 	{
