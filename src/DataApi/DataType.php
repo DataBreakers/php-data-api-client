@@ -6,11 +6,11 @@ namespace DataBreakers\DataApi;
 abstract class DataType
 {
 
-	const TEXT = 'text';
-	const INTEGER = 'integer';
-	const FLOAT = 'float';
-	const BOOLEAN = 'boolean';
-	const JSON = 'json';
+	const TEXT = 'TEXT';
+	const INTEGER = 'INTEGER';
+	const FLOAT = 'FLOAT';
+	const BOOLEAN = 'BOOLEAN';
+	const JSON = 'JSON';
 
 
 	/**
