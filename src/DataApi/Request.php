@@ -3,7 +3,7 @@
 namespace DataBreakers\DataApi;
 
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
 
@@ -17,14 +17,14 @@ class Request
 
 	const ERROR_MESSAGE_KEY = 'message';
 
-	/** @var Client */
+	/** @var GuzzleClient */
 	private $client;
 
 
 	/**
-	 * @param Client $client
+	 * @param GuzzleClient $client
 	 */
-	public function __construct(Client $client)
+	public function __construct(GuzzleClient $client)
 	{
 		$this->client = $client;
 	}

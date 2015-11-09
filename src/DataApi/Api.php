@@ -7,7 +7,7 @@ use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\Utils\HmacSignature;
 use DataBreakers\DataApi\Utils\PathBuilder;
 use DataBreakers\DataApi\Utils\Restriction;
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
 
 
 class Api
@@ -16,7 +16,7 @@ class Api
 	/** @var Configuration */
 	private $configuration;
 
-	/** @var Client */
+	/** @var GuzzleClient */
 	private $client;
 
 	/** @var PathBuilder */
@@ -103,8 +103,9 @@ class Api
 	 */
 	private function createClient()
 	{
-		$this->client = new Client([
-			'base_uri' => $this->configuration->getHost() . $this->configuration->getSlug()
+		$this->client = new GuzzleClient([
+			'base_uri' => $this->configuration->getHost() . $this->configuration->getSlug(),
+			'verify' => false
 		]);
 	}
 
