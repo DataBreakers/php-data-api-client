@@ -34,7 +34,7 @@ class Api
 		$this->configuration = $configuration;
 		$this->pathBuilder = new PathBuilder();
 		$this->hmacSignature = new HmacSignature($this->configuration->getSecretKey());
-		$this->createClient();
+		$this->client = new GuzzleClient(['verify' => false]);
 	}
 
 	/**
@@ -46,8 +46,8 @@ class Api
 	 */
 	public function performGet($pathTemplate, Restriction $restriction = NULL)
 	{
-		$path = $this->constructPath($pathTemplate, $restriction);
-		return $this->createRequest()->performGet($path);
+		$url = $this->constructUrl($pathTemplate, $restriction);
+		return $this->createRequest()->performGet($url);
 	}
 
 	/**
@@ -59,8 +59,8 @@ class Api
 	 */
 	public function performPost($pathTemplate, Restriction $restriction = NULL)
 	{
-		$path = $this->constructPath($pathTemplate, $restriction);
-		return $this->createRequest()->performPost($path);
+		$url = $this->constructUrl($pathTemplate, $restriction);
+		return $this->createRequest()->performPost($url);
 	}
 
 	/**
@@ -72,8 +72,8 @@ class Api
 	 */
 	public function performDelete($pathTemplate, Restriction $restriction = NULL)
 	{
-		$path = $this->constructPath($pathTemplate, $restriction);
-		return $this->createRequest()->performDelete($path);
+		$url = $this->constructUrl($pathTemplate, $restriction);
+		return $this->createRequest()->performDelete($url);
 	}
 
 	/**
@@ -83,7 +83,6 @@ class Api
 	public function changeHost($host)
 	{
 		$this->configuration->setHost($host);
-		$this->createClient();
 		return $this;
 	}
 
@@ -94,19 +93,7 @@ class Api
 	public function changeSlug($slug)
 	{
 		$this->configuration->setSlug($slug);
-		$this->createClient();
 		return $this;
-	}
-
-	/**
-	 * @return void
-	 */
-	private function createClient()
-	{
-		$this->client = new GuzzleClient([
-			'base_uri' => $this->configuration->getHost() . $this->configuration->getSlug(),
-			'verify' => false
-		]);
 	}
 
 	/**
@@ -122,12 +109,12 @@ class Api
 	 * @param Restriction|NULL $restriction
 	 * @return string
 	 */
-	private function constructPath($pathTemplate, Restriction $restriction = NULL)
+	private function constructUrl($pathTemplate, Restriction $restriction = NULL)
 	{
 		$restriction = $restriction ?: new Restriction();
 		$restriction->addParameter('accountId', $this->configuration->getAccountId());
-		$path = $this->pathBuilder->build($pathTemplate, $restriction);
-		return $this->hmacSignature->sign($path);
+		$path = $this->configuration->getSlug() . $this->pathBuilder->build($pathTemplate, $restriction);
+		return $this->configuration->getHost() . $this->hmacSignature->sign($path);
 	}
 
 }

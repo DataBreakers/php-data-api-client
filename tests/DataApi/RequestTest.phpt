@@ -13,7 +13,7 @@ require_once __DIR__ . '/../bootstrap.php';
 class RequestTest extends TestCase
 {
 
-	const PATH = '/foo/bar';
+	const URL = 'https://api.databreakers.com/v1/foo/bar';
 	const ERROR_MESSAGE = 'Foo bar baz error';
 
 	/** @var Request */
@@ -34,27 +34,27 @@ class RequestTest extends TestCase
 
 	public function testGetRequest()
 	{
-		$this->mockClientRequest(Request::METHOD_GET, self::PATH);
-		$this->request->performGet(self::PATH);
+		$this->mockClientRequest(Request::METHOD_GET, self::URL);
+		$this->request->performGet(self::URL);
 	}
 
 	public function testPostRequestWithoutContent()
 	{
-		$this->mockClientRequest(Request::METHOD_POST, self::PATH);
-		$this->request->performPost(self::PATH);
+		$this->mockClientRequest(Request::METHOD_POST, self::URL);
+		$this->request->performPost(self::URL);
 	}
 
 	public function testPostRequestWithContent()
 	{
 		$content = ['bar' => 152, 'baz' => 'foo'];
-		$this->mockClientRequest(Request::METHOD_POST, self::PATH, $content);
-		$this->request->performPost(self::PATH, $content);
+		$this->mockClientRequest(Request::METHOD_POST, self::URL, $content);
+		$this->request->performPost(self::URL, $content);
 	}
 
 	public function testDeleteRequest()
 	{
-		$this->mockClientRequest(Request::METHOD_DELETE, self::PATH);
-		$this->request->performDelete(self::PATH);
+		$this->mockClientRequest(Request::METHOD_DELETE, self::URL);
+		$this->request->performDelete(self::URL);
 	}
 
 	/**
@@ -63,8 +63,8 @@ class RequestTest extends TestCase
 	public function testThrowingRequestFailedException()
 	{
 		$response = $this->createMockResponse([Request::ERROR_MESSAGE_KEY => self::ERROR_MESSAGE]);
-		$this->mockFailedClientRequest(Request::METHOD_GET, self::PATH, $response);
-		$this->request->performGet(self::PATH);
+		$this->mockFailedClientRequest(Request::METHOD_GET, self::URL, $response);
+		$this->request->performGet(self::URL);
 	}
 
 	/**
@@ -72,38 +72,38 @@ class RequestTest extends TestCase
 	 */
 	public function testThrowingRequestFailedExceptionWhenResponseIsNull()
 	{
-		$this->mockFailedClientRequest(Request::METHOD_GET, self::PATH);
-		$this->request->performGet(self::PATH);
+		$this->mockFailedClientRequest(Request::METHOD_GET, self::URL);
+		$this->request->performGet(self::URL);
 	}
 
 	/**
 	 * @param string $method
-	 * @param string $path
+	 * @param string $url
 	 * @param array $content
 	 * @return void
 	 */
-	private function mockClientRequest($method, $path, array $content = [])
+	private function mockClientRequest($method, $url, array $content = [])
 	{
 		$options = $content !== [] ? ['json' => $content] : [];
 		$this->client->shouldReceive('request')
 			->once()
-			->with($method, $path, $options)
+			->with($method, $url, $options)
 			->andReturn($this->createMockResponse($this->responseBody));
 	}
 
 	/**
 	 * @param string $method
-	 * @param string $path
+	 * @param string $url
 	 * @param ResponseInterface|NULL $response
 	 * @return void
 	 */
-	private function mockFailedClientRequest($method, $path, ResponseInterface $response = NULL)
+	private function mockFailedClientRequest($method, $url, ResponseInterface $response = NULL)
 	{
 		$requestException = \Mockery::mock('GuzzleHttp\Exception\RequestException');
 		$requestException->shouldReceive('getResponse')->andReturn($response);
 		$this->client->shouldReceive('request')
 			->once()
-			->with($method, $path, [])
+			->with($method, $url, [])
 			->andThrow($requestException);
 	}
 

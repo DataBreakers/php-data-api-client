@@ -30,48 +30,48 @@ class Request
 	}
 
 	/**
-	 * @param string $path
+	 * @param string $url
 	 * @return array|NULL response parsed into associative array or NULL if response is empty
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function performGet($path)
+	public function performGet($url)
 	{
-		return $this->parseJson($this->sendRequest(self::METHOD_GET, $path));
+		return $this->parseJson($this->sendRequest(self::METHOD_GET, $url));
 	}
 
 	/**
-	 * @param string $path
+	 * @param string $url
 	 * @param array $content body of POST request
 	 * @return array|NULL response parsed into associative array or NULL if response is empty
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function performPost($path, array $content = [])
+	public function performPost($url, array $content = [])
 	{
-		return $this->parseJson($this->sendRequest(self::METHOD_POST, $path, $content));
+		return $this->parseJson($this->sendRequest(self::METHOD_POST, $url, $content));
 	}
 
 	/**
-	 * @param string $path
+	 * @param string $url
 	 * @return array|NULL response parsed into associative array or NULL if response is empty
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function performDelete($path)
+	public function performDelete($url)
 	{
-		return $this->parseJson($this->sendRequest(self::METHOD_DELETE, $path));
+		return $this->parseJson($this->sendRequest(self::METHOD_DELETE, $url));
 	}
 
 	/**
 	 * @param string $method
-	 * @param string $path
+	 * @param string $url
 	 * @param array $content
 	 * @return ResponseInterface
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	private function sendRequest($method, $path, array $content = [])
+	private function sendRequest($method, $url, array $content = [])
 	{
 		try {
 			$options = $content !== [] ? ['json' => $content] : [];
-			return $this->client->request($method, $path, $options);
+			return $this->client->request($method, $url, $options);
 		}
 		catch (RequestException $ex) {
 			$message = $this->getErrorMessage($ex->getResponse());
