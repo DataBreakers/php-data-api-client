@@ -60,7 +60,7 @@ class Api
 	public function performPost($pathTemplate, Restriction $restriction = NULL)
 	{
 		$url = $this->constructUrl($pathTemplate, $restriction);
-		return $this->createRequest()->performPost($url);
+		return $this->createRequest()->performPost($url, $restriction->getContents());
 	}
 
 	/**
