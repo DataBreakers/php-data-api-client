@@ -1,7 +1,7 @@
 <?php
 
-$loader = require_once __DIR__ . '/../vendor/autoload.php';
-$loader->add('DataBreakers', './');
+$loader = include __DIR__ . '/../vendor/autoload.php';
+$loader->addPsr4('DataBreakers\\', __DIR__);
 
 // Configure environment
 Tester\Environment::setup();

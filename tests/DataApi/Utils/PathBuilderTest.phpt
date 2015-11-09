@@ -2,8 +2,8 @@
 
 namespace DataBreakers\DataApi\Utils;
 
+use DataBreakers\TestCase;
 use Tester\Assert;
-use Tester\TestCase;
 
 require_once __DIR__ . '/../../bootstrap.php';
 

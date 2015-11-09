@@ -7,9 +7,12 @@
             "email": "jan.vesely@databreakers.com"
         }
     ],
-    "require": {},
+    "require": {
+        "guzzlehttp/guzzle": "~6.1.0"
+    },
     "require-dev": {
-        "nette/tester": "~1.6"
+        "nette/tester": "~1.6",
+        "mockery/mockery": "~0.9.4"
     },
     "autoload": {
         "psr-4": {
