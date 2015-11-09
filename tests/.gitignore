@@ -1,2 +1,4 @@
 *.actual
 *.expected
+credentials.php
+test.php
