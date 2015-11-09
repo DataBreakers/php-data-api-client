@@ -7,7 +7,7 @@ class Configuration
 {
 
 	/**
-	 * Beggining part of API url
+	 * Beginning part of API url
 	 * @var string
 	 */
 	private $host;
