@@ -27,7 +27,6 @@ class EntitySection extends Section
 	const SEARCH_QUERY_PARAMETER = 'searchQuery';
 	const SEARCH_ATTRIBUTES_PARAMETER = 'searchAttributes';
 	const ENTITIES_PARAMETER = 'entities';
-	const DISABLE_CHECKS_PARAMETER = 'disableChecks';
 	const ID_PARAMETER = 'id';
 
 	/** @var  */
@@ -64,10 +63,7 @@ class EntitySection extends Section
 	 */
 	public function insertOrUpdateEntities(EntitiesBatch $entities)
 	{
-		$restriction = new Restriction([], [
-				self::ENTITIES_PARAMETER => $entities->getEntities(),
-				self::DISABLE_CHECKS_PARAMETER => false
-		]);
+		$restriction = new Restriction([], [self::ENTITIES_PARAMETER => $entities->getEntities()]);
 		return $this->performPost($this->strategy->getInsertOrUpdateEntityUrl(), $restriction);
 	}
 

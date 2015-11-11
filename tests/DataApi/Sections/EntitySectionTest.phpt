@@ -45,8 +45,7 @@ class EntitySectionTest extends SectionTest
 					EntitySection::ID_PARAMETER => self::ID1,
 					EntitySection::ATTRIBUTES_PARAMETER => $attributes
 				]
-			],
-			EntitySection::DISABLE_CHECKS_PARAMETER => false
+			]
 		];
 		$this->mockPerformPost(ItemsSectionStrategy::INSERT_OR_UPDATE_ITEM_URL, [], $content);
 		$this->entitySection->insertOrUpdateEntity(self::ID1, $attributes);
@@ -72,19 +71,7 @@ class EntitySectionTest extends SectionTest
 		$batch = (new EntitiesBatch())
 			->addEntity(self::ID1, $attributes1)
 			->addEntity(self::ID2, $attributes2);
-		$content = [
-				EntitySection::ENTITIES_PARAMETER => [
-					[
-						EntitySection::ID_PARAMETER => self::ID1,
-						EntitySection::ATTRIBUTES_PARAMETER => $attributes1
-					],
-					[
-						EntitySection::ID_PARAMETER => self::ID2,
-						EntitySection::ATTRIBUTES_PARAMETER => $attributes2
-					]
-				],
-				EntitySection::DISABLE_CHECKS_PARAMETER => false
-		];
+		$content = [EntitySection::ENTITIES_PARAMETER => $batch->getEntities()];
 		$this->mockPerformPost(ItemsSectionStrategy::INSERT_OR_UPDATE_ITEM_URL, [], $content);
 		$this->entitySection->insertOrUpdateEntities($batch);
 	}
