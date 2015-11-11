@@ -17,6 +17,10 @@ define('ITEM_ID_1', 'item1');
 define('ITEM_ID_2', 'item2');
 define('ITEM_ID_3', 'item3');
 
+define('USER_ID_1', 'user1');
+define('USER_ID_2', 'user2');
+define('USER_ID_3', 'user3');
+
 
 function testAttribute(array $attribute)
 {
@@ -125,6 +129,46 @@ function addAndTestItems(Client $client)
 	}
 }
 
+function addAndTestUsers(Client $client)
+{
+	$attributes1 = [NAME_ATTRIBUTE => 'Foo'];
+	$attributes2 = [NAME_ATTRIBUTE => 'Bar', AGE_ATTRIBUTE => 25];
+	$attributes3 = [];
+
+	$client->insertOrUpdateUser(USER_ID_1, $attributes1);
+	$users = $client->getUsers(100, 0, [NAME_ATTRIBUTE, AGE_ATTRIBUTE]);
+	testEntitiesCount($users, 1, 1);
+	testEntity($users['entities'][0], USER_ID_1, $attributes1);
+
+	$batch = (new EntitiesBatch())
+			->addEntity(USER_ID_2, $attributes2)
+			->addEntity(USER_ID_3, $attributes3);
+	$client->insertOrUpdateUsers($batch);
+	$users = $client->getUsers(2, 0, [NAME_ATTRIBUTE, AGE_ATTRIBUTE], NULL, Order::DESC);
+	testEntitiesCount($users, 2, 3);
+	testEntity($users['entities'][0], USER_ID_3, $attributes3);
+	testEntity($users['entities'][1], USER_ID_2, $attributes2);
+
+	$users = $client->getUsers(100, 0, [NAME_ATTRIBUTE, AGE_ATTRIBUTE], NULL, NULL, $attributes1['name'], [NAME_ATTRIBUTE]);
+	testEntitiesCount($users, 1, 1);
+	testEntity($users['entities'][0], USER_ID_1, $attributes1);
+
+	$user = $client->getUser(USER_ID_2, true);
+	testEntity($user, USER_ID_2, $attributes2);
+	Assert::same(0, count($user['entityInteractions']));
+
+	$users = $client->getSelectedUsers([USER_ID_1, USER_ID_3]);
+	testEntitiesCount($users, 2, 3);
+	foreach ($users['entities'] as $user) {
+		if ($user['id'] === USER_ID_1) {
+			testEntity($user, USER_ID_1, $attributes1);
+		}
+		if ($user['id'] === USER_ID_3) {
+			testEntity($user, USER_ID_3, $attributes3);
+		}
+	}
+}
+
 function clearItems(Client $client)
 {
 	$client->deleteItem(ITEM_ID_2);
@@ -141,6 +185,22 @@ function clearItems(Client $client)
 	testEntitiesCount($items, 0, 0);
 }
 
+function clearUsers(Client $client)
+{
+	$client->deleteUser(USER_ID_2);
+	$users = $client->getSelectedUsers([USER_ID_2]);
+	testEntitiesCount($users, 1, 3);
+	Assert::true($users['entities'][0]['deleted']);
+
+	$client->deleteUser(USER_ID_2, true);
+	$users = $client->getUsers();
+	testEntitiesCount($users, 2, 2);
+
+	$client->deleteUsers();
+	$users = $client->getUsers();
+	testEntitiesCount($users, 0, 0);
+}
+
 
 require_once __DIR__ . '/bootstrap.php';
 
@@ -153,9 +213,11 @@ addAndTestItemsAttributes($client);
 
 // Add entities
 addAndTestItems($client);
+addAndTestUsers($client);
 
 // Clear entities
 clearItems($client);
+clearUsers($client);
 
 // Clear attributes
 clearUsersAttributes($client);
