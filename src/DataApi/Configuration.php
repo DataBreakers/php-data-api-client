@@ -6,6 +6,9 @@ namespace DataBreakers\DataApi;
 class Configuration
 {
 
+	const DEFAULT_HOST = 'https://api.databreakers.com';
+	const DEFAULT_SLUG = '/v1';
+
 	/**
 	 * Beginning part of API url
 	 * @var string

@@ -14,9 +14,6 @@ use DataBreakers\DataApi\Sections\UsersSectionStrategy;
 class Client
 {
 
-	const DEFAULT_HOST = 'https://api.databreakers.com';
-	const DEFAULT_SLUG = '/v1';
-
 	/** @var Api */
 	private $api;
 
@@ -36,7 +33,7 @@ class Client
 	 */
 	public function __construct($accountId, $secretKey)
 	{
-		$configuration = new Configuration(self::DEFAULT_HOST, self::DEFAULT_SLUG, $accountId, $secretKey);
+		$configuration = new Configuration(Configuration::DEFAULT_HOST, Configuration::DEFAULT_SLUG, $accountId, $secretKey);
 		$this->api = new Api($configuration);
 		$this->attributesSection = new AttributesSection($this->api);
 		$this->itemsSection = new EntitySection($this->api, new ItemsSectionStrategy());
