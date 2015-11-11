@@ -59,4 +59,17 @@ abstract class Section
 		return $this->api->performDelete($pathTemplate, $restriction);
 	}
 
+	/**
+	 * @param Restriction $restriction
+	 * @param string $name
+	 * @param mixed|NULL $value
+	 * @return void
+	 */
+	protected function addParameterIfNotNull(Restriction $restriction, $name, $value)
+	{
+		if ($value !== NULL) {
+			$restriction->addParameter($name, $value);
+		}
+	}
+
 }

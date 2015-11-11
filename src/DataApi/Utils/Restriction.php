@@ -25,12 +25,12 @@ class Restriction
 
 	/**
 	 * @param string $name
-	 * @param string $value
+	 * @param mixed $value
 	 * @return $this
 	 */
 	public function addParameter($name, $value)
 	{
-		$this->parameters[$name] = (string) $value;
+		$this->parameters[$name] = $this->convertValueToString($value);
 		return $this;
 	}
 
@@ -50,7 +50,9 @@ class Restriction
 	 */
 	public function getParameter($name)
 	{
-		return isset($this->parameters[$name]) ? (string) $this->parameters[$name] : NULL;
+		return isset($this->parameters[$name])
+			? $this->convertValueToString($this->parameters[$name])
+			: NULL;
 	}
 
 	/**
@@ -88,6 +90,18 @@ class Restriction
 	public function getContents()
 	{
 		return $this->contents;
+	}
+
+	/**
+	 * @param mixed $value
+	 * @return string
+	 */
+	private function convertValueToString($value)
+	{
+		if (is_bool($value)) {
+			return $value ? 'true' : 'false';
+		}
+		return (string) $value;
 	}
 
 }

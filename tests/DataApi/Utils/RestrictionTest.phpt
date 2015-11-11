@@ -53,6 +53,14 @@ class RestrictionTest extends TestCase
 		Assert::same($contents, $this->restriction->getContents());
 	}
 
+	public function testAddingBooleanParameter()
+	{
+		$this->restriction->addParameter('bool1', true);
+		$this->restriction->addParameter('bool2', false);
+		Assert::same('true', $this->restriction->getParameter('bool1'));
+		Assert::same('false', $this->restriction->getParameter('bool2'));
+	}
+
 }
 
 (new RestrictionTest())->run();
