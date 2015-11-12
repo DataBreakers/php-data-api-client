@@ -55,10 +55,9 @@ class RecommendationSection extends Section
 			throw new InvalidArgumentException("Count must be integer value bigger than 0.");
 		}
 		$parameters = [self::MODEL_ID_PARAMETER => self::DEFAULT_MODEL_ID];
-		$content = [
-			self::COUNT_PARAMETER => $count,
-			self::TEMPLATE_PARAMETER => $this->getTemplateConfiguration($templateId, $configuration)
-		];
+		$content = [self::COUNT_PARAMETER => $count];
+		$template = $this->getTemplateConfiguration($templateId, $configuration);
+		$content = $this->setContentIfNotNull($content, self::TEMPLATE_PARAMETER, $template);
 		$content = $this->setContentIfNotNull($content, self::USER_ID_PARAMETER, $userId);
 		$content = $this->setContentIfNotNull($content, self::ITEM_ID_PARAMETER, $itemId);
 		$restriction = new Restriction($parameters, $content);
@@ -105,7 +104,7 @@ class RecommendationSection extends Section
 	private function getTemplateConfiguration($templateId, RecommendationTemplateConfiguration $configuration = NULL)
 	{
 		if ($templateId === NULL && $configuration === NULL) {
-			return [];
+			return NULL;
 		}
 		if ($configuration === NULL) {
 			return [self::TEMPLATE_ID_PARAMETER => $templateId];
