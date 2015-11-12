@@ -1,1 +1,78 @@
-PHP client for DataBreakers data API.
+# PHP client for DataBreakers DataAPI
+
+This library provides implementation of client for DataBreakers DataAPI.
+
+
+## Requirements
+
+Library requires PHP version 5.4 or higher and [Guzzle](http://guzzlephp.org).
+
+
+## Installation
+
+The best way to install it is using the [Composer](http://getcomposer.org/):
+
+```sh
+$ composer require databreakers/php-data-api-client
+```
+
+
+## Quickstart
+
+```php
+use DataBreakers\DataApi;
+
+// Create a new instance of Client and provide your credentials
+$client = new DataApi\Client('yourAccountId', 'yourSecretKey');
+
+// Define items attributes
+$client->addItemsAttribute('title', DataApi\DataType::TEXT, 'en', DataApi\MetaType::TITLE);
+$client->addItemsAttribute('color', DataApi\DataType::TEXT, 'en');
+$client->addItemsAttribute('weight', DataApi\DataType::INTEGER);
+
+// Add some items (if you are adding multiple items it's much faster to use batches)
+$itemsBatch = (new DataApi\Batch\EntitiesBatch())
+	->addEntity('fridge', [
+		'title' => 'Fridge',
+		'color' => 'white',
+		'weight' => 55
+	])
+	->addEntity('car', [
+		'title' => 'Car',
+		'color' => 'blue',
+		'weight' => 1547
+	]);
+$client->insertOrUpdateItems($itemsBatch);
+
+// Define users attributes
+$client->addUsersAttribute('name', DataApi\DataType::TEXT, 'en', DataApi\MetaType::TITLE);
+$client->addUsersAttribute('age', DataApi\DataType::INTEGER);
+
+// Add some users
+$usersBatch = (new DataApi\Batch\EntitiesBatch())
+	->addEntity('john', [
+		'name' => 'John Smith',
+		'age' => 35
+	])
+	->addEntity('sophia', [
+		'name' => 'Sophia White',
+		'age' => 27
+	]);
+$client->insertOrUpdateUsers($usersBatch);
+
+// Provide us interactions between users and items
+$interactionsBatch = (new DataApi\Batch\InteractionsBatch())
+	->addInteraction('john', 'car', 'Like')
+	->addInteraction('john', 'car', 'Purchase')
+	->addInteraction('john', 'fridge', 'Dislike')
+	->addInteraction('sophia', 'car', 'Detail view')
+	->addInteraction('sophia', 'fridge', 'Purchase');
+
+// And finally obtain ten recommendations for Sophia and car item!
+$recommendations = $client->getRecommendations('sophia', 'car', 10);
+```
+
+
+-----
+
+[DataBreakers.com](https://databreakers.com) – we are your data sense
