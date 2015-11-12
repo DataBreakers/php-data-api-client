@@ -53,7 +53,7 @@ class Client
 		$configuration = new Configuration(Configuration::DEFAULT_HOST, Configuration::DEFAULT_SLUG, $accountId, $secretKey);
 		$pathBuilder = new PathBuilder();
 		$hmacSignature = new HmacSignature($configuration->getSecretKey());
-		$requestFactory = new RequestFactory(new GuzzleClient(['verify' => false]));
+		$requestFactory = new RequestFactory(new GuzzleClient());
 		$this->api = new Api($configuration, $pathBuilder, $hmacSignature, $requestFactory);
 
 		$this->attributesSection = new AttributesSection($this->api);
