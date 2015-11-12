@@ -14,7 +14,7 @@ class TemplatesSection extends Section
 	const INSERT_OR_UPDATE_TEMPLATE_URL = '/{accountId}/template';
 	const GET_TEMPLATES_URL = '/{accountId}/templates';
 	const GET_TEMPLATE_URL = '/{accountId}/templates/{templateId}';
-	const DELETE_TEMPLATE_URL = '/{accountId}/template/{templateId}';
+	const DELETE_TEMPLATE_URL = '/{accountId}/templates/{templateId}';
 
 	const TEMPLATE_ID_PARAMETER = 'templateId';
 	const FILTER_PARAMETER = 'filter';
