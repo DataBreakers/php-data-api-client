@@ -34,11 +34,11 @@ class TemplateConfiguration
 	 */
 	public function __construct($filter = NULL, $booster = NULL, $userWeight = NULL, $itemWeight = NULL, $diversity = NULL)
 	{
-		$this->filter = $filter;
-		$this->booster = $booster;
-		$this->userWeight = $userWeight;
-		$this->itemWeight = $itemWeight;
-		$this->diversity = $diversity;
+		$this->setFilter($filter);
+		$this->setBooster($booster);
+		$this->setUserWeight($userWeight);
+		$this->setItemWeight($itemWeight);
+		$this->setDiversity($diversity);
 	}
 
 	/**
@@ -92,7 +92,7 @@ class TemplateConfiguration
 	 */
 	public function setUserWeight($userWeight)
 	{
-		if ($userWeight !== NULL && !is_float($userWeight)) {
+		if ($userWeight !== NULL && !is_numeric($userWeight)) {
 			throw new InvalidArgumentException("User weight must be float value.");
 		}
 		$this->userWeight = $userWeight;
@@ -114,7 +114,7 @@ class TemplateConfiguration
 	 */
 	public function setItemWeight($itemWeight)
 	{
-		if ($itemWeight !== NULL && !is_float($itemWeight)) {
+		if ($itemWeight !== NULL && !is_numeric($itemWeight)) {
 			throw new InvalidArgumentException("Item weight must be float value.");
 		}
 		$this->itemWeight = $itemWeight;
@@ -137,7 +137,7 @@ class TemplateConfiguration
 	 */
 	public function setDiversity($diversity)
 	{
-		if ($diversity !== NULL && !is_float($diversity)) {
+		if ($diversity !== NULL && !is_numeric($diversity)) {
 			throw new InvalidArgumentException("Diversity must be float value.");
 		}
 		if ($diversity < 0) {
