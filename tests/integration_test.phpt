@@ -22,9 +22,13 @@ define('USER_ID_1', 'user1');
 define('USER_ID_2', 'user2');
 define('USER_ID_3', 'user3');
 
+define('NUMBER_OF_INTERACTION_DEFINITIONS', 6);
 define('INTERACTION_LIKE', 'Like');
 define('INTERACTION_DISLIKE', 'Dislike');
 define('INTERACTION_PURCHASE', 'Purchase');
+define('INTERACTION_RECOMMENDATION', 'Recommendation');
+define('INTERACTION_DETAIL_VIEW', 'Detail view');
+define('INTERACTION_BOOKMARK', 'Bookmark');
 
 
 function testAttribute(array $attribute)
@@ -256,6 +260,20 @@ function clearInteractions(Client $client, DateTime $interactionTime)
 	testInteractions($client, USER_ID_3, [], [], $interactionTime);
 }
 
+function testInteractionDefinitions(Client $client)
+{
+	$definitions = $client->getInteractionDefinitions();
+	Assert::same(NUMBER_OF_INTERACTION_DEFINITIONS, $definitions['totalCount']);
+	$expectedDefinitions = [
+		INTERACTION_LIKE, INTERACTION_DISLIKE,
+		INTERACTION_PURCHASE, INTERACTION_BOOKMARK,
+		INTERACTION_DETAIL_VIEW, INTERACTION_RECOMMENDATION
+	];
+	foreach ($definitions['interactions'] as $definition) {
+		Assert::contains($definition['id'], $expectedDefinitions);
+	}
+}
+
 
 require_once __DIR__ . '/bootstrap.php';
 
@@ -273,6 +291,8 @@ addAndTestUsers($client);
 // Add interactions
 $interactionTime = new DateTime();
 addAndTestInteractions($client, $interactionTime);
+
+testInteractionDefinitions($client);
 
 // Clear interactions
 clearInteractions($client, $interactionTime);
