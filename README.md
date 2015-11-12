@@ -1,11 +1,11 @@
 # PHP client for DataBreakers DataAPI
 
-This library provides implementation of client for DataBreakers DataAPI.
+This library provides PHP implementation of client for DataBreakers DataAPI.
 
 
 ## Requirements
 
-Library requires PHP version 5.4 or higher and [Guzzle](http://guzzlephp.org).
+Library requires PHP version 5.4 (or higher) and [Guzzle](http://guzzlephp.org).
 
 
 ## Installation
@@ -30,7 +30,7 @@ $client->addItemsAttribute('title', DataApi\DataType::TEXT, 'en', DataApi\MetaTy
 $client->addItemsAttribute('color', DataApi\DataType::TEXT, 'en');
 $client->addItemsAttribute('weight', DataApi\DataType::INTEGER);
 
-// Add some items (if you are adding multiple items it's much faster to use batches)
+// Add some items (if you are adding multiple items, users or interactions it's much faster to use batches)
 $itemsBatch = (new DataApi\Batch\EntitiesBatch())
 	->addEntity('fridge', [
 		'title' => 'Fridge',
@@ -60,7 +60,7 @@ $usersBatch = (new DataApi\Batch\EntitiesBatch())
 	]);
 $client->insertOrUpdateUsers($usersBatch);
 
-// Provide us interactions between users and items
+// Add interactions between users and items
 $interactionsBatch = (new DataApi\Batch\InteractionsBatch())
 	->addInteraction('john', 'car', 'Like')
 	->addInteraction('john', 'car', 'Purchase')
