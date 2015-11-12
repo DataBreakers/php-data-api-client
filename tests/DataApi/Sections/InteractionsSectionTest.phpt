@@ -172,8 +172,8 @@ class InteractionsSectionTest extends SectionTest
 	public function testGettingInteractionDefinitionsWithBasicParameters()
 	{
 		$parameters = [
-			InteractionsSection::LIMIT_PARAMETER => 100,
-			InteractionsSection::OFFSET_PARAMETER => 0,
+			InteractionsSection::LIMIT_PARAMETER => InteractionsSection::DEFAULT_LIMIT,
+			InteractionsSection::OFFSET_PARAMETER => InteractionsSection::DEFAULT_OFFSET,
 		];
 		$this->mockPerformGet(InteractionsSection::GET_INTERACTIONS_DEFINITIONS_URL, $parameters);
 		$this->interactionsSection->getInteractionDefinitions();

@@ -29,6 +29,9 @@ class InteractionsSection extends Section
 	const SEARCH_QUERY_PARAMETER = 'searchQuery';
 	const SEARCH_ATTRIBUTES_PARAMETER = 'searchAttributes';
 
+	const DEFAULT_LIMIT = 100;
+	const DEFAULT_OFFSET = 0;
+
 
 	/**
 	 * @param string $userId
@@ -133,8 +136,8 @@ class InteractionsSection extends Section
 	 * @throws InvalidArgumentException when given offset isn't number or is negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getInteractionDefinitions($limit = 100, $offset = 0, array $attributes = NULL, $searchQuery = NULL,
-											  array $searchAttributes = NULL)
+	public function getInteractionDefinitions($limit = self::DEFAULT_LIMIT, $offset = self::DEFAULT_OFFSET,
+											  array $attributes = NULL, $searchQuery = NULL, array $searchAttributes = NULL)
 	{
 		$this->validateLimitAndOffset($limit, $offset);
 		$restriction = new Restriction([self::LIMIT_PARAMETER => $limit, self::OFFSET_PARAMETER => $offset]);

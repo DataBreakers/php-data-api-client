@@ -178,8 +178,8 @@ class Client
 	 * @throws InvalidArgumentException when given order isn't NULL, 'asc' or 'desc'
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getItems($limit = 100, $offset = 0, array $attributes = NULL, $orderBy = NULL, $order = NULL,
-							 $searchQuery = NULL, array $searchAttributes = NULL)
+	public function getItems($limit = EntitySection::DEFAULT_LIMIT, $offset = EntitySection::DEFAULT_OFFSET, array $attributes = NULL,
+							 $orderBy = NULL, $order = NULL, $searchQuery = NULL, array $searchAttributes = NULL)
 	{
 		return $this->itemsSection->getEntities($limit, $offset, $attributes, $orderBy, $order, $searchQuery, $searchAttributes);
 	}
@@ -195,7 +195,8 @@ class Client
 	 * @throws InvalidArgumentException when given interactions offset isn't number or is negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getItem($itemId, $withInteractions = false, $interactionsLimit = 100, $interactionsOffset = 0)
+	public function getItem($itemId, $withInteractions = false, $interactionsLimit = EntitySection::DEFAULT_INTERACTIONS_LIMIT,
+							$interactionsOffset = EntitySection::DEFAULT_INTERACTIONS_OFFSET)
 	{
 		return $this->itemsSection->getEntity($itemId, $withInteractions, $interactionsLimit, $interactionsOffset);
 	}
@@ -273,8 +274,8 @@ class Client
 	 * @throws InvalidArgumentException when given order isn't NULL, 'asc' or 'desc'
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getUsers($limit = 100, $offset = 0, array $attributes = NULL, $orderBy = NULL, $order = NULL,
-							 $searchQuery = NULL, array $searchAttributes = NULL)
+	public function getUsers($limit = EntitySection::DEFAULT_LIMIT, $offset = EntitySection::DEFAULT_OFFSET, array $attributes = NULL,
+							 $orderBy = NULL, $order = NULL, $searchQuery = NULL, array $searchAttributes = NULL)
 	{
 		return $this->usersSection->getEntities($limit, $offset, $attributes, $orderBy, $order, $searchQuery, $searchAttributes);
 	}
@@ -290,7 +291,8 @@ class Client
 	 * @throws InvalidArgumentException when given interactions offset isn't number or is negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getUser($userId, $withInteractions = false, $interactionsLimit = 100, $interactionsOffset = 0)
+	public function getUser($userId, $withInteractions = false, $interactionsLimit = EntitySection::DEFAULT_INTERACTIONS_LIMIT,
+							$interactionsOffset = EntitySection::DEFAULT_INTERACTIONS_OFFSET)
 	{
 		return $this->usersSection->getEntity($userId, $withInteractions, $interactionsLimit, $interactionsOffset);
 	}
@@ -413,8 +415,8 @@ class Client
 	 * @throws InvalidArgumentException when given offset isn't number or is negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getInteractionDefinitions($limit = 100, $offset = 0, array $attributes = NULL, $searchQuery = NULL,
-											  array $searchAttributes = NULL)
+	public function getInteractionDefinitions($limit = InteractionsSection::DEFAULT_LIMIT, $offset = InteractionsSection::DEFAULT_OFFSET,
+											  array $attributes = NULL, $searchQuery = NULL, array $searchAttributes = NULL)
 	{
 		return $this->interactionsSection->getInteractionDefinitions($limit, $offset, $attributes, $searchQuery, $searchAttributes);
 	}

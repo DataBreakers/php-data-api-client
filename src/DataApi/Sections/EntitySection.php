@@ -29,6 +29,11 @@ class EntitySection extends Section
 	const ENTITIES_PARAMETER = 'entities';
 	const ID_PARAMETER = 'id';
 
+	const DEFAULT_LIMIT = 100;
+	const DEFAULT_OFFSET = 0;
+	const DEFAULT_INTERACTIONS_LIMIT = 100;
+	const DEFAULT_INTERACTIONS_OFFSET = 0;
+
 	/** @var  */
 	private $strategy;
 
@@ -82,8 +87,8 @@ class EntitySection extends Section
 	 * @throws InvalidArgumentException when given order isn't NULL, 'asc' or 'desc'
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getEntities($limit = 100, $offset = 0, array $attributes = NULl, $orderBy = NULL, $order = NULL,
-								$searchQuery = NULL, array $searchAttributes = NULL)
+	public function getEntities($limit = self::DEFAULT_LIMIT, $offset = self::DEFAULT_OFFSET, array $attributes = NULl,
+								$orderBy = NULL, $order = NULL, $searchQuery = NULL, array $searchAttributes = NULL)
 	{
 		$this->validateLimitAndOffset($limit, $offset);
 		if ($orderBy !== NULL && $orderBy == '') {
@@ -117,7 +122,8 @@ class EntitySection extends Section
 	 * @throws InvalidArgumentException when given interactions offset isn't number or is negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getEntity($entityId, $withInteractions = false, $interactionsLimit = 100, $interactionsOffset = 0)
+	public function getEntity($entityId, $withInteractions = false, $interactionsLimit = self::DEFAULT_INTERACTIONS_LIMIT,
+							  $interactionsOffset = self::DEFAULT_INTERACTIONS_OFFSET)
 	{
 		if ($entityId == '') {
 			throw new InvalidArgumentException("Entity id can't be empty string.");
