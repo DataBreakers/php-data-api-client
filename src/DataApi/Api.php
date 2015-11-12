@@ -16,25 +16,29 @@ class Api
 	/** @var Configuration */
 	private $configuration;
 
-	/** @var GuzzleClient */
-	private $client;
-
 	/** @var PathBuilder */
 	private $pathBuilder;
 
 	/** @var HmacSignature */
 	private $hmacSignature;
 
+	/** @var RequestFactory */
+	private $requestFactory;
+
 
 	/**
 	 * @param Configuration $configuration
+	 * @param PathBuilder $pathBuilder
+	 * @param HmacSignature $hmacSignature
+	 * @param RequestFactory $requestFactory
 	 */
-	public function __construct(Configuration $configuration)
+	public function __construct(Configuration $configuration, PathBuilder $pathBuilder, HmacSignature $hmacSignature,
+								RequestFactory $requestFactory)
 	{
 		$this->configuration = $configuration;
-		$this->pathBuilder = new PathBuilder();
-		$this->hmacSignature = new HmacSignature($this->configuration->getSecretKey());
-		$this->client = new GuzzleClient(['verify' => false]);
+		$this->pathBuilder = $pathBuilder;
+		$this->hmacSignature = $hmacSignature;
+		$this->requestFactory = $requestFactory;
 	}
 
 	/**
@@ -101,7 +105,7 @@ class Api
 	 */
 	private function createRequest()
 	{
-		return new Request($this->client);
+		return $this->requestFactory->create();
 	}
 
 	/**

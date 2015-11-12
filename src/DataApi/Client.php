@@ -13,7 +13,10 @@ use DataBreakers\DataApi\Sections\ItemsSectionStrategy;
 use DataBreakers\DataApi\Sections\RecommendationSection;
 use DataBreakers\DataApi\Sections\TemplatesSection;
 use DataBreakers\DataApi\Sections\UsersSectionStrategy;
+use DataBreakers\DataApi\Utils\HmacSignature;
+use DataBreakers\DataApi\Utils\PathBuilder;
 use DateTime;
+use GuzzleHttp\Client as GuzzleClient;
 
 
 class Client
@@ -48,7 +51,11 @@ class Client
 	public function __construct($accountId, $secretKey)
 	{
 		$configuration = new Configuration(Configuration::DEFAULT_HOST, Configuration::DEFAULT_SLUG, $accountId, $secretKey);
-		$this->api = new Api($configuration);
+		$pathBuilder = new PathBuilder();
+		$hmacSignature = new HmacSignature($configuration->getSecretKey());
+		$requestFactory = new RequestFactory(new GuzzleClient(['verify' => false]));
+		$this->api = new Api($configuration, $pathBuilder, $hmacSignature, $requestFactory);
+
 		$this->attributesSection = new AttributesSection($this->api);
 		$this->itemsSection = new EntitySection($this->api, new ItemsSectionStrategy());
 		$this->usersSection = new EntitySection($this->api, new UsersSectionStrategy());
