@@ -97,6 +97,20 @@ class RecommendationSection extends Section
 	}
 
 	/**
+	 * @param int $count
+	 * @param string|NULL $templateId
+	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @return array
+	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getGeneralRecommendations($count, $templateId = NULL,
+											  RecommendationTemplateConfiguration $configuration = NULL)
+	{
+		return $this->getRecommendations(NULL, NULL, $count, $templateId, $configuration);
+	}
+
+	/**
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @return array

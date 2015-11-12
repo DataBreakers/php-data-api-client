@@ -161,6 +161,36 @@ class RecommendationSectionTest extends SectionTest
 		$this->recommendationSection->getRecommendationsForItem(self::ITEM_ID, -10);
 	}
 
+	public function testGettingGeneralRecommendations()
+	{
+		$configuration = (new RecommendationTemplateConfiguration())
+			->setBooster(self::BOOSTER)
+			->setDiversity(self::DIVERSITY);
+		$content = [
+			RecommendationSection::COUNT_PARAMETER => self::COUNT,
+			RecommendationSection::TEMPLATE_PARAMETER => $this->getExpectedTemplateConfiguration(NULL, $configuration)
+		];
+		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
+		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
+		$this->recommendationSection->getGeneralRecommendations(self::COUNT, NULL, $configuration);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenCountIsZeroDuringGettingGeneralRecommendations()
+	{
+		$this->recommendationSection->getGeneralRecommendations( 0);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenCountIsNegativeDuringGettingGeneralRecommendations()
+	{
+		$this->recommendationSection->getGeneralRecommendations(-10);
+	}
+
 	/**
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration $configuration
