@@ -7,7 +7,6 @@ use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\Utils\HmacSignature;
 use DataBreakers\DataApi\Utils\PathBuilder;
 use DataBreakers\DataApi\Utils\Restriction;
-use GuzzleHttp\Client as GuzzleClient;
 
 
 class Api
