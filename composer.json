@@ -2,6 +2,7 @@
     "name": "databreakers/php-data-api-client",
     "description": "PHP client for DataBreakers DataAPI.",
     "homepage": "https://databreakers.com",
+    "license": "MIT",
     "authors": [
         {
             "name": "Jan Veselý",
