@@ -8,7 +8,6 @@ use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\Order;
 use DataBreakers\DataApi\Utils\Restriction;
-use DataBreakers\DataApi\Utils\Validator;
 use DateTime;
 
 
