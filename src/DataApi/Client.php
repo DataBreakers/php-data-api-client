@@ -10,6 +10,7 @@ use DataBreakers\DataApi\Sections\AttributesSection;
 use DataBreakers\DataApi\Sections\EntitySection;
 use DataBreakers\DataApi\Sections\InteractionsSection;
 use DataBreakers\DataApi\Sections\ItemsSectionStrategy;
+use DataBreakers\DataApi\Sections\RecommendationSection;
 use DataBreakers\DataApi\Sections\TemplatesSection;
 use DataBreakers\DataApi\Sections\UsersSectionStrategy;
 use DateTime;
@@ -36,6 +37,9 @@ class Client
 	/** @var TemplatesSection */
 	private $templatesSection;
 
+	/** @var RecommendationSection */
+	private $recommendationSection;
+
 
 	/**
 	 * @param string $accountId Unique identifier of account
@@ -50,6 +54,7 @@ class Client
 		$this->usersSection = new EntitySection($this->api, new UsersSectionStrategy());
 		$this->interactionsSection = new InteractionsSection($this->api);
 		$this->templatesSection = new TemplatesSection($this->api);
+		$this->recommendationSection = new RecommendationSection($this->api);
 	}
 
 
@@ -412,6 +417,60 @@ class Client
 											  array $searchAttributes = NULL)
 	{
 		return $this->interactionsSection->getInteractionDefinitions($limit, $offset, $attributes, $searchQuery, $searchAttributes);
+	}
+
+
+
+	// ------------------------- RECOMMENDATION ------------------------- //
+
+	/**
+	 * @param string $userId
+	 * @param string $itemId
+	 * @param int $count
+	 * @param string|NULL $templateId
+	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @return array
+	 * @throws InvalidArgumentException when given user id is empty string value
+	 * @throws InvalidArgumentException when given item id is empty string value
+	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getRecommendations($userId, $itemId, $count, $templateId = NULL,
+									   RecommendationTemplateConfiguration $configuration = NULL)
+	{
+		return $this->recommendationSection->getRecommendations($userId, $itemId, $count, $templateId, $configuration);
+	}
+
+	/**
+	 * @param string $userId
+	 * @param int $count
+	 * @param string|NULL $templateId
+	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @return array
+	 * @throws InvalidArgumentException when given user id is empty string value
+	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getRecommendationsForUser($userId, $count, $templateId = NULL,
+											  RecommendationTemplateConfiguration $configuration = NULL)
+	{
+		return $this->recommendationSection->getRecommendations($userId, $count, $templateId, $configuration);
+	}
+
+	/**
+	 * @param string $itemId
+	 * @param int $count
+	 * @param string|NULL $templateId
+	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @return array
+	 * @throws InvalidArgumentException when given item id is empty string value
+	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getRecommendationsForItem($itemId, $count, $templateId = NULL,
+											  RecommendationTemplateConfiguration $configuration = NULL)
+	{
+		return $this->recommendationSection->getRecommendations($itemId, $count, $templateId, $configuration);
 	}
 
 
