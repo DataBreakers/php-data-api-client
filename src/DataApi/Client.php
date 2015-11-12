@@ -454,7 +454,7 @@ class Client
 	public function getRecommendationsForUser($userId, $count, $templateId = NULL,
 											  RecommendationTemplateConfiguration $configuration = NULL)
 	{
-		return $this->recommendationSection->getRecommendations($userId, $count, $templateId, $configuration);
+		return $this->recommendationSection->getRecommendationsForUser($userId, $count, $templateId, $configuration);
 	}
 
 	/**
@@ -470,7 +470,7 @@ class Client
 	public function getRecommendationsForItem($itemId, $count, $templateId = NULL,
 											  RecommendationTemplateConfiguration $configuration = NULL)
 	{
-		return $this->recommendationSection->getRecommendations($itemId, $count, $templateId, $configuration);
+		return $this->recommendationSection->getRecommendationsForItem($itemId, $count, $templateId, $configuration);
 	}
 
 
