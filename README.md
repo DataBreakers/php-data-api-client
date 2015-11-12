@@ -67,6 +67,7 @@ $interactionsBatch = (new DataApi\Batch\InteractionsBatch())
 	->addInteraction('john', 'fridge', 'Dislike')
 	->addInteraction('sophia', 'car', 'Detail view')
 	->addInteraction('sophia', 'fridge', 'Purchase');
+$client->insertInteractions($interactionsBatch);
 
 // And finally obtain ten recommendations for Sophia and car item!
 $recommendations = $client->getRecommendations('sophia', 'car', 10);
