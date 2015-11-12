@@ -75,4 +75,4 @@ $recommendations = $client->getRecommendations('sophia', 'car', 10);
 
 -----
 
-[DataBreakers.com](https://databreakers.com) – we are your data sense
+[DataBreakers](https://databreakers.com) – we are your data sense
