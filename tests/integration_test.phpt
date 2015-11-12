@@ -156,7 +156,7 @@ function addAndTestItems(Client $client)
 
 	$batch = (new EntitiesBatch())
 		->addEntity(ITEM_ID_2, $attributes2)
-		->addEntity(ITEM_ID_3, $attributes3);
+		->addEntity(ITEM_ID_3, $attributes3, (new DateTime())->modify('-1 hours'));
 	$client->insertOrUpdateItems($batch);
 	$items = $client->getItems(2, 0, [NAME_ATTRIBUTE, AGE_ATTRIBUTE], NULL, Order::DESC);
 	testEntitiesCount($items, 2, 3);
@@ -196,7 +196,7 @@ function addAndTestUsers(Client $client)
 
 	$batch = (new EntitiesBatch())
 			->addEntity(USER_ID_2, $attributes2)
-			->addEntity(USER_ID_3, $attributes3);
+			->addEntity(USER_ID_3, $attributes3, (new DateTime())->modify('-1 hours'));
 	$client->insertOrUpdateUsers($batch);
 	$users = $client->getUsers(2, 0, [NAME_ATTRIBUTE, AGE_ATTRIBUTE], NULL, Order::DESC);
 	testEntitiesCount($users, 2, 3);

@@ -144,13 +144,14 @@ class Client
 	/**
 	 * @param string $itemId
 	 * @param array $attributes
+	 * @param DateTime|NULL $time
 	 * @return NULl
 	 * @throws InvalidArgumentException when given item id is empty string
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function insertOrUpdateItem($itemId, array $attributes = [])
+	public function insertOrUpdateItem($itemId, array $attributes = [], DateTime $time = NULL)
 	{
-		return $this->itemsSection->insertOrUpdateEntity($itemId, $attributes);
+		return $this->itemsSection->insertOrUpdateEntity($itemId, $attributes, $time);
 	}
 
 	/**
@@ -240,13 +241,14 @@ class Client
 	/**
 	 * @param string $userId
 	 * @param array $attributes
+	 * @param DateTime|NULL $time
 	 * @return NULl
 	 * @throws InvalidArgumentException when given user id is empty string
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function insertOrUpdateUser($userId, array $attributes = [])
+	public function insertOrUpdateUser($userId, array $attributes = [], DateTime $time = NULL)
 	{
-		return $this->usersSection->insertOrUpdateEntity($userId, $attributes);
+		return $this->usersSection->insertOrUpdateEntity($userId, $attributes, $time);
 	}
 
 	/**

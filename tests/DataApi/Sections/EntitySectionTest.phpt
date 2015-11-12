@@ -4,6 +4,7 @@ namespace DataBreakers\DataApi\Sections;
 
 use DataBreakers\DataApi\Batch\EntitiesBatch;
 use DataBreakers\DataApi\Order;
+use DateTime;
 
 
 require_once __DIR__ . '/../../bootstrap.php';
@@ -60,6 +61,7 @@ class EntitySectionTest extends SectionTest
 
 	public function testInsertingOrUpdatingEntities()
 	{
+		$time = new DateTime();
 		$attributes1 = [
 			self::NAME_ATTRIBUTE => 'Foo'
 		];
@@ -69,7 +71,7 @@ class EntitySectionTest extends SectionTest
 		];
 		$batch = (new EntitiesBatch())
 			->addEntity(self::ID1, $attributes1)
-			->addEntity(self::ID2, $attributes2);
+			->addEntity(self::ID2, $attributes2, $time);
 		$content = [EntitySection::ENTITIES_PARAMETER => $batch->getEntities()];
 		$this->mockPerformPost(ItemsSectionStrategy::INSERT_OR_UPDATE_ITEM_URL, [], $content);
 		$this->entitySection->insertOrUpdateEntities($batch);

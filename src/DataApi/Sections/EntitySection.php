@@ -9,6 +9,7 @@ use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\Order;
 use DataBreakers\DataApi\Utils\Restriction;
 use DataBreakers\DataApi\Utils\Validator;
+use DateTime;
 
 
 class EntitySection extends Section
@@ -51,13 +52,14 @@ class EntitySection extends Section
 	/**
 	 * @param string $entityId
 	 * @param array $attributes
+	 * @param DateTime|NULL $time
 	 * @return NULl
 	 * @throws InvalidArgumentException when given entity id is empty string
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function insertOrUpdateEntity($entityId, array $attributes = [])
+	public function insertOrUpdateEntity($entityId, array $attributes = [], DateTime $time = NULL)
 	{
-		$batch = (new EntitiesBatch())->addEntity($entityId, $attributes);
+		$batch = (new EntitiesBatch())->addEntity($entityId, $attributes, $time);
 		return $this->insertOrUpdateEntities($batch);
 	}
 

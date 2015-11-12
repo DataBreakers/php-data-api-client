@@ -3,6 +3,7 @@
 namespace DataBreakers\DataApi\Batch;
 
 use DataBreakers\TestCase;
+use DateTime;
 use Tester\Assert;
 
 
@@ -30,12 +31,16 @@ class EntitiesBatchTest extends TestCase
 	/** @var EntitiesBatch */
 	private $batch;
 
+	/** @var DateTime */
+	private $time;
+
 
 	protected function setUp()
 	{
+		$this->time = new DateTime();
 		$this->batch = (new EntitiesBatch())
 			->addEntity(self::ID1, $this->attributes1)
-			->addEntity(self::ID2, $this->attributes2);
+			->addEntity(self::ID2, $this->attributes2, $this->time);
 	}
 
 	public function testGettingEntities()
@@ -44,7 +49,7 @@ class EntitiesBatchTest extends TestCase
 		Assert::true(is_array($entities));
 		Assert::same(2, count($entities));
 		$this->checkEntity($entities[0], self::ID1, $this->attributes1);
-		$this->checkEntity($entities[1], self::ID2, $this->attributes2);
+		$this->checkEntity($entities[1], self::ID2, $this->attributes2, $this->time);
 	}
 
 	public function testItCanBeTraversedByForeach()
@@ -55,7 +60,7 @@ class EntitiesBatchTest extends TestCase
 				$this->checkEntity($entity, self::ID1, $this->attributes1);
 			}
 			if ($counter === 1) {
-				$this->checkEntity($entity, self::ID2, $this->attributes2);
+				$this->checkEntity($entity, self::ID2, $this->attributes2, $this->time);
 			}
 			$counter++;
 		}
@@ -73,11 +78,19 @@ class EntitiesBatchTest extends TestCase
 	 * @param array $entity
 	 * @param string $id
 	 * @param array $attributes
+	 * @param DateTime|NULL $time
+	 * @return void
 	 */
-	private function checkEntity(array $entity, $id, array $attributes)
+	private function checkEntity(array $entity, $id, array $attributes, DateTime $time = NULL)
 	{
-		Assert::same($entity['id'], $id);
-		Assert::same($entity['attributes'], $attributes);
+		Assert::same($id, $entity[EntitiesBatch::ID_KEY]);
+		Assert::same($attributes, $entity[EntitiesBatch::ATTRIBUTES_KEY]);
+		if ($time !== NULL) {
+			Assert::same($time->getTimestamp(), $entity[EntitiesBatch::TIMESTAMP_KEY]);
+		}
+		else {
+			Assert::false(isset($entity[EntitiesBatch::TIMESTAMP_KEY]));
+		}
 	}
 
 }
