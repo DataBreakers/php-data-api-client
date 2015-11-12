@@ -1,6 +1,7 @@
 {
     "name": "databreakers/php-data-api-client",
-    "description": "PHP client for DataBreakers data API.",
+    "description": "PHP client for DataBreakers DataAPI.",
+    "homepage": "https://databreakers.com",
     "authors": [
         {
             "name": "Jan Veselý",
