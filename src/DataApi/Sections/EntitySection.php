@@ -3,7 +3,7 @@
 namespace DataBreakers\DataApi\Sections;
 
 use DataBreakers\DataApi\Api;
-use DataBreakers\DataApi\EntitiesBatch;
+use DataBreakers\DataApi\Batch\EntitiesBatch;
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\Order;
@@ -85,12 +85,7 @@ class EntitySection extends Section
 	public function getEntities($limit = 100, $offset = 0, array $attributes = NULl, $orderBy = NULL, $order = NULL,
 								$searchQuery = NULL, array $searchAttributes = NULL)
 	{
-		if (!Validator::isPositiveNumberOrZero($limit)) {
-			throw new InvalidArgumentException("Limit must be positive numeric value or zero.");
-		}
-		if (!Validator::isPositiveNumberOrZero($offset)) {
-			throw new InvalidArgumentException("Offset must be positive numeric value or zero.");
-		}
+		$this->validateLimitAndOffset($limit, $offset);
 		if ($orderBy !== NULL && $orderBy == '') {
 			throw new InvalidArgumentException("Order by can't be empty string value.");
 		}
@@ -127,12 +122,7 @@ class EntitySection extends Section
 		if ($entityId == '') {
 			throw new InvalidArgumentException("Entity id can't be empty string.");
 		}
-		if (!Validator::isPositiveNumberOrZero($interactionsLimit)) {
-			throw new InvalidArgumentException("Interactions limit must be positive numeric value or zero.");
-		}
-		if (!Validator::isPositiveNumberOrZero($interactionsOffset)) {
-			throw new InvalidArgumentException("Interactions offset must be positive numeric value or zero.");
-		}
+		$this->validateLimitAndOffset($interactionsLimit, $interactionsOffset);
 		$restriction = new Restriction([
 				$this->strategy->getEntityIdParameter() => $entityId,
 				self::WITH_INTERACTIONS_PARAMETER => (bool) $withInteractions,

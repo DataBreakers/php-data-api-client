@@ -1,10 +1,9 @@
 <?php
 
-namespace DataBreakers\DataApi;
+namespace DataBreakers\DataApi\Sections;
 
-use DataBreakers\DataApi\Sections\EntitySection;
-use DataBreakers\DataApi\Sections\ItemsSectionStrategy;
-use DataBreakers\DataApi\Sections\SectionTest;
+use DataBreakers\DataApi\Batch\EntitiesBatch;
+use DataBreakers\DataApi\Order;
 
 
 require_once __DIR__ . '/../../bootstrap.php';

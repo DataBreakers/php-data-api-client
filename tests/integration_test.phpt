@@ -1,8 +1,9 @@
 <?php
 
+use DataBreakers\DataApi\Batch\InteractionsBatch;
 use DataBreakers\DataApi\Client;
 use DataBreakers\DataApi\DataType;
-use DataBreakers\DataApi\EntitiesBatch;
+use DataBreakers\DataApi\Batch\EntitiesBatch;
 use DataBreakers\DataApi\MetaType;
 use DataBreakers\DataApi\Order;
 use Tester\Assert;
@@ -20,6 +21,10 @@ define('ITEM_ID_3', 'item3');
 define('USER_ID_1', 'user1');
 define('USER_ID_2', 'user2');
 define('USER_ID_3', 'user3');
+
+define('INTERACTION_LIKE', 'Like');
+define('INTERACTION_DISLIKE', 'Dislike');
+define('INTERACTION_PURCHASE', 'Purchase');
 
 
 function testAttribute(array $attribute)
@@ -57,6 +62,24 @@ function testEntitiesCount(array $entities, $count, $totalCount)
 {
 	Assert::same($totalCount, $entities['totalCount']);
 	Assert::same($count, count($entities['entities']));
+}
+
+function testInteractions(Client $client, $userId, array $itemIds, array $interactionIds, DateTime $time)
+{
+	$user = $client->getUser($userId, true);
+	Assert::same(count($itemIds), $user['totalInteractions']);
+	$interactions = $user['entityInteractions'];
+	Assert::same(count($itemIds), count($interactions));
+	// todo uncomment this after timestamp problem will be resolved
+	/*$expectedInteractions = [];
+	for ($i = 0; $i < count($itemIds); $i++) {
+		$expectedInteractions[] = [
+			'entityId' => $itemIds[$i],
+			'interactionId' => $interactionIds[$i],
+			'timestamp' => $time->getTimestamp()
+		];
+	}
+	Assert::equal($expectedInteractions, $interactions);*/
 }
 
 function addAndTestUsersAttributes(Client $client)
@@ -201,6 +224,38 @@ function clearUsers(Client $client)
 	testEntitiesCount($users, 0, 0);
 }
 
+function addAndTestInteractions(Client $client, DateTime $interactionTime)
+{
+	$client->insertInteraction(USER_ID_1, ITEM_ID_1, INTERACTION_LIKE, $interactionTime);
+	$batch = (new InteractionsBatch())
+		->addInteraction(USER_ID_1, ITEM_ID_2, INTERACTION_DISLIKE, $interactionTime)
+		->addInteraction(USER_ID_2, ITEM_ID_1, INTERACTION_LIKE, $interactionTime)
+		->addInteraction(USER_ID_2, ITEM_ID_1, INTERACTION_PURCHASE, $interactionTime)
+		->addInteraction(USER_ID_3, ITEM_ID_3, INTERACTION_DISLIKE, $interactionTime);
+	$client->insertInteractions($batch);
+
+	testInteractions($client, USER_ID_1, [ITEM_ID_1, ITEM_ID_2], [INTERACTION_LIKE, INTERACTION_DISLIKE], $interactionTime);
+	testInteractions($client, USER_ID_2, [ITEM_ID_1, ITEM_ID_1], [INTERACTION_LIKE, INTERACTION_PURCHASE], $interactionTime);
+	testInteractions($client, USER_ID_3, [ITEM_ID_3], [INTERACTION_DISLIKE], $interactionTime);
+}
+
+function clearInteractions(Client $client, DateTime $interactionTime)
+{
+	// todo uncomment this after timestamp problem will be resolved
+	/*$client->deleteInteraction(USER_ID_1, ITEM_ID_1, $interactionTime);
+	testInteractions($client, USER_ID_1, [ITEM_ID_2], [INTERACTION_DISLIKE], $interactionTime);*/
+
+	$client->deleteUserInteractions(USER_ID_1);
+	testInteractions($client, USER_ID_1, [], [], $interactionTime);
+
+	$client->deleteItemInteractions(ITEM_ID_1);
+	testInteractions($client, USER_ID_2, [], [], $interactionTime);
+
+	testInteractions($client, USER_ID_3, [ITEM_ID_3], [INTERACTION_DISLIKE], $interactionTime);
+	$client->deleteInteractions();
+	testInteractions($client, USER_ID_3, [], [], $interactionTime);
+}
+
 
 require_once __DIR__ . '/bootstrap.php';
 
@@ -214,6 +269,13 @@ addAndTestItemsAttributes($client);
 // Add entities
 addAndTestItems($client);
 addAndTestUsers($client);
+
+// Add interactions
+$interactionTime = new DateTime();
+addAndTestInteractions($client, $interactionTime);
+
+// Clear interactions
+clearInteractions($client, $interactionTime);
 
 // Clear entities
 clearItems($client);

@@ -6,6 +6,7 @@ use DataBreakers\DataApi\Api;
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\Utils\Restriction;
+use DataBreakers\DataApi\Utils\Validator;
 
 
 abstract class Section
@@ -69,6 +70,22 @@ abstract class Section
 	{
 		if ($value !== NULL) {
 			$restriction->addParameter($name, $value);
+		}
+	}
+
+	/**
+	 * @param int $limit
+	 * @param int $offset
+	 * @throws InvalidArgumentException when given limit isn't number or is negative
+	 * @throws InvalidArgumentException when given offset isn't number or is negative
+	 */
+	protected function validateLimitAndOffset($limit, $offset)
+	{
+		if (!Validator::isPositiveNumberOrZero($limit)) {
+			throw new InvalidArgumentException("Limit must be positive numeric value or zero.");
+		}
+		if (!Validator::isPositiveNumberOrZero($offset)) {
+			throw new InvalidArgumentException("Offset must be positive numeric value or zero.");
 		}
 	}
 

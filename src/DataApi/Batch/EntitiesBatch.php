@@ -1,19 +1,15 @@
 <?php
 
-namespace DataBreakers\DataApi;
+namespace DataBreakers\DataApi\Batch;
 
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
-use Iterator;
 
 
-class EntitiesBatch implements Iterator
+class EntitiesBatch extends Batch
 {
 
 	const ID_KEY = 'id';
 	const ATTRIBUTES_KEY = 'attributes';
-
-	/** @var int */
-	private $iteratorPosition = 0;
 
 	/** @var array */
 	private $entities = [];
@@ -48,47 +44,11 @@ class EntitiesBatch implements Iterator
 	}
 
 	/**
-	 * @return array with information about entity in format:
-	 * 	 array(
-     *       id => 'id of entity',
-     *       attributes => array(... array of attributes ...)
-     *   )
-	 */
-	public function current()
-	{
-		return $this->entities[$this->iteratorPosition];
-	}
-
-	/**
 	 * @inheritdoc
 	 */
-	public function key()
+	protected function getBatchArray()
 	{
-		return $this->iteratorPosition;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function next()
-	{
-		$this->iteratorPosition++;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function rewind()
-	{
-		$this->iteratorPosition = 0;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function valid()
-	{
-		return isset($this->entities[$this->iteratorPosition]);
+		return $this->entities;
 	}
 
 }

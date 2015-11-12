@@ -2,13 +2,16 @@
 
 namespace DataBreakers\DataApi;
 
+use DataBreakers\DataApi\Batch\EntitiesBatch;
+use DataBreakers\DataApi\Batch\InteractionsBatch;
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\Sections\AttributesSection;
 use DataBreakers\DataApi\Sections\EntitySection;
-use DataBreakers\DataApi\Sections\ItemsSection;
+use DataBreakers\DataApi\Sections\InteractionsSection;
 use DataBreakers\DataApi\Sections\ItemsSectionStrategy;
 use DataBreakers\DataApi\Sections\UsersSectionStrategy;
+use DateTime;
 
 
 class Client
@@ -26,6 +29,9 @@ class Client
 	/** @var EntitySection */
 	private $usersSection;
 
+	/** @var InteractionsSection */
+	private $interactionsSection;
+
 
 	/**
 	 * @param string $accountId Unique identifier of account
@@ -38,6 +44,7 @@ class Client
 		$this->attributesSection = new AttributesSection($this->api);
 		$this->itemsSection = new EntitySection($this->api, new ItemsSectionStrategy());
 		$this->usersSection = new EntitySection($this->api, new UsersSectionStrategy());
+		$this->interactionsSection = new InteractionsSection($this->api);
 	}
 
 
@@ -308,6 +315,98 @@ class Client
 	public function deleteUsers()
 	{
 		return $this->usersSection->deleteEntities();
+	}
+
+
+
+	// ------------------------- INTERACTIONS ------------------------- //
+
+	/**
+	 * @param string $userId
+	 * @param string $itemId
+	 * @param string $interactionId
+	 * @param DateTime|NULL $time
+	 * @return NULL
+	 * @throws InvalidArgumentException when given user id is empty string value
+	 * @throws InvalidArgumentException when given item id is empty string value
+	 * @throws InvalidArgumentException when given interaction id is empty string value
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function insertInteraction($userId, $itemId, $interactionId, DateTime $time = NULL)
+	{
+		return $this->interactionsSection->insertInteraction($userId, $itemId, $interactionId, $time);
+	}
+
+	/**
+	 * @param InteractionsBatch $batch
+	 * @return NULL
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function insertInteractions(InteractionsBatch $batch)
+	{
+		return $this->interactionsSection->insertInteractions($batch);
+	}
+
+	/**
+	 * @param string $userId
+	 * @param string $itemId
+	 * @param DateTime $time
+	 * @return NULL
+	 * @throws InvalidArgumentException when given user id is empty string value
+	 * @throws InvalidArgumentException when given item id is empty string value
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function deleteInteraction($userId, $itemId, DateTime $time)
+	{
+		return $this->interactionsSection->deleteInteraction($userId, $itemId, $time);
+	}
+
+	/**
+	 * @param string $userId
+	 * @return NULL
+	 * @throws InvalidArgumentException when given user id is empty string value
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function deleteUserInteractions($userId)
+	{
+		return $this->interactionsSection->deleteUserInteractions($userId);
+	}
+
+	/**
+	 * @param string $itemId
+	 * @return NULL
+	 * @throws InvalidArgumentException when given item id is empty string value
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function deleteItemInteractions($itemId)
+	{
+		return $this->interactionsSection->deleteItemInteractions($itemId);
+	}
+
+	/**
+	 * @return NULL
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function deleteInteractions()
+	{
+		return $this->interactionsSection->deleteInteractions();
+	}
+
+	/**
+	 * @param int $limit
+	 * @param int $offset
+	 * @param array|NULL $attributes
+	 * @param string|NULL $searchQuery
+	 * @param array|NULL $searchAttributes
+	 * @return array
+	 * @throws InvalidArgumentException when given limit isn't number or is negative
+	 * @throws InvalidArgumentException when given offset isn't number or is negative
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getInteractionDefinitions($limit = 100, $offset = 0, array $attributes = NULL, $searchQuery = NULL,
+											  array $searchAttributes = NULL)
+	{
+		return $this->interactionsSection->getInteractionDefinitions($limit, $offset, $attributes, $searchQuery, $searchAttributes);
 	}
 
 

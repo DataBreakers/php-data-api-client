@@ -1,12 +1,12 @@
 <?php
 
-namespace DataBreakers\DataApi;
+namespace DataBreakers\DataApi\Batch;
 
 use DataBreakers\TestCase;
 use Tester\Assert;
 
 
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/../../bootstrap.php';
 
 
 class EntitiesBatchTest extends TestCase
