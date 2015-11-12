@@ -10,6 +10,7 @@ use DataBreakers\DataApi\Sections\AttributesSection;
 use DataBreakers\DataApi\Sections\EntitySection;
 use DataBreakers\DataApi\Sections\InteractionsSection;
 use DataBreakers\DataApi\Sections\ItemsSectionStrategy;
+use DataBreakers\DataApi\Sections\TemplatesSection;
 use DataBreakers\DataApi\Sections\UsersSectionStrategy;
 use DateTime;
 
@@ -32,6 +33,9 @@ class Client
 	/** @var InteractionsSection */
 	private $interactionsSection;
 
+	/** @var TemplatesSection */
+	private $templatesSection;
+
 
 	/**
 	 * @param string $accountId Unique identifier of account
@@ -45,6 +49,7 @@ class Client
 		$this->itemsSection = new EntitySection($this->api, new ItemsSectionStrategy());
 		$this->usersSection = new EntitySection($this->api, new UsersSectionStrategy());
 		$this->interactionsSection = new InteractionsSection($this->api);
+		$this->templatesSection = new TemplatesSection($this->api);
 	}
 
 
@@ -407,6 +412,53 @@ class Client
 											  array $searchAttributes = NULL)
 	{
 		return $this->interactionsSection->getInteractionDefinitions($limit, $offset, $attributes, $searchQuery, $searchAttributes);
+	}
+
+
+
+	// ------------------------- TEMPLATES ------------------------- //
+
+	/**
+	 * @param string $templateId
+	 * @param TemplateConfiguration $configuration
+	 * @return NULL
+	 * @throws InvalidArgumentException when given template id is empty string value
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function insertOrUpdateTemplate($templateId, TemplateConfiguration $configuration)
+	{
+		return $this->templatesSection->insertOrUpdateTemplate($templateId, $configuration);
+	}
+
+	/**
+	 * @return array
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getTemplates()
+	{
+		return $this->templatesSection->getTemplates();
+	}
+
+	/**
+	 * @param string $templateId
+	 * @return array
+	 * @throws InvalidArgumentException when given template id is empty string value
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getTemplate($templateId)
+	{
+		return $this->templatesSection->getTemplate($templateId);
+	}
+
+	/**
+	 * @param string $templateId
+	 * @return NULL
+	 * @throws InvalidArgumentException when given template id is empty string value
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function deleteTemplate($templateId)
+	{
+		return $this->templatesSection->deleteTemplate($templateId);
 	}
 
 

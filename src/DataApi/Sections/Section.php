@@ -89,4 +89,18 @@ abstract class Section
 		}
 	}
 
+	/**
+	 * @param array $content
+	 * @param string $name
+	 * @param mixed|NULL $value
+	 * @return array
+	 */
+	protected function setContentIfNotNull(array $content, $name, $value)
+	{
+		if ($value !== NULL) {
+			$content[$name] = $value;
+		}
+		return $content;
+	}
+
 }
