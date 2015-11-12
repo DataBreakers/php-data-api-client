@@ -6,6 +6,7 @@ use DataBreakers\DataApi\DataType;
 use DataBreakers\DataApi\Batch\EntitiesBatch;
 use DataBreakers\DataApi\MetaType;
 use DataBreakers\DataApi\Order;
+use DataBreakers\DataApi\TemplateConfiguration;
 use Tester\Assert;
 
 
@@ -29,6 +30,14 @@ define('INTERACTION_PURCHASE', 'Purchase');
 define('INTERACTION_RECOMMENDATION', 'Recommendation');
 define('INTERACTION_DETAIL_VIEW', 'Detail view');
 define('INTERACTION_BOOKMARK', 'Bookmark');
+
+define('TEMPLATE_ID_1', 'template1');
+define('TEMPLATE_ID_2', 'template2');
+define('FILTER', 'filter > 1');
+define('BOOSTER', 'booster < 2');
+define('USER_WEIGHT', 0.4);
+define('ITEM_WEIGHT', 0.6);
+define('DIVERSITY', 0.8);
 
 
 function testAttribute(array $attribute)
@@ -74,16 +83,34 @@ function testInteractions(Client $client, $userId, array $itemIds, array $intera
 	Assert::same(count($itemIds), $user['totalInteractions']);
 	$interactions = $user['entityInteractions'];
 	Assert::same(count($itemIds), count($interactions));
-	// todo uncomment this after timestamp problem will be resolved
-	/*$expectedInteractions = [];
 	for ($i = 0; $i < count($itemIds); $i++) {
-		$expectedInteractions[] = [
+		$expectedInteraction = [
 			'entityId' => $itemIds[$i],
 			'interactionId' => $interactionIds[$i],
 			'timestamp' => $time->getTimestamp()
 		];
+		Assert::contains($expectedInteraction, $interactions);
 	}
-	Assert::equal($expectedInteractions, $interactions);*/
+}
+
+function testTemplate(array $template, $id, TemplateConfiguration $configuration)
+{
+	Assert::same($id, $template['templateId']);
+	if ($configuration->getFilter() !== NULL) {
+		Assert::same($configuration->getFilter(), $template['filter']);
+	}
+	if ($configuration->getBooster() !== NULL) {
+		Assert::same($configuration->getBooster(), $template['booster']);
+	}
+	if ($configuration->getUserWeight() !== NULL) {
+		Assert::same($configuration->getUserWeight(), $template['userWeight']);
+	}
+	if ($configuration->getItemWeight() !== NULL) {
+		Assert::same($configuration->getItemWeight(), $template['itemWeight']);
+	}
+	if ($configuration->getDiversity() !== NULL) {
+		Assert::same($configuration->getDiversity(), $template['diversity']);
+	}
 }
 
 function addAndTestUsersAttributes(Client $client)
@@ -245,9 +272,8 @@ function addAndTestInteractions(Client $client, DateTime $interactionTime)
 
 function clearInteractions(Client $client, DateTime $interactionTime)
 {
-	// todo uncomment this after timestamp problem will be resolved
-	/*$client->deleteInteraction(USER_ID_1, ITEM_ID_1, $interactionTime);
-	testInteractions($client, USER_ID_1, [ITEM_ID_2], [INTERACTION_DISLIKE], $interactionTime);*/
+	$client->deleteInteraction(USER_ID_1, ITEM_ID_1, $interactionTime);
+	testInteractions($client, USER_ID_1, [ITEM_ID_2], [INTERACTION_DISLIKE], $interactionTime);
 
 	$client->deleteUserInteractions(USER_ID_1);
 	testInteractions($client, USER_ID_1, [], [], $interactionTime);
@@ -274,6 +300,39 @@ function testInteractionDefinitions(Client $client)
 	}
 }
 
+function addAndTestTemplates(Client $client)
+{
+	$configuration1 = (new TemplateConfiguration())
+		->setFilter(FILTER)
+		->setBooster(BOOSTER)
+		->setDiversity(DIVERSITY);
+	$configuration2 = (new TemplateConfiguration())
+		->setUserWeight(USER_WEIGHT)
+		->setItemWeight(ITEM_WEIGHT)
+		->setDiversity(DIVERSITY);
+
+	$client->insertOrUpdateTemplate(TEMPLATE_ID_1, $configuration1);
+	$templates = $client->getTemplates();
+	Assert::same(2, count($templates['templates']));
+	testTemplate($client->getTemplate(TEMPLATE_ID_1), TEMPLATE_ID_1, $configuration1);
+
+	$client->insertOrUpdateTemplate(TEMPLATE_ID_2, $configuration2);
+	$templates = $client->getTemplates();
+	Assert::same(3, count($templates['templates']));
+	testTemplate($client->getTemplate(TEMPLATE_ID_2), TEMPLATE_ID_2, $configuration2);
+}
+
+function clearTemplates(Client $client)
+{
+	$client->deleteTemplate(TEMPLATE_ID_1);
+	$templates = $client->getTemplates();
+	Assert::same(2, count($templates['templates']));
+
+	$client->deleteTemplate(TEMPLATE_ID_2);
+	$templates = $client->getTemplates();
+	Assert::same(1, count($templates['templates']));
+}
+
 
 require_once __DIR__ . '/bootstrap.php';
 
@@ -292,7 +351,14 @@ addAndTestUsers($client);
 $interactionTime = new DateTime();
 addAndTestInteractions($client, $interactionTime);
 
+// Add templates
+addAndTestTemplates($client);
+
+// Test interaction definitions
 testInteractionDefinitions($client);
+
+// Clear templates
+clearTemplates($client);
 
 // Clear interactions
 clearInteractions($client, $interactionTime);
