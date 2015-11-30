@@ -13,6 +13,7 @@ use DataBreakers\DataApi\Sections\ItemsSectionStrategy;
 use DataBreakers\DataApi\Sections\RecommendationSection;
 use DataBreakers\DataApi\Sections\TemplatesSection;
 use DataBreakers\DataApi\Sections\UsersSectionStrategy;
+use DataBreakers\DataApi\Sections\UsersSection;
 use DataBreakers\DataApi\Utils\HmacSignature;
 use DataBreakers\DataApi\Utils\PathBuilder;
 use DateTime;
@@ -58,7 +59,7 @@ class Client
 
 		$this->attributesSection = new AttributesSection($this->api);
 		$this->itemsSection = new EntitySection($this->api, new ItemsSectionStrategy());
-		$this->usersSection = new EntitySection($this->api, new UsersSectionStrategy());
+		$this->usersSection = new UsersSection($this->api, new UsersSectionStrategy());
 		$this->interactionsSection = new InteractionsSection($this->api);
 		$this->templatesSection = new TemplatesSection($this->api);
 		$this->recommendationSection = new RecommendationSection($this->api);
@@ -338,6 +339,18 @@ class Client
 		return $this->usersSection->deleteEntities();
 	}
 
+	/**
+	 * Merges interactions from one (or more) user(s) to another
+	 *
+	 * @param $sourceUsersId
+	 * @param $targetUserId
+	 *
+	 * @return array|NULL
+	 */
+	public function mergeUser($sourceUsersId, $targetUserId)
+	{
+		return $this->usersSection->mergeUser($sourceUsersId, $targetUserId);
+	}
 
 
 	// ------------------------- INTERACTIONS ------------------------- //
