@@ -342,14 +342,16 @@ class Client
 	/**
 	 * Merges interactions from one (or more) user(s) to another
 	 *
-	 * @param $sourceUsersId
-	 * @param $targetUserId
-	 *
-	 * @return array|NULL
+	 * @param array $sourceUsersIds
+	 * @param string $targetUserId
+	 * @return NULL
+	 * @throws InvalidArgumentException when given array of source users ids is empty
+	 * @throws InvalidArgumentException when given target user id is empty string
+	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function mergeUser($sourceUsersId, $targetUserId)
+	public function mergeUser(array $sourceUsersIds, $targetUserId)
 	{
-		return $this->usersSection->mergeUser($sourceUsersId, $targetUserId);
+		return $this->usersSection->mergeUser($sourceUsersIds, $targetUserId);
 	}
 
 
