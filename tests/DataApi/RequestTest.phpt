@@ -5,7 +5,8 @@ namespace DataBreakers\DataApi;
 use DataBreakers\TestCase;
 use GuzzleHttp\Client;
 use Mockery\MockInterface;
-use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Message\ResponseInterface;
+use GuzzleHttp\Message\RequestInterface;
 
 require_once __DIR__ . '/../bootstrap.php';
 
@@ -84,10 +85,14 @@ class RequestTest extends TestCase
 	 */
 	private function mockClientRequest($method, $url, array $content = [])
 	{
-		$options = $content !== [] ? ['json' => $content] : [];
-		$this->client->shouldReceive('request')
+		$request = $this->createMockRequest($content);
+		$this->client->shouldReceive('createRequest')
 			->once()
-			->with($method, $url, $options)
+			->with($method, $url)
+			->andReturn($request);
+		$this->client->shouldReceive('send')
+			->once()
+			->with($request)
 			->andReturn($this->createMockResponse($this->responseBody));
 	}
 
@@ -99,12 +104,31 @@ class RequestTest extends TestCase
 	 */
 	private function mockFailedClientRequest($method, $url, ResponseInterface $response = NULL)
 	{
+		$request = $this->createMockRequest();
 		$requestException = \Mockery::mock('GuzzleHttp\Exception\RequestException');
 		$requestException->shouldReceive('getResponse')->andReturn($response);
-		$this->client->shouldReceive('request')
+		$this->client->shouldReceive('createRequest')
 			->once()
-			->with($method, $url, [])
+			->with($method, $url)
+			->andReturn($request);
+		$this->client->shouldReceive('send')
+			->once()
+			->with($request)
 			->andThrow($requestException);
+	}
+
+	/**
+	 * @param array $content
+	 * @return MockInterface|RequestInterface
+	 */
+	private function createMockRequest(array $content = [])
+	{
+		$request = \Mockery::mock('GuzzleHttp\Message\RequestInterface');
+		$request->shouldReceive('setHeader')->once();
+		if ($content !== []) {
+			$request->shouldReceive('setBody')->once();
+		}
+		return $request;
 	}
 
 	/**
@@ -113,8 +137,8 @@ class RequestTest extends TestCase
 	 */
 	private function createMockResponse(array $body)
 	{
-		$response = \Mockery::mock('Psr\Http\Message\ResponseInterface');
-		$response->shouldReceive('getBody')->once()->andReturn(json_encode($body));
+		$response = \Mockery::mock('GuzzleHttp\Message\ResponseInterface');
+		$response->shouldReceive('json')->once()->andReturn($body);
 		return $response;
 	}
 

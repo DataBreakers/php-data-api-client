@@ -5,7 +5,8 @@ namespace DataBreakers\DataApi;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
-use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Message\ResponseInterface;
+use GuzzleHttp\Stream\Stream;
 
 
 class Request
@@ -70,8 +71,12 @@ class Request
 	private function sendRequest($method, $url, array $content = [])
 	{
 		try {
-			$options = $content !== [] ? ['json' => $content] : [];
-			return $this->client->request($method, $url, $options);
+			$request = $this->client->createRequest($method, $url);
+			$request->setHeader('Content-Type', 'application/json; charset=utf-8');
+			if (!empty($content)) {
+				$request->setBody(Stream::factory(json_encode($content)));
+			};
+			return $this->client->send($request);
 		}
 		catch (RequestException $ex) {
 			$message = $this->getErrorMessage($ex->getResponse());
@@ -97,10 +102,16 @@ class Request
 	/**
 	 * @param ResponseInterface $response
 	 * @return array|NULL
+	 * @throws RequestFailedException when json parsing failed
 	 */
 	private function parseJson(ResponseInterface $response)
 	{
-		return json_decode($response->getBody(), true);
+		try {
+			return $response->json();
+		}
+		catch (\RuntimeException $ex) {
+			throw new RequestFailedException($ex->getMessage(), $ex->getCode(), $ex);
+		}
 	}
 
 }
