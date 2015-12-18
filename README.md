@@ -25,7 +25,7 @@ use DataBreakers\DataApi;
 // Create a new instance of Client and provide your credentials
 $client = new DataApi\Client('yourAccountId', 'yourSecretKey');
 
-// Define items attributes
+// Define items attributes (do this only when items attributes aren't defined in recommender yet)
 $client->addItemsAttribute('title', DataApi\DataType::TEXT, 'en', DataApi\MetaType::TITLE);
 $client->addItemsAttribute('color', DataApi\DataType::TEXT, 'en');
 $client->addItemsAttribute('weight', DataApi\DataType::INTEGER);
@@ -44,7 +44,7 @@ $itemsBatch = (new DataApi\Batch\EntitiesBatch())
 	]);
 $client->insertOrUpdateItems($itemsBatch);
 
-// Define users attributes
+// Define users attributes (do this only when users attributes aren't defined in recommender yet)
 $client->addUsersAttribute('name', DataApi\DataType::TEXT, 'en', DataApi\MetaType::TITLE);
 $client->addUsersAttribute('age', DataApi\DataType::INTEGER);
 
