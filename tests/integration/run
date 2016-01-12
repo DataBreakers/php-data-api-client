@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # current dir
-${DIR}/../vendor/bin/tester -s --colors 1 -c ${DIR}/php.ini ${DIR}/integration_test.phpt
+${DIR}/../../vendor/bin/tester -s --colors 1 -c ${DIR}/../php.ini ${DIR}/integration_test.phpt
 exit 0
