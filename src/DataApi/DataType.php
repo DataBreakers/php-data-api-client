@@ -28,4 +28,5 @@ abstract class DataType
 		];
 		return in_array($dataType, $validDataTypes);
 	}
+
 }
