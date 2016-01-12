@@ -1,6 +1,6 @@
 <?php
 
-$loader = include __DIR__ . '/../vendor/autoload.php';
+$loader = include __DIR__ . '/../../vendor/autoload.php';
 $loader->addPsr4('DataBreakers\\', __DIR__);
 
 // Configure environment
