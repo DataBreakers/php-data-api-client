@@ -2,13 +2,13 @@
 
 namespace DataBreakers\DataApi\Utils;
 
-use DataBreakers\TestCase;
+use DataBreakers\UnitTestCase;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
 
-class HmacSignatureTest extends TestCase
+class HmacSignatureTest extends UnitTestCase
 {
 
 	const SECRET_KEY = 'm8PxIXmhi2';

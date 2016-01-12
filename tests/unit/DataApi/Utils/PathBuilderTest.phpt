@@ -2,13 +2,13 @@
 
 namespace DataBreakers\DataApi\Utils;
 
-use DataBreakers\TestCase;
+use DataBreakers\UnitTestCase;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
 
-class PathBuilderTest extends TestCase
+class PathBuilderTest extends UnitTestCase
 {
 
 	const DUMMY_DOMAIN = 'http://www.foo.com';

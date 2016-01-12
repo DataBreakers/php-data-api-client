@@ -2,7 +2,7 @@
 
 namespace DataBreakers\DataApi;
 
-use DataBreakers\TestCase;
+use DataBreakers\UnitTestCase;
 use GuzzleHttp\Client as GuzzleClient;
 use Tester\Assert;
 
@@ -10,7 +10,7 @@ use Tester\Assert;
 require_once __DIR__ . '/../bootstrap.php';
 
 
-class RequestFactoryTest extends TestCase
+class RequestFactoryTest extends UnitTestCase
 {
 
 	/** @var RequestFactory */

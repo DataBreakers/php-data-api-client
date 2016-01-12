@@ -2,7 +2,7 @@
 
 namespace DataBreakers\DataApi\Batch;
 
-use DataBreakers\TestCase;
+use DataBreakers\UnitTestCase;
 use DateTime;
 use Tester\Assert;
 
@@ -10,7 +10,7 @@ use Tester\Assert;
 require_once __DIR__ . '/../../bootstrap.php';
 
 
-class InteractionsBatchTest extends TestCase
+class InteractionsBatchTest extends UnitTestCase
 {
 
 	const USER_ID1 = 'user1';

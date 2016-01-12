@@ -2,14 +2,14 @@
 
 namespace DataBreakers\DataApi;
 
-use DataBreakers\TestCase;
+use DataBreakers\UnitTestCase;
 use Tester\Assert;
 
 
 require_once __DIR__ . '/../bootstrap.php';
 
 
-class TemplateConfigurationTest extends TestCase
+class TemplateConfigurationTest extends UnitTestCase
 {
 
 	const FILTER = 'filter > 1';

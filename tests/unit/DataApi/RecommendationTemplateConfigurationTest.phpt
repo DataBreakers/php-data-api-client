@@ -2,14 +2,14 @@
 
 namespace DataBreakers\DataApi;
 
-use DataBreakers\TestCase;
+use DataBreakers\UnitTestCase;
 use Tester\Assert;
 
 
 require_once __DIR__ . '/../bootstrap.php';
 
 
-class RecommendationTemplateConfigurationTest extends TestCase
+class RecommendationTemplateConfigurationTest extends UnitTestCase
 {
 
 	const ATTRIBUTE_ID1 = 'attribute1';

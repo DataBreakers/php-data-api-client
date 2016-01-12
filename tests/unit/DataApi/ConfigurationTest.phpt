@@ -2,13 +2,13 @@
 
 namespace DataBreakers\DataApi;
 
-use DataBreakers\TestCase;
+use DataBreakers\UnitTestCase;
 use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
 
 
-class ConfigurationTest extends TestCase
+class ConfigurationTest extends UnitTestCase
 {
 
 	const HOST = 'http://foo.host.com';

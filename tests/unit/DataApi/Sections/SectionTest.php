@@ -4,11 +4,11 @@ namespace DataBreakers\DataApi\Sections;
 
 use DataBreakers\DataApi\Api;
 use DataBreakers\DataApi\Utils\Restriction;
-use DataBreakers\TestCase;
+use DataBreakers\UnitTestCase;
 use Mockery\MockInterface;
 
 
-abstract class SectionTest extends TestCase
+abstract class SectionTest extends UnitTestCase
 {
 
 	/** @var Api|MockInterface */

@@ -2,8 +2,10 @@
 
 namespace DataBreakers;
 
+use Tester\TestCase;
 
-abstract class TestCase extends \Tester\TestCase
+
+abstract class UnitTestCase extends TestCase
 {
 	
 	/**

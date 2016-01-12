@@ -2,13 +2,13 @@
 
 namespace DataBreakers\DataApi\Utils;
 
-use DataBreakers\TestCase;
+use DataBreakers\UnitTestCase;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
 
-class RestrictionTest extends TestCase
+class RestrictionTest extends UnitTestCase
 {
 
 	/** @var Restriction */

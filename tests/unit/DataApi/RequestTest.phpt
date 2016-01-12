@@ -2,7 +2,7 @@
 
 namespace DataBreakers\DataApi;
 
-use DataBreakers\TestCase;
+use DataBreakers\UnitTestCase;
 use GuzzleHttp\Client;
 use Mockery\MockInterface;
 use GuzzleHttp\Message\ResponseInterface;
@@ -11,7 +11,7 @@ use GuzzleHttp\Message\RequestInterface;
 require_once __DIR__ . '/../bootstrap.php';
 
 
-class RequestTest extends TestCase
+class RequestTest extends UnitTestCase
 {
 
 	const URL = 'https://api.databreakers.com/v1/foo/bar';
