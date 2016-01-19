@@ -11,7 +11,7 @@ class ItemsSectionStrategy implements IEntitySectionStrategy
 	const GET_ITEM_URL = '/{accountId}/items/{itemId}{?withInteractions,interactionsLimit,interactionsOffset}';
 	const GET_SELECTED_ITEMS_URL = '/{accountId}/items/{?withInteractions,interactionsLimit,interactionsOffset}';
 	const DELETE_ITEM_URL = '/{accountId}/items/{itemId}{?permanently}';
-	const DELETE_ITEMS_URL = '/{accountId}/items/';
+	const DELETE_ITEMS_URL = '/{accountId}/items';
 
 	const ITEM_ID_PARAMETER = 'itemId';
 

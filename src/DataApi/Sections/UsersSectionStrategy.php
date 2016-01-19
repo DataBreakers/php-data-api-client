@@ -11,7 +11,7 @@ class UsersSectionStrategy implements IEntitySectionStrategy
 	const GET_USER_URL = '/{accountId}/users/{userId}{?withInteractions,interactionsLimit,interactionsOffset}';
 	const GET_SELECTED_USERS_URL = '/{accountId}/users/{?withInteractions,interactionsLimit,interactionsOffset}';
 	const DELETE_USER_URL = '/{accountId}/users/{userId}{?permanently}';
-	const DELETE_USERS_URL = '/{accountId}/users/';
+	const DELETE_USERS_URL = '/{accountId}/users';
 
 	const USER_ID_PARAMETER = 'userId';
 
