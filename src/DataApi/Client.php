@@ -24,7 +24,7 @@ class Client
 {
 
 	/** @var Api */
-	private $api;
+	protected $api;
 
 	/** @var AttributesSection */
 	private $attributesSection;
