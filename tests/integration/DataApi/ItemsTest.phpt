@@ -88,6 +88,18 @@ class ItemsTest extends IntegrationTestCase
 		}
 	}
 
+	public function testClearingItems()
+	{
+		$this->client->deleteItem(Seeder::ITEM_FOO);
+		$this->client->clearItems();
+		Assert::same(3, count($this->client->getItems()['entities']));
+		$item = $this->client->getItem(Seeder::ITEM_FOO);
+		Assert::same(false, $item['deleted']);
+		Assert::notContains(Seeder::ATTRIBUTE_NAME, $item['attributes']);
+		Assert::notContains(Seeder::ATTRIBUTE_DESCRIPTION, $item['attributes']);
+		Assert::notContains(Seeder::ATTRIBUTE_WEIGHT, $item['attributes']);
+	}
+
 	/**
 	 * @param array $item
 	 * @param string $id

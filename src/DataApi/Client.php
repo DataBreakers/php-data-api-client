@@ -9,6 +9,7 @@ use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\Sections\AttributesSection;
 use DataBreakers\DataApi\Sections\EntitySection;
 use DataBreakers\DataApi\Sections\InteractionsSection;
+use DataBreakers\DataApi\Sections\ItemsSection;
 use DataBreakers\DataApi\Sections\ItemsSectionStrategy;
 use DataBreakers\DataApi\Sections\RecommendationSection;
 use DataBreakers\DataApi\Sections\TemplatesSection;
@@ -58,7 +59,7 @@ class Client
 		$this->api = new Api($configuration, $pathBuilder, $hmacSignature, $requestFactory);
 
 		$this->attributesSection = new AttributesSection($this->api);
-		$this->itemsSection = new EntitySection($this->api, new ItemsSectionStrategy());
+		$this->itemsSection = new ItemsSection($this->api, new ItemsSectionStrategy());
 		$this->usersSection = new UsersSection($this->api, new UsersSectionStrategy());
 		$this->interactionsSection = new InteractionsSection($this->api);
 		$this->templatesSection = new TemplatesSection($this->api);
@@ -231,6 +232,18 @@ class Client
 	public function deleteItem($itemId, $permanently = false)
 	{
 		return $this->itemsSection->deleteEntity($itemId, $permanently);
+	}
+
+	/**
+	 * Sets values of all attributes to null for ALL items and enables ALL items (sets disabled flag from delete
+	 * call for ALL items to false)
+	 *
+	 * @return NULL
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function clearItems()
+	{
+		return $this->itemsSection->clearItems();
 	}
 
 	/**
