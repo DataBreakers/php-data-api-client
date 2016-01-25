@@ -354,6 +354,21 @@ class Client
 		return $this->usersSection->mergeUser($sourceUsersIds, $targetUserId);
 	}
 
+	/**
+	 * Copies interactions from one (or more) user(s) to another
+	 *
+	 * @param array $sourceUsersIds
+	 * @param string $targetUserId
+	 * @return NULL
+	 * @throws InvalidArgumentException when given array of source users ids is empty
+	 * @throws InvalidArgumentException when given target user id is empty string
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function copyUser(array $sourceUsersIds, $targetUserId)
+	{
+		return $this->usersSection->copyUser($sourceUsersIds, $targetUserId);
+	}
+
 
 	// ------------------------- INTERACTIONS ------------------------- //
 

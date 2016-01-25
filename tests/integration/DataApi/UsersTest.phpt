@@ -90,12 +90,13 @@ class UsersTest extends IntegrationTestCase
 	public function testMergingUser()
 	{
 		$this->client->mergeUser([Seeder::USER_JOHN, Seeder::USER_PAUL], self::USER_EMMA);
-		$expectedIds = [Seeder::USER_SUZIE, self::USER_EMMA];
-		$users = $this->client->getUsers();
-		Assert::same(count($expectedIds), count($users['entities']));
-		foreach ($users['entities'] as $user) {
-			Assert::true(in_array($user['id'], $expectedIds));
-		}
+		$this->validateExistingUsers([Seeder::USER_SUZIE, self::USER_EMMA]);
+	}
+
+	public function testCopyingUser()
+	{
+		$this->client->copyUser([Seeder::USER_JOHN, Seeder::USER_PAUL], self::USER_EMMA);
+		$this->validateExistingUsers([Seeder::USER_JOHN, Seeder::USER_PAUL, Seeder::USER_SUZIE, self::USER_EMMA]);
 	}
 
 	/**
@@ -109,6 +110,19 @@ class UsersTest extends IntegrationTestCase
 		Assert::same($id, $user['id']);
 		foreach ($attributes as $name => $value) {
 			Assert::same($value, $user['attributes'][$name]);
+		}
+	}
+
+	/**
+	 * @param array $expectedIds
+	 * @return void
+	 */
+	private function validateExistingUsers(array $expectedIds)
+	{
+		$users = $this->client->getUsers();
+		Assert::same(count($expectedIds), count($users['entities']));
+		foreach ($users['entities'] as $user) {
+			Assert::true(in_array($user['id'], $expectedIds));
 		}
 	}
 
