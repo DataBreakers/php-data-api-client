@@ -19,6 +19,9 @@ class RecommendationTemplateConfiguration extends TemplateConfiguration
 	/** @var bool */
 	private $details;
 
+	/** @var float|NULL */
+	private $diversityDecay;
+
 	/** @var bool|NULL */
 	private $recommendationFeedback;
 
@@ -33,16 +36,21 @@ class RecommendationTemplateConfiguration extends TemplateConfiguration
 	 * @param float|NULL $itemWeight
 	 * @param float|NULL $diversity
 	 * @param bool $details
+	 * @param float|NULL $diversityDecay
 	 * @param bool|NULL $recommendationFeedback
 	 * @param bool|NULL $categoryBlacklist
+	 * @throws InvalidArgumentException when given diversity decay isn't number or in range <0,1>
 	 */
 	public function __construct($filter = NULL, $booster = NULL, $userWeight = NULL, $itemWeight = NULL, $diversity = NULL,
-								$details = false, $recommendationFeedback = NULL, $categoryBlacklist = NULL)
+								$details = false, $diversityDecay = NULL, $recommendationFeedback = NULL, $categoryBlacklist = NULL)
 	{
 		parent::__construct($filter, $booster, $userWeight, $itemWeight, $diversity);
-		$this->details = $details;
-		$this->recommendationFeedback = $recommendationFeedback;
-		$this->categoryBlacklist = $categoryBlacklist;
+		$this->details = (bool) $details;
+		if ($diversityDecay !== NULL) {
+			$this->setDiversityDecay($diversityDecay);
+		}
+		$this->recommendationFeedback = $recommendationFeedback === NULL ? NULL : (bool) $recommendationFeedback;
+		$this->categoryBlacklist = $categoryBlacklist === NULL ? NULL : (bool) $categoryBlacklist;
 	}
 
 	/**
@@ -118,6 +126,29 @@ class RecommendationTemplateConfiguration extends TemplateConfiguration
 	public function disableDetails()
 	{
 		$this->details = false;
+		return $this;
+	}
+
+	/**
+	 * @return float|NULL
+	 */
+	public function getDiversityDecay()
+	{
+		return $this->diversityDecay;
+	}
+
+	/**
+	 * @param float|NULL $diversityDecay
+	 * @return $this
+	 * @throws InvalidArgumentException when given diversity decay isn't number or in range <0,1>
+	 */
+	public function setDiversityDecay($diversityDecay)
+	{
+		$diversityDecay = (float) $diversityDecay;
+		if ($diversityDecay < 0 || $diversityDecay > 1) {
+			throw new InvalidArgumentException('Diversity decay must be float number in range <0,1>.');
+		}
+		$this->diversityDecay = $diversityDecay;
 		return $this;
 	}
 

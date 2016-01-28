@@ -167,7 +167,8 @@ class RecommendationSectionTest extends SectionTest
 			->setBooster(self::BOOSTER)
 			->setDiversity(self::DIVERSITY)
 			->enableRecommendationFeedback()
-			->enableCategoryBlacklist();
+			->enableCategoryBlacklist()
+			->setDiversityDecay(0.25);
 		$content = [
 			RecommendationSection::COUNT_PARAMETER => self::COUNT,
 			RecommendationSection::TEMPLATE_PARAMETER => $this->getExpectedTemplateConfiguration(NULL, $configuration)
@@ -215,6 +216,7 @@ class RecommendationSectionTest extends SectionTest
 		$data = $this->setIfNotNull($data, RecommendationSection::DIVERSITY_PARAMETER, $configuration->getDiversity());
 		$data = $this->setIfNotNull($data, RecommendationSection::RECOMMENDATION_FEEDBACK_PARAMETER, $configuration->getRecommendationFeedback());
 		$data = $this->setIfNotNull($data, RecommendationSection::CATEGORY_BLACKLIST_PARAMETER, $configuration->getCategoryBlacklist());
+		$data = $this->setIfNotNull($data, RecommendationSection::DIVERSITY_DECAY_PARAMETER, $configuration->getDiversityDecay());
 		return $data;
 	}
 

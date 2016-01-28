@@ -230,6 +230,46 @@ class RecommendationTemplateConfigurationTest extends UnitTestCase
 		Assert::false($this->configuration->getCategoryBlacklist());
 	}
 
+	/**
+	 * @param float $diversityDecay
+	 * @dataProvider getValidDiversityDecayValues
+	 */
+	public function testSettingsDiversityDecay($diversityDecay)
+	{
+		Assert::null($this->configuration->getDiversityDecay());
+		$this->configuration->setDiversityDecay($diversityDecay);
+		Assert::same($diversityDecay, $this->configuration->getDiversityDecay());
+	}
+
+	public function getValidDiversityDecayValues()
+	{
+		return [
+			[0.0],
+			[0.25],
+			[1.0],
+		];
+	}
+
+	/**
+	 * @param float $diversityDecay
+	 * @dataProvider getInvalidDiversityDecayValues
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testSettingDiversityDecayThrowsExceptionWhenGivenInvalidValue($diversityDecay)
+	{
+		$this->configuration->setDiversityDecay($diversityDecay);
+	}
+
+	public function getInvalidDiversityDecayValues()
+	{
+		return [
+			[-0.1],
+			[-1.25],
+			[1.1],
+			[2.25],
+		];
+	}
+
 }
 
 (new RecommendationTemplateConfigurationTest())->run();

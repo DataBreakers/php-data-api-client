@@ -30,6 +30,7 @@ class RecommendationSection extends Section
 	const DETAILS_PARAMETER = 'details';
 	const RECOMMENDATION_FEEDBACK_PARAMETER = 'recommendationFeedback';
 	const CATEGORY_BLACKLIST_PARAMETER = 'categoryBlacklist';
+	const DIVERSITY_DECAY_PARAMETER = 'diversityDecay';
 
 
 	/**
@@ -137,6 +138,7 @@ class RecommendationSection extends Section
 		$data = $this->setContentIfNotNull($data, self::DIVERSITY_PARAMETER, $configuration->getDiversity());
 		$data = $this->setContentIfNotNull($data, self::RECOMMENDATION_FEEDBACK_PARAMETER, $configuration->getRecommendationFeedback());
 		$data = $this->setContentIfNotNull($data, self::CATEGORY_BLACKLIST_PARAMETER, $configuration->getCategoryBlacklist());
+		$data = $this->setContentIfNotNull($data, self::DIVERSITY_DECAY_PARAMETER, $configuration->getDiversityDecay());
 		return $data;
 	}
 
