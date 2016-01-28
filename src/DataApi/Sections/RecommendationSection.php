@@ -28,6 +28,8 @@ class RecommendationSection extends Section
 	const DIVERSITY_PARAMETER = 'diversity';
 	const DISTINCT_PARAMETER = 'distinct';
 	const DETAILS_PARAMETER = 'details';
+	const RECOMMENDATION_FEEDBACK_PARAMETER = 'recommendationFeedback';
+	const CATEGORY_BLACKLIST_PARAMETER = 'categoryBlacklist';
 
 
 	/**
@@ -133,6 +135,8 @@ class RecommendationSection extends Section
 		$data = $this->setContentIfNotNull($data, self::USER_WEIGHT_PARAMETER, $configuration->getUserWeight());
 		$data = $this->setContentIfNotNull($data, self::ITEM_WEIGHT_PARAMETER, $configuration->getItemWeight());
 		$data = $this->setContentIfNotNull($data, self::DIVERSITY_PARAMETER, $configuration->getDiversity());
+		$data = $this->setContentIfNotNull($data, self::RECOMMENDATION_FEEDBACK_PARAMETER, $configuration->getRecommendationFeedback());
+		$data = $this->setContentIfNotNull($data, self::CATEGORY_BLACKLIST_PARAMETER, $configuration->getCategoryBlacklist());
 		return $data;
 	}
 

@@ -165,7 +165,9 @@ class RecommendationSectionTest extends SectionTest
 	{
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setBooster(self::BOOSTER)
-			->setDiversity(self::DIVERSITY);
+			->setDiversity(self::DIVERSITY)
+			->enableRecommendationFeedback()
+			->enableCategoryBlacklist();
 		$content = [
 			RecommendationSection::COUNT_PARAMETER => self::COUNT,
 			RecommendationSection::TEMPLATE_PARAMETER => $this->getExpectedTemplateConfiguration(NULL, $configuration)
@@ -211,6 +213,8 @@ class RecommendationSectionTest extends SectionTest
 		$data = $this->setIfNotNull($data, RecommendationSection::USER_WEIGHT_PARAMETER, $configuration->getUserWeight());
 		$data = $this->setIfNotNull($data, RecommendationSection::ITEM_WEIGHT_PARAMETER, $configuration->getItemWeight());
 		$data = $this->setIfNotNull($data, RecommendationSection::DIVERSITY_PARAMETER, $configuration->getDiversity());
+		$data = $this->setIfNotNull($data, RecommendationSection::RECOMMENDATION_FEEDBACK_PARAMETER, $configuration->getRecommendationFeedback());
+		$data = $this->setIfNotNull($data, RecommendationSection::CATEGORY_BLACKLIST_PARAMETER, $configuration->getCategoryBlacklist());
 		return $data;
 	}
 

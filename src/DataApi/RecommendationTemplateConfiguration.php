@@ -19,6 +19,12 @@ class RecommendationTemplateConfiguration extends TemplateConfiguration
 	/** @var bool */
 	private $details;
 
+	/** @var bool|NULL */
+	private $recommendationFeedback;
+
+	/** @var bool|NULL */
+	private $categoryBlacklist;
+
 
 	/**
 	 * @param string|NULL $filter
@@ -27,12 +33,16 @@ class RecommendationTemplateConfiguration extends TemplateConfiguration
 	 * @param float|NULL $itemWeight
 	 * @param float|NULL $diversity
 	 * @param bool $details
+	 * @param bool|NULL $recommendationFeedback
+	 * @param bool|NULL $categoryBlacklist
 	 */
 	public function __construct($filter = NULL, $booster = NULL, $userWeight = NULL, $itemWeight = NULL, $diversity = NULL,
-								$details = false)
+								$details = false, $recommendationFeedback = NULL, $categoryBlacklist = NULL)
 	{
 		parent::__construct($filter, $booster, $userWeight, $itemWeight, $diversity);
 		$this->details = $details;
+		$this->recommendationFeedback = $recommendationFeedback;
+		$this->categoryBlacklist = $categoryBlacklist;
 	}
 
 	/**
@@ -108,6 +118,58 @@ class RecommendationTemplateConfiguration extends TemplateConfiguration
 	public function disableDetails()
 	{
 		$this->details = false;
+		return $this;
+	}
+
+	/**
+	 * @return bool|NULL
+	 */
+	public function getRecommendationFeedback()
+	{
+		return $this->recommendationFeedback;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function enableRecommendationFeedback()
+	{
+		$this->recommendationFeedback = true;
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function disableRecommendationFeedback()
+	{
+		$this->recommendationFeedback = false;
+		return $this;
+	}
+
+	/**
+	 * @return bool|NULL
+	 */
+	public function getCategoryBlacklist()
+	{
+		return $this->categoryBlacklist;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function enableCategoryBlacklist()
+	{
+		$this->categoryBlacklist = true;
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function disableCategoryBlacklist()
+	{
+		$this->categoryBlacklist = false;
 		return $this;
 	}
 

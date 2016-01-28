@@ -212,6 +212,24 @@ class RecommendationTemplateConfigurationTest extends UnitTestCase
 		Assert::false($this->configuration->areDetailsEnabled());
 	}
 
+	public function testGettingRecommendationFeedback()
+	{
+		Assert::null($this->configuration->getRecommendationFeedback());
+		$this->configuration->enableRecommendationFeedback();
+		Assert::true($this->configuration->getRecommendationFeedback());
+		$this->configuration->disableRecommendationFeedback();
+		Assert::false($this->configuration->getRecommendationFeedback());
+	}
+
+	public function testGettingCategoryBlacklist()
+	{
+		Assert::null($this->configuration->getCategoryBlacklist());
+		$this->configuration->enableCategoryBlacklist();
+		Assert::true($this->configuration->getCategoryBlacklist());
+		$this->configuration->disableCategoryBlacklist();
+		Assert::false($this->configuration->getCategoryBlacklist());
+	}
+
 }
 
 (new RecommendationTemplateConfigurationTest())->run();
