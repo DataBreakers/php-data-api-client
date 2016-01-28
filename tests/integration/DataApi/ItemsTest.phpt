@@ -82,9 +82,30 @@ class ItemsTest extends IntegrationTestCase
 	{
 		$this->client->deleteItem(Seeder::ITEM_FOO, true);
 		$items = $this->client->getItems();
-		Assert::same(2, count($items));
+		Assert::same(2, count($items['entities']));
 		foreach ($items['entities'] as $item) {
 			Assert::notSame(Seeder::ITEM_FOO, $item['id']);
+		}
+	}
+
+	public function testSoftDeletingSelectedItems()
+	{
+		$itemsToDelete = [Seeder::ITEM_FOO, Seeder::ITEM_BAZ];
+		$this->client->deleteSelectedItems($itemsToDelete);
+		foreach ($itemsToDelete as $itemToDelete) {
+			$item = $this->client->getItem($itemToDelete);
+			Assert::true($item['deleted']);
+		}
+	}
+
+	public function testHardDeletingSelectedItems()
+	{
+		$itemsToDelete = [Seeder::ITEM_FOO, Seeder::ITEM_BAZ];
+		$this->client->deleteSelectedItems($itemsToDelete, true);
+		$items = $this->client->getItems();
+		Assert::same(1, count($items['entities']));
+		foreach ($items['entities'] as $item) {
+			Assert::notContains($item['id'], $itemsToDelete);
 		}
 	}
 

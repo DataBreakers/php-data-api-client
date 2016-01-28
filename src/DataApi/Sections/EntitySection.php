@@ -157,7 +157,7 @@ class EntitySection extends Section
 	/**
 	 * @param string $entityId
 	 * @param bool $permanently
-	 * @return array|NULL
+	 * @return NULL
 	 * @throws InvalidArgumentException when given entity id is empty
 	 * @throws RequestFailedException when request failed for some reason
 	 */
@@ -167,8 +167,8 @@ class EntitySection extends Section
 			throw new InvalidArgumentException("Entity id can't be empty.");
 		}
 		$restriction = new Restriction([
-				$this->strategy->getEntityIdParameter() => $entityId,
-				self::PERMANENTLY_PARAMETER => (bool) $permanently
+			$this->strategy->getEntityIdParameter() => $entityId,
+			self::PERMANENTLY_PARAMETER => (bool) $permanently
 		]);
 		return $this->performDelete($this->strategy->getDeleteEntityUrl(), $restriction);
 	}

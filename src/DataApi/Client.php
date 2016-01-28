@@ -225,13 +225,25 @@ class Client
 	/**
 	 * @param string $itemId
 	 * @param bool $permanently
-	 * @return array|NULL
+	 * @return NULL
 	 * @throws InvalidArgumentException when given item id is empty
 	 * @throws RequestFailedException when request failed for some reason
 	 */
 	public function deleteItem($itemId, $permanently = false)
 	{
 		return $this->itemsSection->deleteEntity($itemId, $permanently);
+	}
+
+	/**
+	 * @param string[] $ids
+	 * @param bool $permanently
+	 * @return NULL
+	 * @throws InvalidArgumentException when given array of ids is empty
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function deleteSelectedItems(array $ids, $permanently = false)
+	{
+		return $this->itemsSection->deleteSelectedItems($ids, $permanently);
 	}
 
 	/**
@@ -334,7 +346,7 @@ class Client
 	/**
 	 * @param string $userId
 	 * @param bool $permanently
-	 * @return array|NULL
+	 * @return NULL
 	 * @throws InvalidArgumentException when given user id is empty
 	 * @throws RequestFailedException when request failed for some reason
 	 */
