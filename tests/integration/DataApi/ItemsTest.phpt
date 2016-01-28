@@ -121,6 +121,18 @@ class ItemsTest extends IntegrationTestCase
 		Assert::notContains(Seeder::ATTRIBUTE_WEIGHT, $item['attributes']);
 	}
 
+	public function testActivateItems()
+	{
+		$itemsToActivate = [Seeder::ITEM_FOO, Seeder::ITEM_BAZ];
+		$this->client->deleteSelectedItems($itemsToActivate);
+		$this->client->activateItems($itemsToActivate);
+		$items = $this->client->getSelectedItems($itemsToActivate);
+		Assert::same(2, count($items['entities']));
+		foreach ($items['entities'] as $item) {
+			Assert::same(false, $item['deleted']);
+		}
+	}
+
 	/**
 	 * @param array $item
 	 * @param string $id

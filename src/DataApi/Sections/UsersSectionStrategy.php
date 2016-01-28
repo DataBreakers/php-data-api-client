@@ -12,6 +12,7 @@ class UsersSectionStrategy implements IEntitySectionStrategy
 	const GET_SELECTED_USERS_URL = '/{accountId}/users/{?withInteractions,interactionsLimit,interactionsOffset}';
 	const DELETE_USER_URL = '/{accountId}/users/{userId}{?permanently}';
 	const DELETE_USERS_URL = '/{accountId}/users';
+	const ACTIVATE_USERS_URL = '/{accountId}/users/activate';
 
 	const USER_ID_PARAMETER = 'userId';
 
@@ -70,6 +71,14 @@ class UsersSectionStrategy implements IEntitySectionStrategy
 	public function getDeleteEntitiesUrl()
 	{
 		return self::DELETE_USERS_URL;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getActivateEntitiesUrl()
+	{
+		return self::ACTIVATE_USERS_URL;
 	}
 
 }

@@ -87,6 +87,20 @@ class UsersTest extends IntegrationTestCase
 		}
 	}
 
+	public function testActivateUsers()
+	{
+		$usersToActivate = [Seeder::USER_JOHN, Seeder::USER_PAUL];
+		foreach ($usersToActivate as $user) {
+			$this->client->deleteUser($user);
+		}
+		$this->client->activateUsers($usersToActivate);
+		$users = $this->client->getSelectedUsers($usersToActivate);
+		Assert::same(2, count($users['entities']));
+		foreach ($users['entities'] as $user) {
+			Assert::same(false, $user['deleted']);
+		}
+	}
+
 	public function testMergingUser()
 	{
 		$this->client->mergeUser([Seeder::USER_JOHN, Seeder::USER_PAUL], self::USER_EMMA);

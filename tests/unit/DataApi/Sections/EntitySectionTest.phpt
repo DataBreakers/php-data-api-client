@@ -251,6 +251,22 @@ class EntitySectionTest extends SectionTest
 		$this->entitySection->deleteEntities();
 	}
 
+	public function testActivateEntities()
+	{
+		$ids = [self::ID1, self::ID3];
+		$content = [EntitySection::IDS_PARAMETER => $ids];
+		$this->mockPerformPost(ItemsSectionStrategy::ACTIVATE_ITEMS_URL, [], $content);
+		$this->entitySection->activateEntities($ids);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenIdsAreEmptyDuringActivateEntities()
+	{
+		$this->entitySection->activateEntities([]);
+	}
+
 }
 
 (new EntitySectionTest())->run();

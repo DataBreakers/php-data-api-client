@@ -12,6 +12,7 @@ class ItemsSectionStrategy implements IEntitySectionStrategy
 	const GET_SELECTED_ITEMS_URL = '/{accountId}/items/{?withInteractions,interactionsLimit,interactionsOffset}';
 	const DELETE_ITEM_URL = '/{accountId}/items/{itemId}{?permanently}';
 	const DELETE_ITEMS_URL = '/{accountId}/items';
+	const ACTIVATE_ITEMS_URL = '/{accountId}/items/activate';
 
 	const ITEM_ID_PARAMETER = 'itemId';
 
@@ -70,6 +71,14 @@ class ItemsSectionStrategy implements IEntitySectionStrategy
 	public function getDeleteEntitiesUrl()
 	{
 		return self::DELETE_ITEMS_URL;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getActivateEntitiesUrl()
+	{
+		return self::ACTIVATE_ITEMS_URL;
 	}
 
 }

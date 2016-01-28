@@ -182,4 +182,19 @@ class EntitySection extends Section
 		return $this->performDelete($this->strategy->getDeleteEntitiesUrl());
 	}
 
+	/**
+	 * @param array $ids
+	 * @return NULL
+	 * @throws InvalidArgumentException when given array of ids is empty
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function activateEntities(array $ids)
+	{
+		if (count($ids) === 0) {
+			throw new InvalidArgumentException("Ids array can't be empty.");
+		}
+		$restriction = new Restriction([], [self::IDS_PARAMETER => $ids]);
+		return $this->performPost($this->strategy->getActivateEntitiesUrl(), $restriction);
+	}
+
 }

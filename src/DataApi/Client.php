@@ -267,6 +267,17 @@ class Client
 		return $this->itemsSection->deleteEntities();
 	}
 
+	/**
+	 * @param array $ids
+	 * @return NULL
+	 * @throws InvalidArgumentException when given array of ids is empty
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function activateItems(array $ids)
+	{
+		return $this->itemsSection->activateEntities($ids);
+	}
+
 
 
 	// ------------------------- USERS ------------------------- //
@@ -362,6 +373,17 @@ class Client
 	public function deleteUsers()
 	{
 		return $this->usersSection->deleteEntities();
+	}
+
+	/**
+	 * @param array $ids
+	 * @return NULL
+	 * @throws InvalidArgumentException when given array of ids is empty
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function activateUsers(array $ids)
+	{
+		return $this->usersSection->activateEntities($ids);
 	}
 
 	/**

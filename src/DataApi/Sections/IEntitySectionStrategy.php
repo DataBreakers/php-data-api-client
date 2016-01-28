@@ -41,4 +41,9 @@ interface IEntitySectionStrategy
 	 */
 	public function getDeleteEntitiesUrl();
 
+	/**
+	 * @return string
+	 */
+	public function getActivateEntitiesUrl();
+
 }
