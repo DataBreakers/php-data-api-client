@@ -72,6 +72,7 @@ class Seeder
 	{
 		$this->refreshUsersAttributes();
 		$this->refreshItemsAttributes();
+		$this->refreshInteractionsAttributes();
 		$this->seedItems();
 		$this->seedUsers();
 		$this->seedInteractions();
@@ -160,6 +161,26 @@ class Seeder
 		}
 		if (!in_array(self::ATTRIBUTE_WEIGHT, $actualAttributes)) {
 			$this->client->addItemsAttribute(self::ATTRIBUTE_WEIGHT, DataType::INTEGER);
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	private function refreshInteractionsAttributes()
+	{
+		$expectedAttributes = [self::ATTRIBUTE_DESCRIPTION, self::ATTRIBUTE_WEIGHT];
+		$actualAttributes = $this->getAttributesNames($this->client->getInteractionsAttributes());
+		foreach ($actualAttributes as $attribute) {
+			if (!in_array($attribute, $expectedAttributes)) {
+				$this->client->deleteInteractionsAttribute($attribute);
+			}
+		}
+		if (!in_array(self::ATTRIBUTE_DESCRIPTION, $actualAttributes)) {
+			$this->client->addInteractionsAttribute(self::ATTRIBUTE_DESCRIPTION, DataType::TEXT, 'en');
+		}
+		if (!in_array(self::ATTRIBUTE_WEIGHT, $actualAttributes)) {
+			$this->client->addInteractionsAttribute(self::ATTRIBUTE_WEIGHT, DataType::INTEGER);
 		}
 	}
 

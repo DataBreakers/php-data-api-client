@@ -38,6 +38,13 @@ class AttributesSectionTest extends SectionTest
 		$this->attributesSection->addItemsAttribute(self::ATTRIBUTE_NAME, DataType::TEXT);
 	}
 
+	public function testAddingInteractionsAttribute()
+	{
+		$content = $this->getContentForAdding(self::ATTRIBUTE_NAME, DataType::TEXT);
+		$this->mockPerformPost(AttributesSection::ADD_INTERACTIONS_ATTRIBUTE_URL, [], $content);
+		$this->attributesSection->addInteractionsAttribute(self::ATTRIBUTE_NAME, DataType::TEXT);
+	}
+
 	public function testAddingUsersAttributeWhenLanguageIsSet()
 	{
 		$content = $this->getContentForAdding(self::ATTRIBUTE_NAME, DataType::TEXT, self::LANGUAGE);
@@ -50,6 +57,13 @@ class AttributesSectionTest extends SectionTest
 		$content = $this->getContentForAdding(self::ATTRIBUTE_NAME, DataType::TEXT, self::LANGUAGE);
 		$this->mockPerformPost(AttributesSection::ADD_ITEMS_ATTRIBUTE_URL, [], $content);
 		$this->attributesSection->addItemsAttribute(self::ATTRIBUTE_NAME, DataType::TEXT, self::LANGUAGE);
+	}
+
+	public function testAddingInteractionsAttributeWhenLanguageIsSet()
+	{
+		$content = $this->getContentForAdding(self::ATTRIBUTE_NAME, DataType::TEXT, self::LANGUAGE);
+		$this->mockPerformPost(AttributesSection::ADD_INTERACTIONS_ATTRIBUTE_URL, [], $content);
+		$this->attributesSection->addInteractionsAttribute(self::ATTRIBUTE_NAME, DataType::TEXT, self::LANGUAGE);
 	}
 
 	public function testAddingUsersAttributeWhenMetaTypeIsSet()
@@ -66,6 +80,13 @@ class AttributesSectionTest extends SectionTest
 		$this->attributesSection->addItemsAttribute(self::ATTRIBUTE_NAME, DataType::TEXT, NULL, MetaType::TITLE);
 	}
 
+	public function testAddingInteractionsAttributeWhenMetaTypeIsSet()
+	{
+		$content = $this->getContentForAdding(self::ATTRIBUTE_NAME, DataType::TEXT, NULL, MetaType::TITLE);
+		$this->mockPerformPost(AttributesSection::ADD_INTERACTIONS_ATTRIBUTE_URL, [], $content);
+		$this->attributesSection->addInteractionsAttribute(self::ATTRIBUTE_NAME, DataType::TEXT, NULL, MetaType::TITLE);
+	}
+
 	/**
 	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
 	 */
@@ -80,6 +101,14 @@ class AttributesSectionTest extends SectionTest
 	public function testThrowingExceptionWhenNameIsEmptyDuringAddingItemsAttribute()
 	{
 		$this->attributesSection->addItemsAttribute('', DataType::TEXT);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenNameIsEmptyDuringAddingInteractionsAttribute()
+	{
+		$this->attributesSection->addInteractionsAttribute('', DataType::TEXT);
 	}
 
 	/**
@@ -102,6 +131,17 @@ class AttributesSectionTest extends SectionTest
 	public function testThrowingExceptionWhenNameDoNotMatchPatternDuringAddingItemsAttribute($name)
 	{
 		$this->attributesSection->addItemsAttribute($name, DataType::TEXT);
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @dataProvider getInvalidAttributeNames
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenNameDoNotMatchPatternDuringAddingInteractionsAttribute($name)
+	{
+		$this->attributesSection->addInteractionsAttribute($name, DataType::TEXT);
 	}
 
 	/**
@@ -135,6 +175,14 @@ class AttributesSectionTest extends SectionTest
 	/**
 	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
 	 */
+	public function testThrowingExceptionWhenDataTypeIsEmptyDuringAddingInteractionsAttribute()
+	{
+		$this->attributesSection->addInteractionsAttribute(self::ATTRIBUTE_NAME, '');
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
 	public function testThrowingExceptionWhenDataTypeIsNotValidDuringAddingUsersAttribute()
 	{
 		$this->attributesSection->addUsersAttribute(self::ATTRIBUTE_NAME, 'foo');
@@ -146,6 +194,14 @@ class AttributesSectionTest extends SectionTest
 	public function testThrowingExceptionWhenDataTypeIsNotValidDuringAddingItemsAttribute()
 	{
 		$this->attributesSection->addItemsAttribute(self::ATTRIBUTE_NAME, 'foo');
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenDataTypeIsNotValidDuringAddingInteractionsAttribute()
+	{
+		$this->attributesSection->addInteractionsAttribute(self::ATTRIBUTE_NAME, 'foo');
 	}
 
 	/**
@@ -164,6 +220,14 @@ class AttributesSectionTest extends SectionTest
 		$this->attributesSection->addItemsAttribute(self::ATTRIBUTE_NAME, DataType::TEXT, NULL, 'foo');
 	}
 
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenMetaTypeIsNotValidDuringAddingInteractionsAttribute()
+	{
+		$this->attributesSection->addInteractionsAttribute(self::ATTRIBUTE_NAME, DataType::TEXT, NULL, 'foo');
+	}
+
 	public function testGettingUsersAttributes()
 	{
 		$this->mockPerformGet(AttributesSection::GET_USERS_ATTRIBUTES_URL);
@@ -174,6 +238,12 @@ class AttributesSectionTest extends SectionTest
 	{
 		$this->mockPerformGet(AttributesSection::GET_ITEMS_ATTRIBUTES_URL);
 		$this->attributesSection->getItemsAttributes();
+	}
+
+	public function testGettingInteractionsAttributes()
+	{
+		$this->mockPerformGet(AttributesSection::GET_INTERACTIONS_ATTRIBUTES_URL);
+		$this->attributesSection->getInteractionsAttributes();
 	}
 
 	public function testDeletingUsersAttribute()
@@ -190,6 +260,13 @@ class AttributesSectionTest extends SectionTest
 		$this->attributesSection->deleteItemsAttribute(self::ATTRIBUTE_NAME);
 	}
 
+	public function testDeletingInteractionsAttribute()
+	{
+		$expectedParameters = [AttributesSection::ATTRIBUTE_NAME_PARAMETER => self::ATTRIBUTE_NAME];
+		$this->mockPerformDelete(AttributesSection::DELETE_INTERACTIONS_ATTRIBUTE_URL, $expectedParameters);
+		$this->attributesSection->deleteInteractionsAttribute(self::ATTRIBUTE_NAME);
+	}
+
 	/**
 	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
 	 */
@@ -204,6 +281,14 @@ class AttributesSectionTest extends SectionTest
 	public function testThrowingExceptionWhenAttributeNameIsEmptyDuringDeletingItemsAttribute()
 	{
 		$this->attributesSection->deleteItemsAttribute('');
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenAttributeNameIsEmptyDuringDeletingInteractionsAttribute()
+	{
+		$this->attributesSection->deleteInteractionsAttribute('');
 	}
 
 	/**

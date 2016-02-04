@@ -107,6 +107,24 @@ class Client
 	}
 
 	/**
+	 * @param string $name
+	 * @param string $dataType
+	 * @param string|NULL $language
+	 * @param string|NULL $metaType
+	 * @return NULL
+	 * @throws InvalidArgumentException when given name is empty
+	 * @throws InvalidArgumentException when given name doesn't match required pattern
+	 * @throws InvalidArgumentException when given data type is empty
+	 * @throws InvalidArgumentException when given data type isn't known data type
+	 * @throws InvalidArgumentException when given meta type isn't known meta type
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function addInteractionsAttribute($name, $dataType, $language = NULL, $metaType = NULL)
+	{
+		return $this->attributesSection->addInteractionsAttribute($name, $dataType, $language, $metaType);
+	}
+
+	/**
 	 * @return array
 	 * @throws RequestFailedException when request failed for some reason
 	 */
@@ -122,6 +140,15 @@ class Client
 	public function getItemsAttributes()
 	{
 		return $this->attributesSection->getItemsAttributes();
+	}
+
+	/**
+	 * @return array
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getInteractionsAttributes()
+	{
+		return $this->attributesSection->getInteractionsAttributes();
 	}
 
 	/**
@@ -144,6 +171,17 @@ class Client
 	public function deleteItemsAttribute($attributeName)
 	{
 		return $this->attributesSection->deleteItemsAttribute($attributeName);
+	}
+
+	/**
+	 * @param string $attributeName
+	 * @return NULL
+	 * @throws InvalidArgumentException when given attribute name is empty
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function deleteInteractionsAttribute($attributeName)
+	{
+		return $this->attributesSection->deleteInteractionsAttribute($attributeName);
 	}
 
 

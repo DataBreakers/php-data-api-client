@@ -15,12 +15,15 @@ class AttributesSection extends Section
 
 	const ADD_USERS_ATTRIBUTE_URL = '/{accountId}/attribute/users';
 	const ADD_ITEMS_ATTRIBUTE_URL = '/{accountId}/attribute/items';
+	const ADD_INTERACTIONS_ATTRIBUTE_URL = '/{accountId}/attribute/interactions';
 
 	const GET_USERS_ATTRIBUTES_URL = '/{accountId}/attributes/users';
 	const GET_ITEMS_ATTRIBUTES_URL = '/{accountId}/attributes/items';
+	const GET_INTERACTIONS_ATTRIBUTES_URL = '/{accountId}/attributes/interactions';
 
 	const DELETE_USERS_ATTRIBUTE_URL = '/{accountId}/attributes/users/{attributeName}';
 	const DELETE_ITEMS_ATTRIBUTE_URL = '/{accountId}/attributes/items/{attributeName}';
+	const DELETE_INTERACTIONS_ATTRIBUTE_URL = '/{accountId}/attributes/interactions/{attributeName}';
 
 	const ATTRIBUTE_NAME_PARAMETER = 'attributeName';
 	const NAME_PARAMETER = 'name';
@@ -67,6 +70,24 @@ class AttributesSection extends Section
 	}
 
 	/**
+	 * @param string $name
+	 * @param string $dataType
+	 * @param string|NULL $language
+	 * @param string|NULL $metaType
+	 * @return NULL
+	 * @throws InvalidArgumentException when given name is empty
+	 * @throws InvalidArgumentException when given name doesn't match required pattern
+	 * @throws InvalidArgumentException when given data type is empty
+	 * @throws InvalidArgumentException when given data type isn't known data type
+	 * @throws InvalidArgumentException when given meta type isn't known meta type
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function addInteractionsAttribute($name, $dataType, $language = NULL, $metaType = NULL)
+	{
+		return $this->addAttribute(self::ADD_INTERACTIONS_ATTRIBUTE_URL, $name, $dataType, $language, $metaType);
+	}
+
+	/**
 	 * @return array
 	 * @throws RequestFailedException when request failed for some reason
 	 */
@@ -82,6 +103,15 @@ class AttributesSection extends Section
 	public function getItemsAttributes()
 	{
 		return $this->performGet(self::GET_ITEMS_ATTRIBUTES_URL);
+	}
+
+	/**
+	 * @return array
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getInteractionsAttributes()
+	{
+		return $this->performGet(self::GET_INTERACTIONS_ATTRIBUTES_URL);
 	}
 
 	/**
@@ -104,6 +134,17 @@ class AttributesSection extends Section
 	public function deleteItemsAttribute($attributeName)
 	{
 		return $this->deleteAttribute(self::DELETE_ITEMS_ATTRIBUTE_URL, $attributeName);
+	}
+
+	/**
+	 * @param string $attributeName
+	 * @return NULL
+	 * @throws InvalidArgumentException when given attribute name is empty
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function deleteInteractionsAttribute($attributeName)
+	{
+		return $this->deleteAttribute(self::DELETE_INTERACTIONS_ATTRIBUTE_URL, $attributeName);
 	}
 
 	/**
