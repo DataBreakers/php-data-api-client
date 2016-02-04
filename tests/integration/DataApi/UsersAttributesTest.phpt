@@ -26,6 +26,18 @@ class UsersAttributesTest extends IntegrationTestCase
 		$this->validateExpectedAttributes([Seeder::ATTRIBUTE_NAME, Seeder::ATTRIBUTE_AGE]);
 	}
 
+	public function testUpdatingAttributesDescription()
+	{
+		$this->client->updateUsersAttributeDescription(Seeder::ATTRIBUTE_NAME, 'cz', MetaType::PRICE);
+		$attributes = $this->client->getUsersAttributes();
+		foreach ($attributes['attributes'] as $attribute) {
+			if ($attribute['name'] === Seeder::ATTRIBUTE_NAME) {
+				Assert::same('cz', $attribute['description']['language']);
+				Assert::same(MetaType::PRICE, $attribute['description']['metaType']);
+			}
+		}
+	}
+
 	public function testDeletingAttribute()
 	{
 		$this->client->deleteUsersAttribute(Seeder::ATTRIBUTE_AGE);

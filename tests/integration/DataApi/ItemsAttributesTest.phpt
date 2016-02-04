@@ -35,6 +35,18 @@ class ItemsAttributesTest extends IntegrationTestCase
 		]);
 	}
 
+	public function testUpdatingAttributesDescription()
+	{
+		$this->client->updateItemsAttributeDescription(Seeder::ATTRIBUTE_NAME, 'cz', MetaType::PRICE);
+		$attributes = $this->client->getItemsAttributes();
+		foreach ($attributes['attributes'] as $attribute) {
+			if ($attribute['name'] === Seeder::ATTRIBUTE_NAME) {
+				Assert::same('cz', $attribute['description']['language']);
+				Assert::same(MetaType::PRICE, $attribute['description']['metaType']);
+			}
+		}
+	}
+
 	public function testDeletingAttribute()
 	{
 		$this->client->deleteItemsAttribute(Seeder::ATTRIBUTE_DESCRIPTION);

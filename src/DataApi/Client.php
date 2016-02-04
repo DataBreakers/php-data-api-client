@@ -153,6 +153,51 @@ class Client
 
 	/**
 	 * @param string $attributeName
+	 * @param string|NULL $language
+	 * @param string|NULL $metaType
+	 * @return NULL
+	 * @throws InvalidArgumentException when given name is empty
+	 * @throws InvalidArgumentException when given name doesn't match required pattern
+	 * @throws InvalidArgumentException when given meta type isn't known meta type
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function updateUsersAttributeDescription($attributeName, $language = NULL, $metaType = NULL)
+	{
+		return $this->attributesSection->updateUsersAttributeDescription($attributeName, $language, $metaType);
+	}
+
+	/**
+	 * @param string $attributeName
+	 * @param string|NULL $language
+	 * @param string|NULL $metaType
+	 * @return NULL
+	 * @throws InvalidArgumentException when given name is empty
+	 * @throws InvalidArgumentException when given name doesn't match required pattern
+	 * @throws InvalidArgumentException when given meta type isn't known meta type
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function updateItemsAttributeDescription($attributeName, $language = NULL, $metaType = NULL)
+	{
+		return $this->attributesSection->updateItemsAttributeDescription($attributeName, $language, $metaType);
+	}
+
+	/**
+	 * @param string $attributeName
+	 * @param string|NULL $language
+	 * @param string|NULL $metaType
+	 * @return NULL
+	 * @throws InvalidArgumentException when given name is empty
+	 * @throws InvalidArgumentException when given name doesn't match required pattern
+	 * @throws InvalidArgumentException when given meta type isn't known meta type
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function updateInteractionsAttributeDescription($attributeName, $language = NULL, $metaType = NULL)
+	{
+		return $this->attributesSection->updateInteractionsAttributeDescription($attributeName, $language, $metaType);
+	}
+
+	/**
+	 * @param string $attributeName
 	 * @return NULL
 	 * @throws InvalidArgumentException when given attribute name is empty
 	 * @throws RequestFailedException when request failed for some reason

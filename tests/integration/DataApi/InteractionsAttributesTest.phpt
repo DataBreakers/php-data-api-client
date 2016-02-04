@@ -33,6 +33,18 @@ class InteractionsAttributesTest extends IntegrationTestCase
 		]);
 	}
 
+	public function testUpdatingAttributesDescription()
+	{
+		$this->client->updateInteractionsAttributeDescription(Seeder::ATTRIBUTE_DESCRIPTION, 'cz', MetaType::PRICE);
+		$attributes = $this->client->getInteractionsAttributes();
+		foreach ($attributes['attributes'] as $attribute) {
+			if ($attribute['name'] === Seeder::ATTRIBUTE_DESCRIPTION) {
+				Assert::same('cz', $attribute['description']['language']);
+				Assert::same(MetaType::PRICE, $attribute['description']['metaType']);
+			}
+		}
+	}
+
 	public function testDeletingAttribute()
 	{
 		$this->client->deleteInteractionsAttribute(Seeder::ATTRIBUTE_DESCRIPTION);

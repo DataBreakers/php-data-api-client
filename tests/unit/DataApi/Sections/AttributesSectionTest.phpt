@@ -145,18 +145,6 @@ class AttributesSectionTest extends SectionTest
 	}
 
 	/**
-	 * @return array
-	 */
-	public function getInvalidAttributeNames()
-	{
-		return [
-			['foo%bar'],
-			['1foo'],
-			['_foo']
-		];
-	}
-
-	/**
 	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
 	 */
 	public function testThrowingExceptionWhenDataTypeIsEmptyDuringAddingUsersAttribute()
@@ -246,6 +234,159 @@ class AttributesSectionTest extends SectionTest
 		$this->attributesSection->getInteractionsAttributes();
 	}
 
+	public function testUpdatingUsersAttributeDescription()
+	{
+		$params = [AttributesSection::ATTRIBUTE_NAME_PARAMETER => self::ATTRIBUTE_NAME];
+		$content = [AttributesSection::DESCRIPTION_PARAMETER => $this->getContentForDescription()];
+		$this->mockPerformPost(AttributesSection::UPDATE_USERS_ATTRIBUTE_DESCRIPTION_URL, $params, $content);
+		$this->attributesSection->updateUsersAttributeDescription(self::ATTRIBUTE_NAME);
+	}
+
+	public function testUpdatingItemsAttributeDescription()
+	{
+		$params = [AttributesSection::ATTRIBUTE_NAME_PARAMETER => self::ATTRIBUTE_NAME];
+		$content = [AttributesSection::DESCRIPTION_PARAMETER => $this->getContentForDescription()];
+		$this->mockPerformPost(AttributesSection::UPDATE_ITEMS_ATTRIBUTE_DESCRIPTION_URL, $params, $content);
+		$this->attributesSection->updateItemsAttributeDescription(self::ATTRIBUTE_NAME);
+	}
+
+	public function testUpdatingInteractionsAttributeDescription()
+	{
+		$params = [AttributesSection::ATTRIBUTE_NAME_PARAMETER => self::ATTRIBUTE_NAME];
+		$content = [AttributesSection::DESCRIPTION_PARAMETER => $this->getContentForDescription()];
+		$this->mockPerformPost(AttributesSection::UPDATE_INTERACTIONS_DESCRIPTION_ATTRIBUTE_URL, $params, $content);
+		$this->attributesSection->updateInteractionsAttributeDescription(self::ATTRIBUTE_NAME);
+	}
+
+	public function testUpdatingUsersAttributeDescriptionWhenLanguageIsSet()
+	{
+		$params = [AttributesSection::ATTRIBUTE_NAME_PARAMETER => self::ATTRIBUTE_NAME];
+		$content = [AttributesSection::DESCRIPTION_PARAMETER => $this->getContentForDescription(self::LANGUAGE)];
+		$this->mockPerformPost(AttributesSection::UPDATE_USERS_ATTRIBUTE_DESCRIPTION_URL, $params, $content);
+		$this->attributesSection->updateUsersAttributeDescription(self::ATTRIBUTE_NAME, self::LANGUAGE);
+	}
+
+	public function testUpdatingItemsAttributeDescriptionWhenLanguageIsSet()
+	{
+		$params = [AttributesSection::ATTRIBUTE_NAME_PARAMETER => self::ATTRIBUTE_NAME];
+		$content = [AttributesSection::DESCRIPTION_PARAMETER => $this->getContentForDescription(self::LANGUAGE)];
+		$this->mockPerformPost(AttributesSection::UPDATE_ITEMS_ATTRIBUTE_DESCRIPTION_URL, $params, $content);
+		$this->attributesSection->updateItemsAttributeDescription(self::ATTRIBUTE_NAME, self::LANGUAGE);
+	}
+
+	public function testUpdatingInteractionsAttributeDescriptionWhenLanguageIsSet()
+	{
+		$params = [AttributesSection::ATTRIBUTE_NAME_PARAMETER => self::ATTRIBUTE_NAME];
+		$content = [AttributesSection::DESCRIPTION_PARAMETER => $this->getContentForDescription(self::LANGUAGE)];
+		$this->mockPerformPost(AttributesSection::UPDATE_INTERACTIONS_DESCRIPTION_ATTRIBUTE_URL, $params, $content);
+		$this->attributesSection->updateInteractionsAttributeDescription(self::ATTRIBUTE_NAME, self::LANGUAGE);
+	}
+
+	public function testUpdatingUsersAttributeDescriptionWhenMetaTypeIsSet()
+	{
+		$params = [AttributesSection::ATTRIBUTE_NAME_PARAMETER => self::ATTRIBUTE_NAME];
+		$content = [AttributesSection::DESCRIPTION_PARAMETER => $this->getContentForDescription(NULL, MetaType::TITLE)];
+		$this->mockPerformPost(AttributesSection::UPDATE_USERS_ATTRIBUTE_DESCRIPTION_URL, $params, $content);
+		$this->attributesSection->updateUsersAttributeDescription(self::ATTRIBUTE_NAME, NULL, MetaType::TITLE);
+	}
+
+	public function testUpdatingItemsAttributeDescriptionWhenMetaTypeIsSet()
+	{
+		$params = [AttributesSection::ATTRIBUTE_NAME_PARAMETER => self::ATTRIBUTE_NAME];
+		$content = [AttributesSection::DESCRIPTION_PARAMETER => $this->getContentForDescription(NULL, MetaType::TITLE)];
+		$this->mockPerformPost(AttributesSection::UPDATE_ITEMS_ATTRIBUTE_DESCRIPTION_URL, $params, $content);
+		$this->attributesSection->updateItemsAttributeDescription(self::ATTRIBUTE_NAME, NULL, MetaType::TITLE);
+	}
+
+	public function testUpdatingInteractionsAttributeDescriptionWhenMetaTypeIsSet()
+	{
+		$params = [AttributesSection::ATTRIBUTE_NAME_PARAMETER => self::ATTRIBUTE_NAME];
+		$content = [AttributesSection::DESCRIPTION_PARAMETER => $this->getContentForDescription(NULL, MetaType::TITLE)];
+		$this->mockPerformPost(AttributesSection::UPDATE_INTERACTIONS_DESCRIPTION_ATTRIBUTE_URL, $params, $content);
+		$this->attributesSection->updateInteractionsAttributeDescription(self::ATTRIBUTE_NAME, NULL, MetaType::TITLE);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenNameIsEmptyDuringUpdatingUsersAttributeDescription()
+	{
+		$this->attributesSection->updateUsersAttributeDescription('');
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenNameIsEmptyDuringUpdatingItemsAttributeDescription()
+	{
+		$this->attributesSection->updateItemsAttributeDescription('');
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenNameIsEmptyDuringUpdatingInteractionsAttributeDescription()
+	{
+		$this->attributesSection->updateInteractionsAttributeDescription('');
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @dataProvider getInvalidAttributeNames
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenNameDoNotMatchPatternDuringUpdatingUsersAttributeDescription($name)
+	{
+		$this->attributesSection->updateUsersAttributeDescription($name);
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @dataProvider getInvalidAttributeNames
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenNameDoNotMatchPatternDuringUpdatingItemsAttributeDescription($name)
+	{
+		$this->attributesSection->updateItemsAttributeDescription($name);
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @dataProvider getInvalidAttributeNames
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenNameDoNotMatchPatternDuringUpdatingInteractionsAttributeDescription($name)
+	{
+		$this->attributesSection->updateInteractionsAttributeDescription($name);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenMetaTypeIsNotValidDuringUpdatingUsersAttributeDescription()
+	{
+		$this->attributesSection->updateUsersAttributeDescription(self::ATTRIBUTE_NAME, NULL, 'foo');
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenMetaTypeIsNotValidDuringUpdatingItemsAttributeDescription()
+	{
+		$this->attributesSection->updateItemsAttributeDescription(self::ATTRIBUTE_NAME, NULL, 'foo');
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenMetaTypeIsNotValidDuringUpdatingInteractionsAttributeDescription()
+	{
+		$this->attributesSection->updateInteractionsAttributeDescription(self::ATTRIBUTE_NAME, NULL, 'foo');
+	}
+
 	public function testDeletingUsersAttribute()
 	{
 		$expectedParameters = [AttributesSection::ATTRIBUTE_NAME_PARAMETER => self::ATTRIBUTE_NAME];
@@ -292,6 +433,18 @@ class AttributesSectionTest extends SectionTest
 	}
 
 	/**
+	 * @return array
+	 */
+	public function getInvalidAttributeNames()
+	{
+		return [
+			['foo%bar'],
+			['1foo'],
+			['_foo']
+		];
+	}
+
+	/**
 	 * @param string $name
 	 * @param string $dataType
 	 * @param string|NULL $language
@@ -304,6 +457,20 @@ class AttributesSectionTest extends SectionTest
 			AttributesSection::NAME_PARAMETER => $name,
 			AttributesSection::DATA_TYPE_PARAMETER => $dataType
 		];
+		$description = $this->getContentForDescription($language, $metaType);
+		if ($description !== []) {
+			$content[AttributesSection::DESCRIPTION_PARAMETER] = $description;
+		}
+		return $content;
+	}
+
+	/**
+	 * @param string|NULL $language
+	 * @param string|NULL $metaType
+	 * @return array
+	 */
+	private function getContentForDescription($language = NULL, $metaType = NULL)
+	{
 		$description = [];
 		if ($language !== NULL) {
 			$description[AttributesSection::LANGUAGE_PARAMETER] = $language;
@@ -311,10 +478,7 @@ class AttributesSectionTest extends SectionTest
 		if ($metaType !== NULL) {
 			$description[AttributesSection::META_TYPE_PARAMETER] = $metaType;
 		}
-		if ($description !== []) {
-			$content[AttributesSection::DESCRIPTION_PARAMETER] = $description;
-		}
-		return $content;
+		return $description;
 	}
 
 }
