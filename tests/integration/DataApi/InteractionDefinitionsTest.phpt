@@ -16,8 +16,7 @@ class InteractionDefinitionsTest extends IntegrationTestCase
 	{
 		$expectedDefinitions = [
 			Seeder::INTERACTION_LIKE, Seeder::INTERACTION_DISLIKE,
-			Seeder::INTERACTION_PURCHASE, Seeder::INTERACTION_BOOKMARK,
-			Seeder::INTERACTION_DETAIL_VIEW, Seeder::INTERACTION_RECOMMENDATION
+			Seeder::INTERACTION_PURCHASE, Seeder::INTERACTION_RECOMMENDATION
 		];
 		$definitions = $this->client->getInteractionDefinitions();
 		Assert::same(count($expectedDefinitions), count($definitions['interactions']));

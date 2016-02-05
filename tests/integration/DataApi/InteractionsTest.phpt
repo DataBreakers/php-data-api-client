@@ -28,12 +28,12 @@ class InteractionsTest extends IntegrationTestCase
 	public function testInsertingMultipleInteractions()
 	{
 		$this->client->insertInteractions((new InteractionsBatch())
-			->addInteraction(Seeder::USER_SUZIE, Seeder::ITEM_FOO, Seeder::INTERACTION_BOOKMARK, new DateTime())
+			->addInteraction(Seeder::USER_SUZIE, Seeder::ITEM_FOO, Seeder::INTERACTION_PURCHASE, new DateTime())
 			->addInteraction(Seeder::USER_SUZIE, Seeder::ITEM_BAR, Seeder::INTERACTION_DISLIKE, new DateTime())
 		);
 		$user = $this->client->getUser(Seeder::USER_SUZIE, true);
 		$this->validateExpectedInteractions($user, [
-			Seeder::ITEM_FOO => Seeder::INTERACTION_BOOKMARK,
+			Seeder::ITEM_FOO => Seeder::INTERACTION_PURCHASE,
 			Seeder::ITEM_BAR => Seeder::INTERACTION_DISLIKE,
 			Seeder::ITEM_BAZ => Seeder::INTERACTION_DISLIKE
 		]);

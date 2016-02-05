@@ -42,7 +42,8 @@ class EntitiesBatch extends Batch
 	 *    all entities have format:
 	 *       array(
 	 *           id => 'id of entity',
-	 *           attributes => array(... array of attributes ...)
+	 *           attributes => array(... array of attributes ...),
+	 *           timestamp => 123456 // if set
 	 *       )
 	 */
 	public function getEntities()

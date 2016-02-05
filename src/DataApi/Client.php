@@ -4,11 +4,13 @@ namespace DataBreakers\DataApi;
 
 use DataBreakers\DataApi\Batch\EntitiesBatch;
 use DataBreakers\DataApi\Batch\InteractionsBatch;
+use DataBreakers\DataApi\Batch\InteractionTypesBatch;
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\Sections\AttributesSection;
 use DataBreakers\DataApi\Sections\EntitySection;
 use DataBreakers\DataApi\Sections\InteractionsSection;
+use DataBreakers\DataApi\Sections\InteractionTypesSection;
 use DataBreakers\DataApi\Sections\ItemsSection;
 use DataBreakers\DataApi\Sections\ItemsSectionStrategy;
 use DataBreakers\DataApi\Sections\RecommendationSection;
@@ -59,6 +61,7 @@ class Client
 		$this->api = new Api($configuration, $pathBuilder, $hmacSignature, $requestFactory);
 
 		$this->attributesSection = new AttributesSection($this->api);
+		$this->interactionTypesSection = new InteractionTypesSection($this->api);
 		$this->itemsSection = new ItemsSection($this->api, new ItemsSectionStrategy());
 		$this->usersSection = new UsersSection($this->api, new UsersSectionStrategy());
 		$this->interactionsSection = new InteractionsSection($this->api);
@@ -227,6 +230,84 @@ class Client
 	public function deleteInteractionsAttribute($attributeName)
 	{
 		return $this->attributesSection->deleteInteractionsAttribute($attributeName);
+	}
+
+
+
+	// ------------------------- INTERACTION TYPES ------------------------- //
+
+	/**
+	 * @param string $interactionTypeId
+	 * @param string|NULL $interactionMetaType
+	 * @param array $attributes
+	 * @param float|NULL $interactionWeight decimal number from interval <-1,1>
+	 * @param float|NULL $interactionLearnWeight decimal number from interval <-1,1>
+	 * @param DateTime|NULL $time
+	 * @return NULL
+	 * @throws InvalidArgumentException when given entity id is empty string
+	 * @throws InvalidArgumentException when given interaction meta type isn't valid meta type
+	 * @throws InvalidArgumentException when given interaction weight isn't number from interval <-1,1>
+	 * @throws InvalidArgumentException when given interaction learn weight isn't number from interval <-1,1>
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function insertOrUpdateInteractionType($interactionTypeId, $interactionMetaType = NULL, array $attributes = [],
+												  $interactionWeight = NULL, $interactionLearnWeight = NULL, DateTime $time = NULL)
+	{
+		return $this->interactionTypesSection->insertOrUpdateInteractionType(
+			$interactionTypeId, $interactionMetaType, $attributes,
+			$interactionWeight, $interactionLearnWeight, $time
+		);
+	}
+
+	/**
+	 * @param InteractionTypesBatch $interactionTypes
+	 * @return NULL
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function insertOrUpdateInteractionTypes(InteractionTypesBatch $interactionTypes)
+	{
+		return $this->interactionTypesSection->insertOrUpdateInteractionTypes($interactionTypes);
+	}
+
+	/**
+	 * @param string $interactionTypeId
+	 * @return NULL
+	 * @throws InvalidArgumentException when given interaction type id is empty
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getInteractionType($interactionTypeId)
+	{
+		return $this->interactionTypesSection->getInteractionType($interactionTypeId);
+	}
+
+	/**
+	 * @param int|NULL $limit
+	 * @param int|NULL $offset
+	 * @param array|NULL $attributes
+	 * @param string|NULL $searchQuery
+	 * @param array|NULL $searchAttributes
+	 * @returns array
+	 * @throws InvalidArgumentException when given limit isn't number or is negative
+	 * @throws InvalidArgumentException when given offset isn't number or is negative
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getInteractionTypes($limit = NULL, $offset = NULL, array $attributes = NULL,
+										$searchQuery = NULL, array $searchAttributes = NULL)
+	{
+		return $this->interactionTypesSection->getInteractionTypes(
+			$limit, $offset, $attributes, $searchQuery, $searchAttributes
+		);
+	}
+
+	/**
+	 * @param string $interactionTypeId
+	 * @return NULL
+	 * @throws InvalidArgumentException when given interaction type id is empty
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function deleteInteractionType($interactionTypeId)
+	{
+		return $this->interactionTypesSection->deleteInteractionType($interactionTypeId);
 	}
 
 

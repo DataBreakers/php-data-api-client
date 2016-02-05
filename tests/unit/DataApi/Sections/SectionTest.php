@@ -23,31 +23,31 @@ abstract class SectionTest extends UnitTestCase
 
 	/**
 	 * @param string $path
-	 * @param array $parameters
+	 * @param array|NULL $parameters
 	 * @return void
 	 */
-	protected function mockPerformGet($path, array $parameters = [])
+	protected function mockPerformGet($path, array $parameters = NULL)
 	{
 		$this->mockPerformCall('performGet', $path, $parameters);
 	}
 
 	/**
 	 * @param string $path
-	 * @param array $parameters
-	 * @param array $content
+	 * @param array|NULL $parameters
+	 * @param array|NULL $content
 	 * @return void
 	 */
-	protected function mockPerformPost($path, array $parameters = [], array $content = [])
+	protected function mockPerformPost($path, array $parameters = NULL, array $content = NULL)
 	{
 		$this->mockPerformCall('performPost', $path, $parameters, $content);
 	}
 
 	/**
 	 * @param string $path
-	 * @param array $parameters
+	 * @param array|NULL $parameters
 	 * @return void
 	 */
-	protected function mockPerformDelete($path, array $parameters = [])
+	protected function mockPerformDelete($path, array $parameters = NULL)
 	{
 		$this->mockPerformCall('performDelete', $path, $parameters);
 	}
@@ -55,18 +55,29 @@ abstract class SectionTest extends UnitTestCase
 	/**
 	 * @param string $methodName
 	 * @param string $path
-	 * @param array $parameters
-	 * @param array $content
+	 * @param array|NULL $parameters
+	 * @param array|NULL $content
 	 * @return void
 	 */
-	private function mockPerformCall($methodName, $path, array $parameters = [], array $content = [])
+	private function mockPerformCall($methodName, $path, array $parameters = NULL, array $content = NULL)
 	{
-		$expectedRestrictions = $parameters === [] && $content === []
-			? NULL
-			: new Restriction($parameters, $content);
+		$expectedRestrictions = $this->getExpectedRestrictions($parameters, $content);
 		$this->api->shouldReceive($methodName)
 			->with($path, equalTo($expectedRestrictions))
 			->once();
+	}
+
+	/**
+	 * @param array|NULL $parameters
+	 * @param array|NULL $content
+	 * @return array
+	 */
+	private function getExpectedRestrictions(array $parameters = NULL, array $content = NULL)
+	{
+		if ($parameters === NULL && $content === NULL) {
+			return NULL;
+		}
+		return new Restriction((array) $parameters, (array) $content);
 	}
 
 }

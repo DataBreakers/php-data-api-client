@@ -4,8 +4,10 @@ namespace DataBreakers;
 
 use DataBreakers\DataApi\Batch\EntitiesBatch;
 use DataBreakers\DataApi\Batch\InteractionsBatch;
+use DataBreakers\DataApi\Batch\InteractionTypesBatch;
 use DataBreakers\DataApi\Client;
 use DataBreakers\DataApi\DataType;
+use DataBreakers\DataApi\InteractionMetaType;
 use DataBreakers\DataApi\MetaType;
 use DataBreakers\DataApi\TemplateConfiguration;
 use DateTime;
@@ -31,8 +33,9 @@ class Seeder
 	const INTERACTION_DISLIKE = 'Dislike';
 	const INTERACTION_PURCHASE = 'Purchase';
 	const INTERACTION_RECOMMENDATION = 'Recommendation';
-	const INTERACTION_DETAIL_VIEW = 'Detail view';
-	const INTERACTION_BOOKMARK = 'Bookmark';
+
+	const INTERACTION_WEIGHT1 = 0.5;
+	const INTERACTION_WEIGHT2 = 0.25;
 
 	const TEMPLATE_DEFAULT = 'default';
 	const TEMPLATE_ID_1 = 'template1';
@@ -63,6 +66,7 @@ class Seeder
 		$this->clearTemplates();
 		$this->clearItems();
 		$this->clearUsers();
+		$this->clearInteractionTypes();
 	}
 
 	/**
@@ -73,6 +77,7 @@ class Seeder
 		$this->refreshUsersAttributes();
 		$this->refreshItemsAttributes();
 		$this->refreshInteractionsAttributes();
+		$this->seedInteractionTypes();
 		$this->seedItems();
 		$this->seedUsers();
 		$this->seedInteractions();
@@ -117,6 +122,20 @@ class Seeder
 			$templateId = $template['templateId'];
 			if ($templateId !== self::TEMPLATE_DEFAULT) {
 				$this->client->deleteTemplate($templateId);
+			}
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	private function clearInteractionTypes()
+	{
+		$interactionTypes = $this->client->getInteractionTypes();
+		foreach ($interactionTypes['interactions'] as $interactionType) {
+			$interactionTypeId = $interactionType['id'];
+			if ($interactionTypeId !== self::INTERACTION_RECOMMENDATION) {
+				$this->client->deleteInteractionType($interactionTypeId);
 			}
 		}
 	}
@@ -257,6 +276,21 @@ class Seeder
 			->setUserWeight(self::TEMPLATE_USER_WEIGHT)
 			->setItemWeight(self::TEMPLATE_ITEM_WEIGHT)
 			->setDiversity(self::TEMPLATE_DIVERSITY)
+		);
+	}
+
+	/**
+	 * @return void
+	 */
+	private function seedInteractionTypes()
+	{
+		$this->client->insertOrUpdateInteractionTypes((new InteractionTypesBatch())
+			->addInteractionType(self::INTERACTION_LIKE, NULL, [], self::INTERACTION_WEIGHT1)
+			->addInteractionType(self::INTERACTION_DISLIKE, InteractionMetaType::ACTION, [
+				self::ATTRIBUTE_DESCRIPTION => 'Foo',
+				self::ATTRIBUTE_WEIGHT => 150,
+			], self::INTERACTION_WEIGHT2, self::INTERACTION_WEIGHT1)
+			->addInteractionType(self::INTERACTION_PURCHASE, InteractionMetaType::CONVERSION)
 		);
 	}
 
