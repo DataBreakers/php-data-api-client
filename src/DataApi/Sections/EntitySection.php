@@ -52,7 +52,7 @@ class EntitySection extends Section
 	 * @param string $entityId
 	 * @param array $attributes
 	 * @param DateTime|NULL $time
-	 * @return NULl
+	 * @return NULL
 	 * @throws InvalidArgumentException when given entity id is empty string
 	 * @throws RequestFailedException when request failed for some reason
 	 */
@@ -64,7 +64,7 @@ class EntitySection extends Section
 
 	/**
 	 * @param EntitiesBatch $entities
-	 * @return NULl
+	 * @return NULL
 	 * @throws RequestFailedException when request failed for some reason
 	 */
 	public function insertOrUpdateEntities(EntitiesBatch $entities)
