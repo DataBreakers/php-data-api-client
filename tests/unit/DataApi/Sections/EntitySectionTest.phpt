@@ -144,7 +144,7 @@ class EntitySectionTest extends SectionTest
 	/**
 	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
 	 */
-	public function testThrowingExceptionWhenOrderIsEmptyStringDuringGettingEntities()
+	public function testThrowingExceptionWhenOrderByIsEmptyStringDuringGettingEntities()
 	{
 		$this->entitySection->getEntities(self::LIMIT, self::OFFSET, [self::AGE_ATTRIBUTE], '', Order::ASC,
 				'foo', [self::AGE_ATTRIBUTE]);
@@ -153,7 +153,7 @@ class EntitySectionTest extends SectionTest
 	/**
 	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
 	 */
-	public function testThrowingExceptionWhenOrderByIsNotValidValueDuringGettingEntities()
+	public function testThrowingExceptionWhenOrderIsNotValidValueDuringGettingEntities()
 	{
 		$this->entitySection->getEntities(self::LIMIT, self::OFFSET, [self::AGE_ATTRIBUTE], self::AGE_ATTRIBUTE, 'foo',
 				'foo', [self::AGE_ATTRIBUTE]);
@@ -211,12 +211,33 @@ class EntitySectionTest extends SectionTest
 		$this->entitySection->getEntity(self::ID1, true, self::LIMIT, -10);
 	}
 
-	public function testGettingSelectedEntities()
+	public function testGettingSelectedEntitiesWithBasicParameters()
 	{
 		$ids = [self::ID1, self::ID2, self::ID3];
 		$content = [EntitySection::IDS_PARAMETER => $ids];
 		$this->mockPerformPost(ItemsSectionStrategy::GET_SELECTED_ITEMS_URL, [], $content);
 		$this->entitySection->getSelectedEntities($ids);
+	}
+
+	public function testGettingSelectedEntitiesWithAllParameters()
+	{
+		$ids = [self::ID1, self::ID2, self::ID3];
+		$searchQuery = 'foo';
+		$content = [
+			EntitySection::IDS_PARAMETER => $ids,
+			EntitySection::LIMIT_PARAMETER => self::LIMIT,
+			EntitySection::OFFSET_PARAMETER => self::OFFSET,
+			EntitySection::ATTRIBUTES_PARAMETER => [self::NAME_ATTRIBUTE],
+			EntitySection::ORDER_BY_PARAMETER => self::AGE_ATTRIBUTE,
+			EntitySection::ORDER_PARAMETER => Order::DESC,
+			EntitySection::SEARCH_QUERY_PARAMETER => $searchQuery,
+			EntitySection::SEARCH_ATTRIBUTES_PARAMETER => [self::NAME_ATTRIBUTE, self::AGE_ATTRIBUTE]
+		];
+		$this->mockPerformPost(ItemsSectionStrategy::GET_SELECTED_ITEMS_URL, [], $content);
+		$this->entitySection->getSelectedEntities(
+			$ids, self::LIMIT, self::OFFSET, [self::NAME_ATTRIBUTE], self::AGE_ATTRIBUTE, Order::DESC,
+			$searchQuery, [self::NAME_ATTRIBUTE, self::AGE_ATTRIBUTE]
+		);
 	}
 
 	/**
@@ -225,6 +246,54 @@ class EntitySectionTest extends SectionTest
 	public function testThrowingExceptionWhenIdsAreEmptyDuringGettingSelectedEntities()
 	{
 		$this->entitySection->getSelectedEntities([]);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenLimitIsNotANumberDuringGettingSelectedEntities()
+	{
+		$this->entitySection->getSelectedEntities([self::ID1], 'foo');
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenLimitIsNegativeNumberDuringGettingSelectedEntities()
+	{
+		$this->entitySection->getSelectedEntities([self::ID1], -10);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenOffsetIsNotANumberDuringGettingSelectedEntities()
+	{
+		$this->entitySection->getSelectedEntities([self::ID1], 10, 'foo');
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenOffsetIsNegativeNumberDuringGettingSelectedEntities()
+	{
+		$this->entitySection->getSelectedEntities([self::ID1], 10, -10);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenOrderByIsEmptyStringDuringGettingSelectedEntities()
+	{
+		$this->entitySection->getSelectedEntities([self::ID1], NULL, NULL, NULL, '');
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenOrderByIsNotValidValueDuringGettingSelectedEntities()
+	{
+		$this->entitySection->getSelectedEntities([self::ID1], NULL, NULL, NULL, NULL, 'foo');
 	}
 	
 	public function testDeletingEntity()

@@ -139,7 +139,7 @@ class InteractionsSection extends Section
 	public function getInteractionDefinitions($limit = self::DEFAULT_LIMIT, $offset = self::DEFAULT_OFFSET,
 											  array $attributes = NULL, $searchQuery = NULL, array $searchAttributes = NULL)
 	{
-		$this->validateLimitAndOffset($limit, $offset);
+		$this->validateNotNullLimitAndOffset($limit, $offset);
 		$restriction = new Restriction([self::LIMIT_PARAMETER => $limit, self::OFFSET_PARAMETER => $offset]);
 		$attributes = $attributes === NULL ? NULL : implode(',', $attributes);
 		$this->addParameterIfNotNull($restriction, self::ATTRIBUTES_PARAMETER, $attributes);

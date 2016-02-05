@@ -296,13 +296,27 @@ class Client
 
 	/**
 	 * @param string[] $ids
+	 * @param int|NULL $limit
+	 * @param int|NULL $offset
+	 * @param array|NULL $attributes
+	 * @param string|NULL $orderBy
+	 * @param string|NULL $order
+	 * @param string|NULL $searchQuery
+	 * @param array|NULL $searchAttributes
 	 * @returns array
 	 * @throws InvalidArgumentException when given array of ids is empty
+	 * @throws InvalidArgumentException when given limit isn't number or is negative
+	 * @throws InvalidArgumentException when given offset isn't number or is negative
+	 * @throws InvalidArgumentException when given order by is empty string value
+	 * @throws InvalidArgumentException when given order isn't NULL, 'asc' or 'desc'
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getSelectedItems(array $ids)
+	public function getSelectedItems(array $ids, $limit = NULL, $offset = NULL, array $attributes = NULl, $orderBy = NULL,
+									 $order = NULL, $searchQuery = NULL, array $searchAttributes = NULL)
 	{
-		return $this->itemsSection->getSelectedEntities($ids);
+		return $this->itemsSection->getSelectedEntities(
+			$ids, $limit, $offset, $attributes, $orderBy, $order, $searchQuery, $searchAttributes
+		);
 	}
 
 	/**
@@ -428,13 +442,27 @@ class Client
 
 	/**
 	 * @param string[] $ids
+	 * @param int|NULL $limit
+	 * @param int|NULL $offset
+	 * @param array|NULL $attributes
+	 * @param string|NULL $orderBy
+	 * @param string|NULL $order
+	 * @param string|NULL $searchQuery
+	 * @param array|NULL $searchAttributes
 	 * @returns array
 	 * @throws InvalidArgumentException when given array of ids is empty
+	 * @throws InvalidArgumentException when given limit isn't number or is negative
+	 * @throws InvalidArgumentException when given offset isn't number or is negative
+	 * @throws InvalidArgumentException when given order by is empty string value
+	 * @throws InvalidArgumentException when given order isn't NULL, 'asc' or 'desc'
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getSelectedUsers(array $ids)
+	public function getSelectedUsers(array $ids, $limit = NULL, $offset = NULL, array $attributes = NULl, $orderBy = NULL,
+									 $order = NULL, $searchQuery = NULL, array $searchAttributes = NULL)
 	{
-		return $this->usersSection->getSelectedEntities($ids);
+		return $this->usersSection->getSelectedEntities(
+			$ids, $limit, $offset, $attributes, $orderBy, $order, $searchQuery, $searchAttributes
+		);
 	}
 
 	/**

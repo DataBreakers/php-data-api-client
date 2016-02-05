@@ -5,6 +5,7 @@ namespace DataBreakers\DataApi\Sections;
 use DataBreakers\DataApi\Api;
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
+use DataBreakers\DataApi\Order;
 use DataBreakers\DataApi\Utils\Restriction;
 use DataBreakers\DataApi\Utils\Validator;
 
@@ -76,15 +77,34 @@ abstract class Section
 	/**
 	 * @param int $limit
 	 * @param int $offset
+	 * @return void
+	 * @throws InvalidArgumentException when given limit isn't number or is negative
+	 * @throws InvalidArgumentException when given offset isn't number or is negative
+	 */
+	protected function validateNotNullLimitAndOffset($limit, $offset)
+	{
+		if ($limit === NULL) {
+			throw new InvalidArgumentException("Limit can't be NULL value.");
+		}
+		if ($offset === NULL) {
+			throw new InvalidArgumentException("Offset can't be NULL value.");
+		}
+		$this->validateLimitAndOffset($limit, $offset);
+	}
+
+	/**
+	 * @param int|NULL $limit
+	 * @param int|NULL $offset
+	 * @return void
 	 * @throws InvalidArgumentException when given limit isn't number or is negative
 	 * @throws InvalidArgumentException when given offset isn't number or is negative
 	 */
 	protected function validateLimitAndOffset($limit, $offset)
 	{
-		if (!Validator::isPositiveNumberOrZero($limit)) {
+		if ($limit !== NULL && !Validator::isPositiveNumberOrZero($limit)) {
 			throw new InvalidArgumentException("Limit must be positive numeric value or zero.");
 		}
-		if (!Validator::isPositiveNumberOrZero($offset)) {
+		if ($offset !== NULL && !Validator::isPositiveNumberOrZero($offset)) {
 			throw new InvalidArgumentException("Offset must be positive numeric value or zero.");
 		}
 	}
