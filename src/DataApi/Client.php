@@ -612,6 +612,7 @@ class Client
 	 * @throws InvalidArgumentException when given limit isn't number or is negative
 	 * @throws InvalidArgumentException when given offset isn't number or is negative
 	 * @throws RequestFailedException when request failed for some reason
+	 * @deprecated will be removed in next major version, do not use
 	 */
 	public function getInteractionDefinitions($limit = InteractionsSection::DEFAULT_LIMIT, $offset = InteractionsSection::DEFAULT_OFFSET,
 											  array $attributes = NULL, $searchQuery = NULL, array $searchAttributes = NULL)
