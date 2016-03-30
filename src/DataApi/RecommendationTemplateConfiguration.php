@@ -28,6 +28,18 @@ class RecommendationTemplateConfiguration extends TemplateConfiguration
 	/** @var bool|NULL */
 	private $categoryBlacklist;
 
+	/** @var bool */
+	private $diversityByCategories = false;
+
+	/** @var NULL|array */
+	private $diversityCategories = NULL;
+
+	/** @var bool */
+	private $diversityBySimilarity = false;
+
+	/** @var NULL|array */
+	private $similarityTypes = NULL;
+
 
 	/**
 	 * @param string|NULL $filter
@@ -201,6 +213,60 @@ class RecommendationTemplateConfiguration extends TemplateConfiguration
 	public function disableCategoryBlacklist()
 	{
 		$this->categoryBlacklist = false;
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isDiversityByCategoriesEnabled()
+	{
+		return $this->diversityByCategories;
+	}
+
+	/**
+	 * @return array|NULL
+	 */
+	public function getDiversityCategories()
+	{
+		return $this->diversityCategories;
+	}
+
+	/**
+	 * @param array|NULL $diversityCategories
+	 * @return $this
+	 */
+	public function setDiversityByCategories(array $diversityCategories = NULL)
+	{
+		$this->diversityByCategories = true;
+		$this->diversityCategories = $diversityCategories;
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isDiversityBySimilarityEnabled()
+	{
+		return $this->diversityBySimilarity;
+	}
+
+	/**
+	 * @return array|NULL
+	 */
+	public function getSimilarityTypes()
+	{
+		return $this->similarityTypes;
+	}
+
+	/**
+	 * @param array|NULL $similarityTypes
+	 * @return $this
+	 */
+	public function setDiversityBySimilarity(array $similarityTypes = NULL)
+	{
+		$this->diversityBySimilarity = true;
+		$this->similarityTypes = $similarityTypes;
 		return $this;
 	}
 

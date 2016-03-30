@@ -2,8 +2,8 @@
 
 namespace DataBreakers\DataApi\Sections;
 
-
 use DataBreakers\DataApi\RecommendationTemplateConfiguration;
+use DataBreakers\DataApi\Utils\RecommendationContentBuilder;
 
 
 require_once __DIR__ . '/../../bootstrap.php';
@@ -43,12 +43,7 @@ class RecommendationSectionTest extends SectionTest
 			->setDiversity(self::DIVERSITY)
 			->disableDetails()
 			->addAttributeLimitInRequest(self::ATTRIBUTE_ID1, 10);
-		$content = [
-			RecommendationSection::USER_ID_PARAMETER => self::USER_ID,
-			RecommendationSection::ITEM_ID_PARAMETER => self::ITEM_ID,
-			RecommendationSection::COUNT_PARAMETER => self::COUNT,
-			RecommendationSection::TEMPLATE_PARAMETER => $this->getExpectedTemplateConfiguration(NULL, $configuration)
-		];
+		$content = RecommendationContentBuilder::construct(self::USER_ID, self::ITEM_ID, self::COUNT, NULL, $configuration);
 		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
 		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
 		$this->recommendationSection->getRecommendations(self::USER_ID, self::ITEM_ID, self::COUNT, NULL, $configuration);
@@ -91,11 +86,7 @@ class RecommendationSectionTest extends SectionTest
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setBooster(self::BOOSTER)
 			->setDiversity(self::DIVERSITY);
-		$content = [
-			RecommendationSection::USER_ID_PARAMETER => self::USER_ID,
-			RecommendationSection::COUNT_PARAMETER => self::COUNT,
-			RecommendationSection::TEMPLATE_PARAMETER => $this->getExpectedTemplateConfiguration(self::TEMPLATE_ID, $configuration)
-		];
+		$content = RecommendationContentBuilder::construct(self::USER_ID, NULL, self::COUNT, self::TEMPLATE_ID, $configuration);
 		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
 		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
 		$this->recommendationSection->getRecommendationsForUser(self::USER_ID, self::COUNT, self::TEMPLATE_ID, $configuration);
@@ -127,11 +118,7 @@ class RecommendationSectionTest extends SectionTest
 
 	public function testGettingRecommendationsForItem()
 	{
-		$content = [
-			RecommendationSection::ITEM_ID_PARAMETER => self::ITEM_ID,
-			RecommendationSection::COUNT_PARAMETER => self::COUNT,
-			RecommendationSection::TEMPLATE_PARAMETER => $this->getExpectedTemplateConfiguration(self::TEMPLATE_ID)
-		];
+		$content = RecommendationContentBuilder::construct(NULL, self::ITEM_ID, self::COUNT, self::TEMPLATE_ID);
 		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
 		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
 		$this->recommendationSection->getRecommendationsForItem(self::ITEM_ID, self::COUNT, self::TEMPLATE_ID);
@@ -169,10 +156,7 @@ class RecommendationSectionTest extends SectionTest
 			->enableRecommendationFeedback()
 			->enableCategoryBlacklist()
 			->setDiversityDecay(0.25);
-		$content = [
-			RecommendationSection::COUNT_PARAMETER => self::COUNT,
-			RecommendationSection::TEMPLATE_PARAMETER => $this->getExpectedTemplateConfiguration(NULL, $configuration)
-		];
+		$content = RecommendationContentBuilder::construct(NULL, NULL, self::COUNT, NULL, $configuration);
 		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
 		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
 		$this->recommendationSection->getGeneralRecommendations(self::COUNT, NULL, $configuration);
@@ -192,46 +176,6 @@ class RecommendationSectionTest extends SectionTest
 	public function testThrowingExceptionWhenCountIsNegativeDuringGettingGeneralRecommendations()
 	{
 		$this->recommendationSection->getGeneralRecommendations(-10);
-	}
-
-	/**
-	 * @param string|NULL $templateId
-	 * @param RecommendationTemplateConfiguration $configuration
-	 * @return array
-	 */
-	private function getExpectedTemplateConfiguration($templateId, RecommendationTemplateConfiguration $configuration = NULL)
-	{
-		if ($configuration === NULL) {
-			return [RecommendationSection::TEMPLATE_ID_PARAMETER => $templateId];
-		}
-		$data = [
-			RecommendationSection::DISTINCT_PARAMETER => $configuration->getAttributesLimits(),
-			RecommendationSection::DETAILS_PARAMETER => $configuration->areDetailsEnabled()
-		];
-		$data = $this->setIfNotNull($data, RecommendationSection::TEMPLATE_ID_PARAMETER, $templateId);
-		$data = $this->setIfNotNull($data, RecommendationSection::FILTER_PARAMETER, $configuration->getFilter());
-		$data = $this->setIfNotNull($data, RecommendationSection::BOOSTER_PARAMETER, $configuration->getBooster());
-		$data = $this->setIfNotNull($data, RecommendationSection::USER_WEIGHT_PARAMETER, $configuration->getUserWeight());
-		$data = $this->setIfNotNull($data, RecommendationSection::ITEM_WEIGHT_PARAMETER, $configuration->getItemWeight());
-		$data = $this->setIfNotNull($data, RecommendationSection::DIVERSITY_PARAMETER, $configuration->getDiversity());
-		$data = $this->setIfNotNull($data, RecommendationSection::RECOMMENDATION_FEEDBACK_PARAMETER, $configuration->getRecommendationFeedback());
-		$data = $this->setIfNotNull($data, RecommendationSection::CATEGORY_BLACKLIST_PARAMETER, $configuration->getCategoryBlacklist());
-		$data = $this->setIfNotNull($data, RecommendationSection::DIVERSITY_DECAY_PARAMETER, $configuration->getDiversityDecay());
-		return $data;
-	}
-
-	/**
-	 * @param array $data
-	 * @param string $name
-	 * @param string|NULL $value
-	 * @return array
-	 */
-	private function setIfNotNull(array $data, $name, $value)
-	{
-		if ($value !== NULL) {
-			$data[$name] = $value;
-		}
-		return $data;
 	}
 
 }

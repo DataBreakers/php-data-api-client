@@ -133,7 +133,7 @@ class RecommendationTemplateConfigurationTest extends UnitTestCase
 		$this->configuration->addAttributeLimitInTime(self::ATTRIBUTE_ID1, 10, -20);
 	}
 
-	public function testAddingAttributeLimitInRequestAndTIme()
+	public function testAddingAttributeLimitInRequestAndTime()
 	{
 		$this->configuration->addAttributeLimitInRequestAndTime(self::ATTRIBUTE_ID1, 10, 20, 30);
 		$expected = [
@@ -268,6 +268,40 @@ class RecommendationTemplateConfigurationTest extends UnitTestCase
 			[1.1],
 			[2.25],
 		];
+	}
+
+	public function testGettingIfDiversityByCategoriesIsEnabled()
+	{
+		Assert::false($this->configuration->isDiversityByCategoriesEnabled());
+		$this->configuration->setDiversityByCategories();
+		Assert::true($this->configuration->isDiversityByCategoriesEnabled());
+	}
+
+	public function testGettingDiversityCategories()
+	{
+		Assert::null($this->configuration->getDiversityCategories());
+		$this->configuration->setDiversityByCategories();
+		Assert::null($this->configuration->getDiversityCategories());
+		$diversityCategories = ['foo', 'baz'];
+		$this->configuration->setDiversityByCategories($diversityCategories);
+		Assert::same($diversityCategories, $this->configuration->getDiversityCategories());
+	}
+
+	public function testGettingIfDiversityBySimilarityIsEnabled()
+	{
+		Assert::false($this->configuration->isDiversityBySimilarityEnabled());
+		$this->configuration->setDiversityBySimilarity();
+		Assert::true($this->configuration->isDiversityBySimilarityEnabled());
+	}
+
+	public function testGettingSimilarityTypes()
+	{
+		Assert::null($this->configuration->getSimilarityTypes());
+		$this->configuration->setDiversityBySimilarity();
+		Assert::null($this->configuration->getSimilarityTypes());
+		$similarityTypes = [4, 2, 10];
+		$this->configuration->setDiversityBySimilarity($similarityTypes);
+		Assert::same($similarityTypes, $this->configuration->getSimilarityTypes());
 	}
 
 }

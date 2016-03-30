@@ -6,6 +6,7 @@ namespace DataBreakers\DataApi\Sections;
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\RecommendationTemplateConfiguration;
+use DataBreakers\DataApi\Utils\RecommendationContentBuilder;
 use DataBreakers\DataApi\Utils\Restriction;
 
 
@@ -16,26 +17,11 @@ class RecommendationSection extends Section
 
 	const DEFAULT_MODEL_ID = 'default';
 	const MODEL_ID_PARAMETER = 'modelId';
-	const USER_ID_PARAMETER = 'userId';
-	const ITEM_ID_PARAMETER = 'itemId';
-	const COUNT_PARAMETER = 'count';
-	const TEMPLATE_PARAMETER = 'template';
-	const TEMPLATE_ID_PARAMETER = 'templateId';
-	const FILTER_PARAMETER = 'filter';
-	const BOOSTER_PARAMETER = 'booster';
-	const USER_WEIGHT_PARAMETER = 'userWeight';
-	const ITEM_WEIGHT_PARAMETER = 'itemWeight';
-	const DIVERSITY_PARAMETER = 'diversity';
-	const DISTINCT_PARAMETER = 'distinct';
-	const DETAILS_PARAMETER = 'details';
-	const RECOMMENDATION_FEEDBACK_PARAMETER = 'recommendationFeedback';
-	const CATEGORY_BLACKLIST_PARAMETER = 'categoryBlacklist';
-	const DIVERSITY_DECAY_PARAMETER = 'diversityDecay';
 
 
 	/**
-	 * @param string $userId
-	 * @param string $itemId
+	 * @param string|NULL $userId
+	 * @param string|NULL $itemId
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
@@ -58,11 +44,7 @@ class RecommendationSection extends Section
 			throw new InvalidArgumentException("Count must be integer value bigger than 0.");
 		}
 		$parameters = [self::MODEL_ID_PARAMETER => self::DEFAULT_MODEL_ID];
-		$content = [self::COUNT_PARAMETER => $count];
-		$template = $this->getTemplateConfiguration($templateId, $configuration);
-		$content = $this->setContentIfNotNull($content, self::TEMPLATE_PARAMETER, $template);
-		$content = $this->setContentIfNotNull($content, self::USER_ID_PARAMETER, $userId);
-		$content = $this->setContentIfNotNull($content, self::ITEM_ID_PARAMETER, $itemId);
+		$content = RecommendationContentBuilder::construct($userId, $itemId, $count, $templateId, $configuration);
 		$restriction = new Restriction($parameters, $content);
 		return $this->performPost(self::GET_RECOMMENDATION_URL, $restriction);
 	}
@@ -111,35 +93,6 @@ class RecommendationSection extends Section
 											  RecommendationTemplateConfiguration $configuration = NULL)
 	{
 		return $this->getRecommendations(NULL, NULL, $count, $templateId, $configuration);
-	}
-
-	/**
-	 * @param string|NULL $templateId
-	 * @param RecommendationTemplateConfiguration|NULL $configuration
-	 * @return array
-	 */
-	private function getTemplateConfiguration($templateId, RecommendationTemplateConfiguration $configuration = NULL)
-	{
-		if ($templateId === NULL && $configuration === NULL) {
-			return NULL;
-		}
-		if ($configuration === NULL) {
-			return [self::TEMPLATE_ID_PARAMETER => $templateId];
-		}
-		$data = [
-			self::DISTINCT_PARAMETER => $configuration->getAttributesLimits(),
-			self::DETAILS_PARAMETER => $configuration->areDetailsEnabled()
-		];
-		$data = $this->setContentIfNotNull($data, self::TEMPLATE_ID_PARAMETER, $templateId);
-		$data = $this->setContentIfNotNull($data, self::FILTER_PARAMETER, $configuration->getFilter());
-		$data = $this->setContentIfNotNull($data, self::BOOSTER_PARAMETER, $configuration->getBooster());
-		$data = $this->setContentIfNotNull($data, self::USER_WEIGHT_PARAMETER, $configuration->getUserWeight());
-		$data = $this->setContentIfNotNull($data, self::ITEM_WEIGHT_PARAMETER, $configuration->getItemWeight());
-		$data = $this->setContentIfNotNull($data, self::DIVERSITY_PARAMETER, $configuration->getDiversity());
-		$data = $this->setContentIfNotNull($data, self::RECOMMENDATION_FEEDBACK_PARAMETER, $configuration->getRecommendationFeedback());
-		$data = $this->setContentIfNotNull($data, self::CATEGORY_BLACKLIST_PARAMETER, $configuration->getCategoryBlacklist());
-		$data = $this->setContentIfNotNull($data, self::DIVERSITY_DECAY_PARAMETER, $configuration->getDiversityDecay());
-		return $data;
 	}
 
 }
