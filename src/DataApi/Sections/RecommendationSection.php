@@ -2,8 +2,8 @@
 
 namespace DataBreakers\DataApi\Sections;
 
-
 use DataBreakers\DataApi\Batch\RecommendationEntitiesBatch;
+use DataBreakers\DataApi\Batch\RecommendationsBatch;
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\RecommendationTemplateConfiguration;
@@ -15,9 +15,14 @@ class RecommendationSection extends Section
 {
 
 	const GET_RECOMMENDATION_URL = '/{accountId}/model/{modelId}/recommend';
+	const GET_RECOMMENDATIONS_BATCH_URL = '/{accountId}/model/{modelId}/recommend/batch';
 
 	const DEFAULT_MODEL_ID = 'default';
 	const MODEL_ID_PARAMETER = 'modelId';
+	const REQUESTS_PARAMETER = 'requests';
+	const EVALUATION_PARAMETER = 'evaluation';
+	const IMPORTANCE_TYPE_PARAMETER = 'importanceType';
+	const UNIQUE_RECOMMENDATIONS_PARAMETER = 'uniqueRecommendations';
 
 
 	/**
@@ -124,6 +129,46 @@ class RecommendationSection extends Section
 											  RecommendationTemplateConfiguration $configuration = NULL)
 	{
 		return $this->getRecommendations(NULL, NULL, $count, $templateId, $configuration);
+	}
+
+	/**
+	 * @param RecommendationsBatch $batch
+	 * @param bool $uniqueRecommendations
+	 * @param string $evaluation
+	 * @param string $importanceType
+	 * @return array
+	 * @throws InvalidArgumentException when given evaluation isn't 'parallel' or 'sequential'
+	 * @throws InvalidArgumentException when given evaluation isn't 'priority' or 'weight'
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getRecommendationsBatch(RecommendationsBatch $batch,
+											$uniqueRecommendations = true,
+											$evaluation = RecommendationsBatch::PARALLEL_EVALUATION,
+											$importanceType = RecommendationsBatch::PRIORITY_IMPORTANCE_TYPE)
+	{
+		$validEvaluations = [
+			RecommendationsBatch::PARALLEL_EVALUATION,
+			RecommendationsBatch::SEQUENTIAL_EVALUATION
+		];
+		if (!in_array($evaluation, $validEvaluations)) {
+			throw new InvalidArgumentException("Given evaluation '{$evaluation}' isn't valid.");
+		}
+		$validImportanceTypes = [
+			RecommendationsBatch::PRIORITY_IMPORTANCE_TYPE,
+			RecommendationsBatch::WEIGHT_IMPORTANCE_TYPE,
+		];
+		if (!in_array($importanceType, $validImportanceTypes)) {
+			throw new InvalidArgumentException("Given importance type '{$importanceType}' isn't valid.");
+		}
+		$parameters = [self::MODEL_ID_PARAMETER => self::DEFAULT_MODEL_ID];
+		$content = [
+			self::REQUESTS_PARAMETER => $batch->getRecommendations(),
+			self::EVALUATION_PARAMETER => $evaluation,
+			self::IMPORTANCE_TYPE_PARAMETER => $importanceType,
+			self::UNIQUE_RECOMMENDATIONS_PARAMETER => (bool) $uniqueRecommendations,
+		];
+		$restriction = new Restriction($parameters, $content);
+		return $this->performPost(self::GET_RECOMMENDATIONS_BATCH_URL, $restriction);
 	}
 
 }

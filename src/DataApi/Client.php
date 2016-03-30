@@ -6,6 +6,7 @@ use DataBreakers\DataApi\Batch\EntitiesBatch;
 use DataBreakers\DataApi\Batch\InteractionsBatch;
 use DataBreakers\DataApi\Batch\InteractionTypesBatch;
 use DataBreakers\DataApi\Batch\RecommendationEntitiesBatch;
+use DataBreakers\DataApi\Batch\RecommendationsBatch;
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\Sections\AttributesSection;
@@ -798,6 +799,24 @@ class Client
 											  RecommendationTemplateConfiguration $configuration = NULL)
 	{
 		return $this->recommendationSection->getGeneralRecommendations($count, $templateId, $configuration);
+	}
+
+	/**
+	 * @param RecommendationsBatch $batch
+	 * @param bool $uniqueRecommendations
+	 * @param string $evaluation
+	 * @param string $importanceType
+	 * @return array
+	 * @throws InvalidArgumentException when given evaluation isn't 'parallel' or 'sequential'
+	 * @throws InvalidArgumentException when given evaluation isn't 'priority' or 'weight'
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getRecommendationsBatch(RecommendationsBatch $batch,
+											$uniqueRecommendations = true,
+											$evaluation = RecommendationsBatch::PARALLEL_EVALUATION,
+											$importanceType = RecommendationsBatch::PRIORITY_IMPORTANCE_TYPE)
+	{
+		return $this->recommendationSection->getRecommendationsBatch($batch, $uniqueRecommendations, $evaluation, $importanceType);
 	}
 
 

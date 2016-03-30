@@ -3,6 +3,7 @@
 namespace DataBreakers\DataApi\Sections;
 
 use DataBreakers\DataApi\Batch\RecommendationEntitiesBatch;
+use DataBreakers\DataApi\Batch\RecommendationsBatch;
 use DataBreakers\DataApi\RecommendationTemplateConfiguration;
 use DataBreakers\DataApi\Utils\RecommendationContentBuilder;
 
@@ -210,7 +211,7 @@ class RecommendationSectionTest extends SectionTest
 	 */
 	public function testThrowingExceptionWhenCountIsZeroDuringGettingGeneralRecommendations()
 	{
-		$this->recommendationSection->getGeneralRecommendations( 0);
+		$this->recommendationSection->getGeneralRecommendations(0);
 	}
 
 	/**
@@ -219,6 +220,53 @@ class RecommendationSectionTest extends SectionTest
 	public function testThrowingExceptionWhenCountIsNegativeDuringGettingGeneralRecommendations()
 	{
 		$this->recommendationSection->getGeneralRecommendations(-10);
+	}
+
+	public function testGettingRecommendationsBatch()
+	{
+		$batch = (new RecommendationsBatch())
+			->requestRecommendationsForItem('request1', 2.0, self::ITEM_ID1, 10, self::TEMPLATE_ID)
+			->requestGeneralRecommendations('request2', 5.0, 50);
+		$content = [
+			RecommendationSection::REQUESTS_PARAMETER => $batch->getRecommendations(),
+			RecommendationSection::EVALUATION_PARAMETER => RecommendationsBatch::SEQUENTIAL_EVALUATION,
+			RecommendationSection::IMPORTANCE_TYPE_PARAMETER => RecommendationsBatch::WEIGHT_IMPORTANCE_TYPE,
+			RecommendationSection::UNIQUE_RECOMMENDATIONS_PARAMETER => false
+		];
+		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
+		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATIONS_BATCH_URL, $parameters, $content);
+		$this->recommendationSection->getRecommendationsBatch(
+			$batch,
+			false,
+			RecommendationsBatch::SEQUENTIAL_EVALUATION,
+			RecommendationsBatch::WEIGHT_IMPORTANCE_TYPE
+		);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenInvalidEvaluationWhileGettingRecommendationsBatch()
+	{
+		$this->recommendationSection->getRecommendationsBatch(
+			new RecommendationsBatch(),
+			true,
+			'bar',
+			RecommendationsBatch::WEIGHT_IMPORTANCE_TYPE
+		);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenInvalidImportanceTypeWhileGettingRecommendationsBatch()
+	{
+		$this->recommendationSection->getRecommendationsBatch(
+			new RecommendationsBatch(),
+			true,
+			RecommendationsBatch::PARALLEL_EVALUATION,
+			'foo'
+		);
 	}
 
 }
