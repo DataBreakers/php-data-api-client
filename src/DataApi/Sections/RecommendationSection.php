@@ -3,6 +3,7 @@
 namespace DataBreakers\DataApi\Sections;
 
 
+use DataBreakers\DataApi\Batch\RecommendationEntitiesBatch;
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\RecommendationTemplateConfiguration;
@@ -20,8 +21,8 @@ class RecommendationSection extends Section
 
 
 	/**
-	 * @param string|NULL $userId
-	 * @param string|NULL $itemId
+	 * @param string|NULL|RecommendationEntitiesBatch $users
+	 * @param string|NULL|RecommendationEntitiesBatch $items
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
@@ -31,20 +32,20 @@ class RecommendationSection extends Section
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getRecommendations($userId, $itemId, $count, $templateId = NULL,
+	public function getRecommendations($users, $items, $count, $templateId = NULL,
 									   RecommendationTemplateConfiguration $configuration = NULL)
 	{
-		if ($userId !== NULL && $userId == '') {
+		if ($users !== NULL && is_string($users) && $users == '') {
 			throw new InvalidArgumentException("User id can't be empty string value.");
 		}
-		if ($itemId !== NULL && $itemId == '') {
+		if ($items !== NULL && is_string($items) && $items == '') {
 			throw new InvalidArgumentException("Item id can't be empty string value.");
 		}
 		if (!is_int($count) || $count <= 0) {
 			throw new InvalidArgumentException("Count must be integer value bigger than 0.");
 		}
 		$parameters = [self::MODEL_ID_PARAMETER => self::DEFAULT_MODEL_ID];
-		$content = RecommendationContentBuilder::construct($userId, $itemId, $count, $templateId, $configuration);
+		$content = RecommendationContentBuilder::construct($users, $items, $count, $templateId, $configuration);
 		$restriction = new Restriction($parameters, $content);
 		return $this->performPost(self::GET_RECOMMENDATION_URL, $restriction);
 	}
@@ -66,6 +67,21 @@ class RecommendationSection extends Section
 	}
 
 	/**
+	 * @param RecommendationEntitiesBatch $users
+	 * @param int $count
+	 * @param string|NULL $templateId
+	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @return array
+	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getRecommendationsForUsers(RecommendationEntitiesBatch $users, $count, $templateId = NULL,
+											   RecommendationTemplateConfiguration $configuration = NULL)
+	{
+		return $this->getRecommendations($users, NULL, $count, $templateId, $configuration);
+	}
+
+	/**
 	 * @param string $itemId
 	 * @param int $count
 	 * @param string|NULL $templateId
@@ -79,6 +95,21 @@ class RecommendationSection extends Section
 											  RecommendationTemplateConfiguration $configuration = NULL)
 	{
 		return $this->getRecommendations(NULL, $itemId, $count, $templateId, $configuration);
+	}
+
+	/**
+	 * @param RecommendationEntitiesBatch $items
+	 * @param int $count
+	 * @param string|NULL $templateId
+	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @return array
+	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getRecommendationsForItems(RecommendationEntitiesBatch $items, $count, $templateId = NULL,
+											   RecommendationTemplateConfiguration $configuration = NULL)
+	{
+		return $this->getRecommendations(NULL, $items, $count, $templateId, $configuration);
 	}
 
 	/**

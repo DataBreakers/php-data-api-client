@@ -5,6 +5,7 @@ namespace DataBreakers\DataApi;
 use DataBreakers\DataApi\Batch\EntitiesBatch;
 use DataBreakers\DataApi\Batch\InteractionsBatch;
 use DataBreakers\DataApi\Batch\InteractionTypesBatch;
+use DataBreakers\DataApi\Batch\RecommendationEntitiesBatch;
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\Sections\AttributesSection;
@@ -706,8 +707,8 @@ class Client
 	// ------------------------- RECOMMENDATION ------------------------- //
 
 	/**
-	 * @param string $userId
-	 * @param string $itemId
+	 * @param string|RecommendationEntitiesBatch $users user id or users batch
+	 * @param string|RecommendationEntitiesBatch $items item id or items batch
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
@@ -717,10 +718,10 @@ class Client
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getRecommendations($userId, $itemId, $count, $templateId = NULL,
+	public function getRecommendations($users, $items, $count, $templateId = NULL,
 									   RecommendationTemplateConfiguration $configuration = NULL)
 	{
-		return $this->recommendationSection->getRecommendations($userId, $itemId, $count, $templateId, $configuration);
+		return $this->recommendationSection->getRecommendations($users, $items, $count, $templateId, $configuration);
 	}
 
 	/**
@@ -740,6 +741,21 @@ class Client
 	}
 
 	/**
+	 * @param RecommendationEntitiesBatch $users
+	 * @param int $count
+	 * @param string|NULL $templateId
+	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @return array
+	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getRecommendationsForUsers(RecommendationEntitiesBatch $users, $count, $templateId = NULL,
+											   RecommendationTemplateConfiguration $configuration = NULL)
+	{
+		return $this->recommendationSection->getRecommendationsForUsers($users, $count, $templateId, $configuration);
+	}
+
+	/**
 	 * @param string $itemId
 	 * @param int $count
 	 * @param string|NULL $templateId
@@ -753,6 +769,21 @@ class Client
 											  RecommendationTemplateConfiguration $configuration = NULL)
 	{
 		return $this->recommendationSection->getRecommendationsForItem($itemId, $count, $templateId, $configuration);
+	}
+
+	/**
+	 * @param RecommendationEntitiesBatch $items
+	 * @param int $count
+	 * @param string|NULL $templateId
+	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @return array
+	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getRecommendationsForItems(RecommendationEntitiesBatch $items, $count, $templateId = NULL,
+											   RecommendationTemplateConfiguration $configuration = NULL)
+	{
+		return $this->recommendationSection->getRecommendationsForItems($items, $count, $templateId, $configuration);
 	}
 
 	/**

@@ -2,6 +2,7 @@
 
 namespace DataBreakers\DataApi\Utils;
 
+use DataBreakers\DataApi\Batch\RecommendationEntitiesBatch;
 use DataBreakers\DataApi\RecommendationTemplateConfiguration;
 use DataBreakers\UnitTestCase;
 use Tester\Assert;
@@ -12,8 +13,10 @@ require_once __DIR__ . '/../../bootstrap.php';
 class RecommendationContentBuilderTest extends UnitTestCase
 {
 
-	const USER_ID = 'user1';
-	const ITEM_ID = 'item1';
+	const USER_ID1 = 'user1';
+	const USER_ID2 = 'user2';
+	const ITEM_ID1 = 'item1';
+	const ITEM_ID2 = 'item2';
 	const COUNT = 10;
 	const TEMPLATE_ID = 'template1';
 	const FILTER = 'filter > 1';
@@ -22,6 +25,8 @@ class RecommendationContentBuilderTest extends UnitTestCase
 	const ITEM_WEIGHT = 0.6;
 	const DIVERSITY = 0.8;
 	const DIVERSITY_DECAY = 0.5;
+	const INTERACTION = 'interaction';
+	const INTERACTION_WEIGHT = 0.25;
 
 	/** @var RecommendationContentBuilder */
 	private $builder;
@@ -36,8 +41,8 @@ class RecommendationContentBuilderTest extends UnitTestCase
 	public function testSettingMultipleSettings()
 	{
 		$expected = [
-			RecommendationContentBuilder::USER_ID_PARAMETER => self::USER_ID,
-			RecommendationContentBuilder::ITEM_ID_PARAMETER => self::ITEM_ID,
+			RecommendationContentBuilder::USER_ID_PARAMETER => self::USER_ID1,
+			RecommendationContentBuilder::ITEM_ID_PARAMETER => self::ITEM_ID1,
 			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT,
 			RecommendationContentBuilder::TEMPLATE_PARAMETER => [
 				RecommendationContentBuilder::TEMPLATE_ID_PARAMETER => self::TEMPLATE_ID,
@@ -52,7 +57,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 			->setBooster(self::BOOSTER)
 			->setUserWeight(self::USER_WEIGHT)
 			->setItemWeight(self::ITEM_WEIGHT);
-		$this->validateRecommendationContent($expected, self::USER_ID, self::ITEM_ID, self::COUNT, self::TEMPLATE_ID, $configuration);
+		$this->validateRecommendationContent($expected, self::USER_ID1, self::ITEM_ID1, self::COUNT, self::TEMPLATE_ID, $configuration);
 	}
 	
 	public function testSettingOnlyCount()
@@ -64,19 +69,63 @@ class RecommendationContentBuilderTest extends UnitTestCase
 	public function testSettingUserId()
 	{
 		$expected = [
-			RecommendationContentBuilder::USER_ID_PARAMETER => self::USER_ID,
+			RecommendationContentBuilder::USER_ID_PARAMETER => self::USER_ID1,
 			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT
 		];
-		$this->validateRecommendationContent($expected, self::USER_ID, NULL, self::COUNT);
+		$this->validateRecommendationContent($expected, self::USER_ID1, NULL, self::COUNT);
+	}
+
+	public function testSettingUsers()
+	{
+		$expected = [
+			RecommendationContentBuilder::USERS_PARAMETER => [
+				[
+					RecommendationContentBuilder::USER_ID_PARAMETER => self::USER_ID1
+				],
+				[
+					RecommendationContentBuilder::USER_ID_PARAMETER => self::USER_ID2,
+					RecommendationEntitiesBatch::INTERACTIONS_KEY => [
+						self::INTERACTION => self::INTERACTION_WEIGHT
+					]
+				],
+			],
+			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT
+		];
+		$users = (new RecommendationEntitiesBatch())
+			->addEntity(self::USER_ID1)
+			->addEntity(self::USER_ID2, [self::INTERACTION => self::INTERACTION_WEIGHT]);
+		$this->validateRecommendationContent($expected, $users, NULL, self::COUNT);
 	}
 
 	public function testSettingItemId()
 	{
 		$expected = [
-			RecommendationContentBuilder::ITEM_ID_PARAMETER => self::ITEM_ID,
+			RecommendationContentBuilder::ITEM_ID_PARAMETER => self::ITEM_ID1,
 			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT
 		];
-		$this->validateRecommendationContent($expected, NULL, self::ITEM_ID, self::COUNT);
+		$this->validateRecommendationContent($expected, NULL, self::ITEM_ID1, self::COUNT);
+	}
+
+	public function testSettingItems()
+	{
+		$expected = [
+			RecommendationContentBuilder::ITEMS_PARAMETER => [
+				[
+					RecommendationContentBuilder::ITEM_ID_PARAMETER => self::ITEM_ID1
+				],
+				[
+					RecommendationContentBuilder::ITEM_ID_PARAMETER => self::ITEM_ID2,
+					RecommendationEntitiesBatch::INTERACTIONS_KEY => [
+						self::INTERACTION => self::INTERACTION_WEIGHT
+					]
+				],
+			],
+			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT
+		];
+		$items = (new RecommendationEntitiesBatch())
+			->addEntity(self::ITEM_ID1)
+			->addEntity(self::ITEM_ID2, [self::INTERACTION => self::INTERACTION_WEIGHT]);
+		$this->validateRecommendationContent($expected, NULL, $items, self::COUNT);
 	}
 
 	public function testSettingTemplateId()
@@ -319,14 +368,14 @@ class RecommendationContentBuilderTest extends UnitTestCase
 
 	/**
 	 * @param array|NULL $expectedContent
-	 * @param string|NULL $userId
-	 * @param string|NULL $itemId
+	 * @param string|NULL|RecommendationEntitiesBatch $users
+	 * @param string|NULL|RecommendationEntitiesBatch $items
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @return void
 	 */
-	private function validateRecommendationContent(array $expectedContent, $userId, $itemId, $count, $templateId = NULL,
+	private function validateRecommendationContent(array $expectedContent, $users, $items, $count, $templateId = NULL,
 												   RecommendationTemplateConfiguration $configuration = NULL)
 	{
 		if ($configuration !== NULL) {
@@ -338,7 +387,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 				$expectedContent[RecommendationContentBuilder::TEMPLATE_PARAMETER]
 			);
 		}
-		$actualContent = RecommendationContentBuilder::construct($userId, $itemId, $count, $templateId, $configuration);
+		$actualContent = RecommendationContentBuilder::construct($users, $items, $count, $templateId, $configuration);
 		Assert::equal($expectedContent, $actualContent);
 	}
 

@@ -2,6 +2,7 @@
 
 namespace DataBreakers\DataApi\Utils;
 
+use DataBreakers\DataApi\Batch\RecommendationEntitiesBatch;
 use DataBreakers\DataApi\RecommendationTemplateConfiguration;
 
 
@@ -9,7 +10,9 @@ class RecommendationContentBuilder
 {
 
 	const USER_ID_PARAMETER = 'userId';
+	const USERS_PARAMETER = 'users';
 	const ITEM_ID_PARAMETER = 'itemId';
+	const ITEMS_PARAMETER = 'items';
 	const COUNT_PARAMETER = 'count';
 	const TEMPLATE_PARAMETER = 'template';
 	const TEMPLATE_ID_PARAMETER = 'templateId';
@@ -32,19 +35,29 @@ class RecommendationContentBuilder
 
 
 	/**
-	 * @param string|NULL $userId
-	 * @param string|NULL $itemId
+	 * @param string|NULL|RecommendationEntitiesBatch $users
+	 * @param string|NULL|RecommendationEntitiesBatch $items
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @return array
 	 */
-	public static function construct($userId, $itemId, $count, $templateId = NULL,
-							  		 RecommendationTemplateConfiguration $configuration = NULL)
+	public static function construct($users, $items, $count, $templateId = NULL,
+									 RecommendationTemplateConfiguration $configuration = NULL)
 	{
 		$data = [self::COUNT_PARAMETER => $count];
-		$data = self::setIfNotNull($data, self::USER_ID_PARAMETER, $userId);
-		$data = self::setIfNotNull($data, self::ITEM_ID_PARAMETER, $itemId);
+		if ($users !== NULL && is_string($users)) {
+			$data[self::USER_ID_PARAMETER] = $users;
+		}
+		if ($items !== NULL && is_string($items)) {
+			$data[self::ITEM_ID_PARAMETER] = $items;
+		}
+		if ($users !== NULL && $users instanceof RecommendationEntitiesBatch) {
+			$data[self::USERS_PARAMETER] = self::convertEntitiesBatchToArray($users, self::USER_ID_PARAMETER);
+		}
+		if ($items !== NULL && $items instanceof RecommendationEntitiesBatch) {
+			$data[self::ITEMS_PARAMETER] = self::convertEntitiesBatchToArray($items, self::ITEM_ID_PARAMETER);
+		}
 		$template = self::getTemplateConfiguration($templateId, $configuration);
 		$data = self::setIfNotNull($data, self::TEMPLATE_PARAMETER, $template);
 		return $data;
@@ -116,6 +129,20 @@ class RecommendationContentBuilder
 			$data[$name] = $value;
 		}
 		return $data;
+	}
+
+	/**
+	 * @param RecommendationEntitiesBatch $batch
+	 * @param string $entityIdKey
+	 * @return array
+	 */
+	private static function convertEntitiesBatchToArray(RecommendationEntitiesBatch $batch, $entityIdKey)
+	{
+		return array_map(function($entity) use($entityIdKey) {
+			$entity[$entityIdKey] = $entity[RecommendationEntitiesBatch::ENTITY_ID_KEY];
+			unset($entity[RecommendationEntitiesBatch::ENTITY_ID_KEY]);
+			return $entity;
+		}, $batch->getEntities());
 	}
 
 }
