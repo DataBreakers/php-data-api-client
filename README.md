@@ -32,12 +32,12 @@ $client->addItemsAttribute('weight', DataApi\DataType::INTEGER);
 
 // Add some items (if you are adding multiple items, users or interactions it's much faster to use batches)
 $itemsBatch = (new DataApi\Batch\EntitiesBatch())
-	->addEntity('fridge', [
+	->addEntity('fridgeId', [
 		'title' => 'Fridge',
 		'color' => 'white',
 		'weight' => 55
 	])
-	->addEntity('car', [
+	->addEntity('carId', [
 		'title' => 'Car',
 		'color' => 'blue',
 		'weight' => 1547
@@ -62,15 +62,15 @@ $client->insertOrUpdateUsers($usersBatch);
 
 // Add interactions between users and items
 $interactionsBatch = (new DataApi\Batch\InteractionsBatch())
-	->addInteraction('john', 'car', 'Like')
-	->addInteraction('john', 'car', 'Purchase')
-	->addInteraction('john', 'fridge', 'Dislike')
-	->addInteraction('sophia', 'car', 'Detail view')
-	->addInteraction('sophia', 'fridge', 'Purchase');
+	->addInteraction('john', 'carId', 'Like')
+	->addInteraction('john', 'carId', 'Purchase')
+	->addInteraction('john', 'fridgeId', 'Dislike')
+	->addInteraction('sophia', 'carId', 'Detail view')
+	->addInteraction('sophia', 'fridgeId', 'Purchase');
 $client->insertInteractions($interactionsBatch);
 
 // And finally obtain ten recommendations for Sophia and car item!
-$recommendations = $client->getRecommendations('sophia', 'car', 10);
+$recommendations = $client->getRecommendations('sophia', 'carId', 10);
 ```
 
 
