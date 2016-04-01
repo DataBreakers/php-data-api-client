@@ -50,11 +50,11 @@ $client->addUsersAttribute('age', DataApi\DataType::INTEGER);
 
 // Add some users
 $usersBatch = (new DataApi\Batch\EntitiesBatch())
-	->addEntity('john', [
+	->addEntity('johnId', [
 		'name' => 'John Smith',
 		'age' => 35
 	])
-	->addEntity('sophia', [
+	->addEntity('sophiaId', [
 		'name' => 'Sophia White',
 		'age' => 27
 	]);
@@ -62,15 +62,15 @@ $client->insertOrUpdateUsers($usersBatch);
 
 // Add interactions between users and items
 $interactionsBatch = (new DataApi\Batch\InteractionsBatch())
-	->addInteraction('john', 'carId', 'Like')
-	->addInteraction('john', 'carId', 'Purchase')
-	->addInteraction('john', 'fridgeId', 'Dislike')
-	->addInteraction('sophia', 'carId', 'Detail view')
-	->addInteraction('sophia', 'fridgeId', 'Purchase');
+	->addInteraction('johnId', 'carId', 'Like')
+	->addInteraction('johnId', 'carId', 'Purchase')
+	->addInteraction('johnId', 'fridgeId', 'Dislike')
+	->addInteraction('sophiaId', 'carId', 'Detail view')
+	->addInteraction('sophiaId', 'fridgeId', 'Purchase');
 $client->insertInteractions($interactionsBatch);
 
 // And finally obtain ten recommendations for Sophia and car item!
-$recommendations = $client->getRecommendations('sophia', 'carId', 10);
+$recommendations = $client->getRecommendations('sophiaId', 'carId', 10);
 ```
 
 
