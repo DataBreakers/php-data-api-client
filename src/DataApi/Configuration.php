@@ -3,7 +3,7 @@
 namespace DataBreakers\DataApi;
 
 
-class Configuration
+class Configuration implements ConfigurationInterface
 {
 
 	const DEFAULT_HOST = 'https://api.databreakers.com';

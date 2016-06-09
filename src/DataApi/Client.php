@@ -53,10 +53,19 @@ class Client
 	/**
 	 * @param string $accountId Unique identifier of account
 	 * @param string $secretKey Key used for hmac signature
+	 * @param ConfigurationInterface $configuration Client confguration
 	 */
-	public function __construct($accountId, $secretKey)
+	public function __construct($accountId, $secretKey, ConfigurationInterface $configuration = null)
 	{
-		$configuration = new Configuration(Configuration::DEFAULT_HOST, Configuration::DEFAULT_SLUG, $accountId, $secretKey);
+		if ($configuration === null) {
+			$configuration = new Configuration(
+				Configuration::DEFAULT_HOST,
+				Configuration::DEFAULT_SLUG,
+				$accountId,
+				$secretKey
+			);
+		}
+
 		$pathBuilder = new PathBuilder();
 		$hmacSignature = new HmacSignature($configuration->getSecretKey());
 		$requestFactory = new RequestFactory(new GuzzleClient());
