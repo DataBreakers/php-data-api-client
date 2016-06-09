@@ -33,19 +33,27 @@ class Configuration implements ConfigurationInterface
 	 */
 	private $secretKey;
 
+	/**
+	 * Timeout for http request [s]
+	 * @var
+	 */
+	protected $requestTimeout;
+
 
 	/**
 	 * @param string $host
 	 * @param string $slug
 	 * @param string $accountId
 	 * @param string $secretKey
+	 * @param int $requestTimeout
 	 */
-	public function __construct($host, $slug, $accountId, $secretKey)
+	public function __construct($host, $slug, $accountId, $secretKey, $requestTimeout = 10)
 	{
 		$this->host = $host;
 		$this->slug = $slug;
 		$this->accountId = $accountId;
 		$this->secretKey = $secretKey;
+		$this->requestTimeout = $requestTimeout;
 	}
 
 	/**
@@ -120,4 +128,11 @@ class Configuration implements ConfigurationInterface
 		return $this;
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getRequestTimeout()
+	{
+		return $this->requestTimeout;
+	}
 }

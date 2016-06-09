@@ -34,4 +34,9 @@ interface ConfigurationInterface
 	 * @return string
 	 */
 	public function getSecretKey();
+
+	/**
+	 * @return int
+	 */
+	public function getRequestTimeout();
 }

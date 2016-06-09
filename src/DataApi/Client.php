@@ -68,7 +68,7 @@ class Client
 
 		$pathBuilder = new PathBuilder();
 		$hmacSignature = new HmacSignature($configuration->getSecretKey());
-		$requestFactory = new RequestFactory(new GuzzleClient());
+		$requestFactory = new RequestFactory(new GuzzleClient(), ['timeout' => $configuration->getRequestTimeout()]);
 		$this->api = new Api($configuration, $pathBuilder, $hmacSignature, $requestFactory);
 
 		$this->attributesSection = new AttributesSection($this->api);

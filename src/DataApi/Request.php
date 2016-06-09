@@ -21,13 +21,20 @@ class Request
 	/** @var GuzzleClient */
 	private $client;
 
+	/**
+	 * array of GuzzleClient request options
+	 * @var array
+	 */
+	private $requestOptions = [];
+
 
 	/**
 	 * @param GuzzleClient $client
 	 */
-	public function __construct(GuzzleClient $client)
+	public function __construct(GuzzleClient $client, array $requestOptions = [])
 	{
 		$this->client = $client;
+		$this->requestOptions = $requestOptions;
 	}
 
 	/**
@@ -71,11 +78,12 @@ class Request
 	private function sendRequest($method, $url, array $content = [])
 	{
 		try {
-			$request = $this->client->createRequest($method, $url);
+			$request = $this->client->createRequest($method, $url, $this->requestOptions);
 			$request->setHeader('Content-Type', 'application/json; charset=utf-8');
 			if (!empty($content)) {
 				$request->setBody(Stream::factory(json_encode($content)));
 			};
+
 			return $this->client->send($request);
 		}
 		catch (RequestException $ex) {
@@ -92,6 +100,7 @@ class Request
 	{
 		if ($response !== NULL) {
 			$json = $this->parseJson($response);
+
 			return is_array($json) && isset($json[self::ERROR_MESSAGE_KEY])
 				? $json[self::ERROR_MESSAGE_KEY]
 				: NULL;
