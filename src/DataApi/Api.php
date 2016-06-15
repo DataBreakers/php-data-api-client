@@ -80,6 +80,7 @@ class Api
 	}
 
 	/**
+	 * @deprecated use configuration object in constructor instead
 	 * @param string $host
 	 * @return $this
 	 */
@@ -90,6 +91,7 @@ class Api
 	}
 
 	/**
+	 * @deprecated use configuration object in constructor instead
 	 * @param string $slug
 	 * @return $this
 	 */

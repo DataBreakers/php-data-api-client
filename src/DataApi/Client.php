@@ -881,6 +881,7 @@ class Client
 	// ------------------------- CONFIGURATION ------------------------- //
 
 	/**
+	 * @deprecated use configuration object in constructor instead
 	 * @param string $host
 	 * @return $this
 	 */
@@ -891,6 +892,7 @@ class Client
 	}
 
 	/**
+	 * @deprecated use configuration object in constructor instead
 	 * @param string $slug
 	 * @return $this
 	 */
