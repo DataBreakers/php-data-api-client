@@ -25,6 +25,12 @@ interface ConfigurationInterface
 	public function getSlug();
 
 	/**
+	 * @param string $slug
+	 * @return $this
+	 */
+	public function setSlug($slug);
+
+	/**
 	 * @return string
 	 */
 	public function getAccountId();

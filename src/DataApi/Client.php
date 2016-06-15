@@ -57,12 +57,13 @@ class Client
 	 */
 	public function __construct($accountId, $secretKey, ConfigurationInterface $configuration = null)
 	{
-		if ($configuration === null) {
+		if ($configuration === NULL) {
 			$configuration = new Configuration(
 				Configuration::DEFAULT_HOST,
 				Configuration::DEFAULT_SLUG,
 				$accountId,
-				$secretKey
+				$secretKey,
+				Configuration::DEFAULT_REQUEST_TIMEOUT
 			);
 		}
 
