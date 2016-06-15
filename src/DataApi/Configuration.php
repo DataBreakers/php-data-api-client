@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
 
 	/**
 	 * Timeout for http request [s]
-	 * @var
+	 * @var int
 	 */
 	protected $requestTimeout;
 

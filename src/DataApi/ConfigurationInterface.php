@@ -4,11 +4,10 @@ namespace DataBreakers\DataApi;
 
 /**
  * Defines client configuration
- *
- * @package DataBreakers\DataApi
  */
 interface ConfigurationInterface
 {
+
 	/**
 	 * @return string
 	 */
@@ -39,4 +38,5 @@ interface ConfigurationInterface
 	 * @return int
 	 */
 	public function getRequestTimeout();
+
 }

@@ -53,7 +53,7 @@ class Client
 	/**
 	 * @param string $accountId Unique identifier of account
 	 * @param string $secretKey Key used for hmac signature
-	 * @param ConfigurationInterface $configuration Client confguration
+	 * @param ConfigurationInterface $configuration Client configuration
 	 */
 	public function __construct($accountId, $secretKey, ConfigurationInterface $configuration = null)
 	{
