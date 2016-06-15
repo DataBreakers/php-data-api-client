@@ -21,15 +21,13 @@ class Request
 	/** @var GuzzleClient */
 	private $client;
 
-	/**
-	 * array of GuzzleClient request options
-	 * @var array
-	 */
+	/** @var array */
 	private $requestOptions = [];
 
 
 	/**
 	 * @param GuzzleClient $client
+	 * @param array $requestOptions array of GuzzleClient request options
 	 */
 	public function __construct(GuzzleClient $client, array $requestOptions = [])
 	{
@@ -83,7 +81,6 @@ class Request
 			if (!empty($content)) {
 				$request->setBody(Stream::factory(json_encode($content)));
 			};
-
 			return $this->client->send($request);
 		}
 		catch (RequestException $ex) {
