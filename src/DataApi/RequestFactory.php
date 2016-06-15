@@ -11,13 +11,18 @@ class RequestFactory
 	/** @var GuzzleClient */
 	private $client;
 
+	/** @var array */
+	private $requestOptions = [];
+
 
 	/**
 	 * @param GuzzleClient $client
+	 * @param array $requestOptions array of GuzzleClient request options
 	 */
-	public function __construct(GuzzleClient $client)
+	public function __construct(GuzzleClient $client, array $requestOptions = [])
 	{
 		$this->client = $client;
+		$this->requestOptions = $requestOptions;
 	}
 
 	/**
@@ -25,7 +30,7 @@ class RequestFactory
 	 */
 	public function create()
 	{
-		return new Request($this->client);
+		return new Request($this->client, $this->requestOptions);
 	}
 
 }

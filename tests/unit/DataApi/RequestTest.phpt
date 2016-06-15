@@ -17,6 +17,9 @@ class RequestTest extends UnitTestCase
 	const URL = 'https://api.databreakers.com/v1/foo/bar';
 	const ERROR_MESSAGE = 'Foo bar baz error';
 
+	/** @var array */
+	private $mockOptions = ['timeout' => 10];
+
 	/** @var Request */
 	private $request;
 
@@ -30,7 +33,7 @@ class RequestTest extends UnitTestCase
 	protected function setUp()
 	{
 		$this->client = \Mockery::mock('GuzzleHttp\Client');
-		$this->request = new Request($this->client);
+		$this->request = new Request($this->client, $this->mockOptions);
 	}
 
 	public function testGetRequest()
@@ -88,7 +91,7 @@ class RequestTest extends UnitTestCase
 		$request = $this->createMockRequest($content);
 		$this->client->shouldReceive('createRequest')
 			->once()
-			->with($method, $url)
+			->with($method, $url, $this->mockOptions)
 			->andReturn($request);
 		$this->client->shouldReceive('send')
 			->once()
@@ -109,7 +112,7 @@ class RequestTest extends UnitTestCase
 		$requestException->shouldReceive('getResponse')->andReturn($response);
 		$this->client->shouldReceive('createRequest')
 			->once()
-			->with($method, $url)
+			->with($method, $url, $this->mockOptions)
 			->andReturn($request);
 		$this->client->shouldReceive('send')
 			->once()

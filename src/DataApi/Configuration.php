@@ -3,11 +3,12 @@
 namespace DataBreakers\DataApi;
 
 
-class Configuration
+class Configuration implements ConfigurationInterface
 {
 
 	const DEFAULT_HOST = 'https://api.databreakers.com';
 	const DEFAULT_SLUG = '/v1';
+	const DEFAULT_REQUEST_TIMEOUT = NULL;
 
 	/**
 	 * Beginning part of API url
@@ -33,23 +34,31 @@ class Configuration
 	 */
 	private $secretKey;
 
+	/**
+	 * Timeout for http request [s]
+	 * @var int
+	 */
+	protected $requestTimeout;
+
 
 	/**
 	 * @param string $host
 	 * @param string $slug
 	 * @param string $accountId
 	 * @param string $secretKey
+	 * @param int $requestTimeout
 	 */
-	public function __construct($host, $slug, $accountId, $secretKey)
+	public function __construct($host, $slug, $accountId, $secretKey, $requestTimeout = self::DEFAULT_REQUEST_TIMEOUT)
 	{
 		$this->host = $host;
 		$this->slug = $slug;
 		$this->accountId = $accountId;
 		$this->secretKey = $secretKey;
+		$this->requestTimeout = $requestTimeout;
 	}
 
 	/**
-	 * @return string
+	 * @inheritdoc
 	 */
 	public function getHost()
 	{
@@ -57,8 +66,7 @@ class Configuration
 	}
 
 	/**
-	 * @param string $host
-	 * @return $this
+	 * @inheritdoc
 	 */
 	public function setHost($host)
 	{
@@ -67,7 +75,7 @@ class Configuration
 	}
 
 	/**
-	 * @return string
+	 * @inheritdoc
 	 */
 	public function getSlug()
 	{
@@ -75,8 +83,7 @@ class Configuration
 	}
 
 	/**
-	 * @param string $slug
-	 * @return $this
+	 * @inheritdoc
 	 */
 	public function setSlug($slug)
 	{
@@ -85,7 +92,7 @@ class Configuration
 	}
 
 	/**
-	 * @return string
+	 * @inheritdoc
 	 */
 	public function getAccountId()
 	{
@@ -103,7 +110,7 @@ class Configuration
 	}
 
 	/**
-	 * @return string
+	 * @inheritdoc
 	 */
 	public function getSecretKey()
 	{
@@ -111,12 +118,29 @@ class Configuration
 	}
 
 	/**
-	 * @param string $secretKey
-	 * @return $this
+	 * @inheritdoc
 	 */
 	public function setSecretKey($secretKey)
 	{
 		$this->secretKey = $secretKey;
+		return $this;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getRequestTimeout()
+	{
+		return $this->requestTimeout;
+	}
+
+	/**
+	 * @param int $requestTimeout
+	 * @return $this
+	 */
+	public function setRequestTimeout($requestTimeout)
+	{
+		$this->requestTimeout = $requestTimeout;
 		return $this;
 	}
 

@@ -12,7 +12,7 @@ use DataBreakers\DataApi\Utils\Restriction;
 class Api
 {
 
-	/** @var Configuration */
+	/** @var ConfigurationInterface */
 	private $configuration;
 
 	/** @var PathBuilder */
@@ -26,12 +26,12 @@ class Api
 
 
 	/**
-	 * @param Configuration $configuration
+	 * @param ConfigurationInterface $configuration
 	 * @param PathBuilder $pathBuilder
 	 * @param HmacSignature $hmacSignature
 	 * @param RequestFactory $requestFactory
 	 */
-	public function __construct(Configuration $configuration, PathBuilder $pathBuilder, HmacSignature $hmacSignature,
+	public function __construct(ConfigurationInterface $configuration, PathBuilder $pathBuilder, HmacSignature $hmacSignature,
 								RequestFactory $requestFactory)
 	{
 		$this->configuration = $configuration;

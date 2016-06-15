@@ -15,6 +15,7 @@ class ConfigurationTest extends UnitTestCase
 	const SLUG = '/v1';
 	const ACCOUNT_ID = 'FooAccount';
 	const SECRET_KEY = '1234';
+	const REQUEST_TIMEOUT = 10;
 
 	/** @var Configuration */
 	private $configuration;
@@ -23,7 +24,13 @@ class ConfigurationTest extends UnitTestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->configuration = new Configuration(self::HOST, self::SLUG, self::ACCOUNT_ID, self::SECRET_KEY);
+		$this->configuration = new Configuration(
+			self::HOST,
+			self::SLUG,
+			self::ACCOUNT_ID,
+			self::SECRET_KEY,
+			self::REQUEST_TIMEOUT
+		);
 	}
 
 	public function testGettingHost()
@@ -72,6 +79,18 @@ class ConfigurationTest extends UnitTestCase
 		$secretKey = '4321';
 		$this->configuration->setSecretKey($secretKey);
 		Assert::same($secretKey, $this->configuration->getSecretKey());
+	}
+
+	public function testGettingRequestTimeout()
+	{
+		Assert::same(self::REQUEST_TIMEOUT, $this->configuration->getRequestTimeout());
+	}
+
+	public function testSettingRequestTimeout()
+	{
+		$requestTimeout = 150;
+		$this->configuration->setRequestTimeout($requestTimeout);
+		Assert::same($requestTimeout, $this->configuration->getRequestTimeout());
 	}
 
 }
