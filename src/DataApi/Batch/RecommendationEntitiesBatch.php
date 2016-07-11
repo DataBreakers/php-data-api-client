@@ -14,6 +14,9 @@ class RecommendationEntitiesBatch extends Batch
 	/** @var array */
 	private $entities = [];
 
+	/** @var string */
+	private $primaryEntityId;
+
 
 	/**
 	 * @param string $entityId
@@ -35,6 +38,16 @@ class RecommendationEntitiesBatch extends Batch
 	}
 
 	/**
+	 * @param string $entityId
+	 * @return $this
+	 */
+	public function setPrimaryEntityId($entityId)
+	{
+		$this->primaryEntityId = $entityId;
+		return $this;
+	}
+
+	/**
 	 * @return array of entities
 	 *    all entities have format:
 	 *       array(
@@ -45,6 +58,14 @@ class RecommendationEntitiesBatch extends Batch
 	public function getEntities()
 	{
 		return $this->entities;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPrimaryEntityId()
+	{
+		return $this->primaryEntityId;
 	}
 
 	/**

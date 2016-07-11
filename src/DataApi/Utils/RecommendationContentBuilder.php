@@ -53,10 +53,20 @@ class RecommendationContentBuilder
 			$data[self::ITEM_ID_PARAMETER] = $items;
 		}
 		if ($users !== NULL && $users instanceof RecommendationEntitiesBatch) {
-			$data[self::USERS_PARAMETER] = self::convertEntitiesBatchToArray($users, self::USER_ID_PARAMETER);
+			if (count($users->getEntities()) > 0) {
+				$data[self::USERS_PARAMETER] = self::convertEntitiesBatchToArray($users, self::USER_ID_PARAMETER);
+			}
+			if ($users->getPrimaryEntityId() !== NULL) {
+				$data[self::USER_ID_PARAMETER] = $users->getPrimaryEntityId();
+			}
 		}
 		if ($items !== NULL && $items instanceof RecommendationEntitiesBatch) {
-			$data[self::ITEMS_PARAMETER] = self::convertEntitiesBatchToArray($items, self::ITEM_ID_PARAMETER);
+			if (count($items->getEntities()) > 0) {
+				$data[self::ITEMS_PARAMETER] = self::convertEntitiesBatchToArray($items, self::ITEM_ID_PARAMETER);
+			}
+			if ($items->getPrimaryEntityId() !== NULL) {
+				$data[self::ITEM_ID_PARAMETER] = $items->getPrimaryEntityId();
+			}
 		}
 		$template = self::getTemplateConfiguration($templateId, $configuration);
 		$data = self::setIfNotNull($data, self::TEMPLATE_PARAMETER, $template);

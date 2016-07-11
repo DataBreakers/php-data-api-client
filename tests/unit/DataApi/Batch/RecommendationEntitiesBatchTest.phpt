@@ -14,6 +14,7 @@ class RecommendationEntitiesBatchTest extends UnitTestCase
 
 	const ID1 = 'entity1';
 	const ID2 = 'entity1';
+	const ID_PRIMARY = 'primaryEntity';
 
 	const INTERACTION1 = 'interaction1';
 	const WEIGHT1 = 0.5;
@@ -36,6 +37,13 @@ class RecommendationEntitiesBatchTest extends UnitTestCase
 		Assert::same(2, count($entities));
 		$this->checkEntity($entities[0], self::ID1, [self::INTERACTION1 => self::WEIGHT1]);
 		$this->checkEntity($entities[1], self::ID2);
+	}
+
+	public function testGettingPrimaryEntityId()
+	{
+		Assert::same(NULL, $this->batch->getPrimaryEntityId());
+		$this->batch->setPrimaryEntityId(self::ID_PRIMARY);
+		Assert::same(self::ID_PRIMARY, $this->batch->getPrimaryEntityId());
 	}
 
 	public function testItCanBeTraversedByForeach()

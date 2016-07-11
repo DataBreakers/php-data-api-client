@@ -97,6 +97,26 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		$this->validateRecommendationContent($expected, $users, NULL, self::COUNT);
 	}
 
+	public function testSettingsUsersAndUserId()
+	{
+		$expected = [
+			RecommendationContentBuilder::USER_ID_PARAMETER => self::USER_ID1,
+			RecommendationContentBuilder::USERS_PARAMETER => [
+				[
+					RecommendationContentBuilder::USER_ID_PARAMETER => self::USER_ID2,
+					RecommendationEntitiesBatch::INTERACTIONS_KEY => [
+						self::INTERACTION => self::INTERACTION_WEIGHT
+					]
+				],
+			],
+			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT
+		];
+		$users = (new RecommendationEntitiesBatch())
+			->setPrimaryEntityId(self::USER_ID1)
+			->addEntity(self::USER_ID2, [self::INTERACTION => self::INTERACTION_WEIGHT]);
+		$this->validateRecommendationContent($expected, $users, NULL, self::COUNT);
+	}
+
 	public function testSettingItemId()
 	{
 		$expected = [
@@ -124,6 +144,26 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$items = (new RecommendationEntitiesBatch())
 			->addEntity(self::ITEM_ID1)
+			->addEntity(self::ITEM_ID2, [self::INTERACTION => self::INTERACTION_WEIGHT]);
+		$this->validateRecommendationContent($expected, NULL, $items, self::COUNT);
+	}
+
+	public function testSettingItemsAndItemId()
+	{
+		$expected = [
+			RecommendationContentBuilder::ITEM_ID_PARAMETER => self::ITEM_ID1,
+			RecommendationContentBuilder::ITEMS_PARAMETER => [
+				[
+					RecommendationContentBuilder::ITEM_ID_PARAMETER => self::ITEM_ID2,
+					RecommendationEntitiesBatch::INTERACTIONS_KEY => [
+						self::INTERACTION => self::INTERACTION_WEIGHT
+					]
+				],
+			],
+			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT
+		];
+		$items = (new RecommendationEntitiesBatch())
+			->setPrimaryEntityId(self::ITEM_ID1)
 			->addEntity(self::ITEM_ID2, [self::INTERACTION => self::INTERACTION_WEIGHT]);
 		$this->validateRecommendationContent($expected, NULL, $items, self::COUNT);
 	}
