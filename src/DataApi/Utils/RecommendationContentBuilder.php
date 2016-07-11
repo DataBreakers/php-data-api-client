@@ -138,11 +138,14 @@ class RecommendationContentBuilder
 	 */
 	private static function convertEntitiesBatchToArray(RecommendationEntitiesBatch $batch, $entityIdKey)
 	{
-		return array_map(function($entity) use($entityIdKey) {
-			$entity[$entityIdKey] = $entity[RecommendationEntitiesBatch::ENTITY_ID_KEY];
-			unset($entity[RecommendationEntitiesBatch::ENTITY_ID_KEY]);
-			return $entity;
-		}, $batch->getEntities());
+		return array_map(
+			function($entity) use($entityIdKey) {
+				$entity[$entityIdKey] = $entity[RecommendationEntitiesBatch::ENTITY_ID_KEY];
+				unset($entity[RecommendationEntitiesBatch::ENTITY_ID_KEY]);
+				return $entity;
+			},
+			$batch->getEntities()
+		);
 	}
 
 }
