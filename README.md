@@ -71,6 +71,13 @@ $client->insertInteractions($interactionsBatch);
 
 // And finally obtain ten recommendations for Sophia and car item!
 $recommendations = $client->getRecommendations('sophiaId', 'carId', 10);
+
+// If you want to send more recommendation requests at once, you can use recommendations batch
+$batchRecommendations = $client->getRecommendationsBatch((new DataApi\Batch\RecommendationsBatch())
+	->requestRecommendations('req1', 10, 'johnId', 'fridgeId', 20)
+	->requestRecommendationsForUser('req2', 5, 'sophiaId', 15)
+	->requestRecommendationsForItem('req3', 1, 'fridgeId', 10)
+);
 ```
 
 
