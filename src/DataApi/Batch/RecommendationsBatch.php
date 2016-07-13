@@ -27,8 +27,8 @@ class RecommendationsBatch extends Batch
 	/**
 	 * @param string $requestId
 	 * @param float $importance
-	 * @param string|RecommendationEntitiesBatch $users
-	 * @param string|RecommendationEntitiesBatch $items
+	 * @param string|RecommendationEntitiesBatch|NULL $users user id or users batch
+	 * @param string|RecommendationEntitiesBatch|NULL $items item id or items batch
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration

@@ -718,8 +718,8 @@ class Client
 	// ------------------------- RECOMMENDATION ------------------------- //
 
 	/**
-	 * @param string|RecommendationEntitiesBatch $users user id or users batch
-	 * @param string|RecommendationEntitiesBatch $items item id or items batch
+	 * @param string|RecommendationEntitiesBatch|NULL $users user id or users batch
+	 * @param string|RecommendationEntitiesBatch|NULL $items item id or items batch
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
