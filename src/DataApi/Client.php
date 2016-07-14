@@ -629,15 +629,16 @@ class Client
 	 * @param string $itemId
 	 * @param string $interactionId
 	 * @param DateTime|NULL $time
+	 * @param array|NULL $attributes
 	 * @return NULL
 	 * @throws InvalidArgumentException when given user id is empty string value
 	 * @throws InvalidArgumentException when given item id is empty string value
 	 * @throws InvalidArgumentException when given interaction id is empty string value
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function insertInteraction($userId, $itemId, $interactionId, DateTime $time = NULL)
+	public function insertInteraction($userId, $itemId, $interactionId, DateTime $time = NULL, array $attributes = NULL)
 	{
-		return $this->interactionsSection->insertInteraction($userId, $itemId, $interactionId, $time);
+		return $this->interactionsSection->insertInteraction($userId, $itemId, $interactionId, $time, $attributes);
 	}
 
 	/**
