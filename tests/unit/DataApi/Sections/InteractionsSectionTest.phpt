@@ -18,6 +18,8 @@ class InteractionsSectionTest extends SectionTest
 	const ITEM_ID2 = 'item2';
 	const INTERACTION_ID1 = 'interaction1';
 	const INTERACTION_ID2 = 'interaction2';
+	const ATTRIBUTE = 'fooAttribute';
+	const ATTRIBUTE_VALUE = 'bar';
 
 	const LIMIT = 250;
 	const OFFSET = 500;
@@ -41,17 +43,22 @@ class InteractionsSectionTest extends SectionTest
 					InteractionsSection::USER_ID_PARAMETER => self::USER_ID1,
 					InteractionsSection::ITEM_ID_PARAMETER => self::ITEM_ID1,
 					InteractionsSection::INTERACTION_PARAMETER => [
-						InteractionsSection::INTERACTION_ID_PARAMETER => self::INTERACTION_ID1
+						InteractionsSection::INTERACTION_ID_PARAMETER => self::INTERACTION_ID1,
+						InteractionsSection::ATTRIBUTES_PARAMETER => [
+							self::ATTRIBUTE => self::ATTRIBUTE_VALUE
+						]
 					],
 					InteractionsSection::TIMESTAMP_PARAMETER => $time->getTimestamp()
 				]
 			]
 		];
 		$this->mockPerformPost(InteractionsSection::INSERT_INTERACTION_URL, [], $content);
-		$this->interactionsSection->insertInteraction(self::USER_ID1, self::ITEM_ID1, self::INTERACTION_ID1, $time);
+		$this->interactionsSection->insertInteraction(self::USER_ID1, self::ITEM_ID1, self::INTERACTION_ID1, $time, [
+			self::ATTRIBUTE => self::ATTRIBUTE_VALUE
+		]);
 	}
 
-	public function testInsertingInteractionWithoutTime()
+	public function testInsertingInteractionWithoutTimeAndAttributes()
 	{
 		$content = [
 			InteractionsSection::INTERACTIONS_PARAMETER => [

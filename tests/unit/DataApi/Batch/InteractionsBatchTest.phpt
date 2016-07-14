@@ -19,6 +19,8 @@ class InteractionsBatchTest extends UnitTestCase
 	const ITEM_ID2 = 'item2';
 	const INTERACTION_ID1 = 'interaction1';
 	const INTERACTION_ID2 = 'interaction2';
+	const ATTRIBUTE = 'fooAttribute';
+	const ATTRIBUTE_VALUE = 'bar';
 
 	/** @var DateTime */
 	private $time;
@@ -32,7 +34,9 @@ class InteractionsBatchTest extends UnitTestCase
 		$this->time = new DateTime();
 		$this->batch = (new InteractionsBatch())
 			->addInteraction(self::USER_ID1, self::ITEM_ID1, self::INTERACTION_ID1, $this->time)
-			->addInteraction(self::USER_ID2, self::ITEM_ID2, self::INTERACTION_ID2);
+			->addInteraction(self::USER_ID2, self::ITEM_ID2, self::INTERACTION_ID2, NULL, [
+				self::ATTRIBUTE => self::ATTRIBUTE_VALUE
+			]);
 	}
 
 	public function testGettingInteractions()
@@ -41,7 +45,9 @@ class InteractionsBatchTest extends UnitTestCase
 		Assert::true(is_array($interactions));
 		Assert::same(2, count($interactions));
 		$this->checkInteraction($interactions[0], self::USER_ID1, self::ITEM_ID1, self::INTERACTION_ID1, $this->time);
-		$this->checkInteraction($interactions[1], self::USER_ID2, self::ITEM_ID2, self::INTERACTION_ID2);
+		$this->checkInteraction($interactions[1], self::USER_ID2, self::ITEM_ID2, self::INTERACTION_ID2, NULL, [
+			self::ATTRIBUTE => self::ATTRIBUTE_VALUE
+		]);
 	}
 
 	public function testItCanBeTraversedByForeach()
@@ -52,7 +58,9 @@ class InteractionsBatchTest extends UnitTestCase
 				$this->checkInteraction($interaction, self::USER_ID1, self::ITEM_ID1, self::INTERACTION_ID1, $this->time);
 			}
 			if ($counter === 1) {
-				$this->checkInteraction($interaction, self::USER_ID2, self::ITEM_ID2, self::INTERACTION_ID2);
+				$this->checkInteraction($interaction, self::USER_ID2, self::ITEM_ID2, self::INTERACTION_ID2, NULL, [
+					self::ATTRIBUTE => self::ATTRIBUTE_VALUE
+				]);
 			}
 			$counter++;
 		}
@@ -88,9 +96,11 @@ class InteractionsBatchTest extends UnitTestCase
 	 * @param string $itemId
 	 * @param string $interactionId
 	 * @param DateTime|NULL $time
+	 * @param array|NULL $attributes
 	 * @return void
 	 */
-	private function checkInteraction(array $interaction, $userId, $itemId, $interactionId, DateTime $time = NULL)
+	private function checkInteraction(array $interaction, $userId, $itemId, $interactionId, DateTime $time = NULL,
+									  array $attributes = NULL)
 	{
 		Assert::same($userId, $interaction[InteractionsBatch::USER_ID_KEY]);
 		Assert::same($itemId, $interaction[InteractionsBatch::ITEM_ID_KEY]);
@@ -100,6 +110,9 @@ class InteractionsBatchTest extends UnitTestCase
 		);
 		if ($time !== NULL) {
 			Assert::same($time->getTimestamp(), $interaction[InteractionsBatch::TIMESTAMP_KEY]);
+		}
+		if ($attributes !== NULL) {
+			Assert::same($attributes, $interaction[InteractionsBatch::INTERACTION_KEY][InteractionsBatch::ATTRIBUTES_KEY]);
 		}
 	}
 

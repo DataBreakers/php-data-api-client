@@ -14,6 +14,7 @@ class InteractionsBatch extends Batch
 	const INTERACTION_KEY = 'interaction';
 	const INTERACTION_ID_KEY = 'interactionId';
 	const TIMESTAMP_KEY = 'timestamp';
+	const ATTRIBUTES_KEY = 'attributes';
 
 	/** @var array */
 	private $interactions = [];
@@ -24,12 +25,13 @@ class InteractionsBatch extends Batch
 	 * @param $itemId
 	 * @param $interactionId
 	 * @param DateTime|NULL $time
+	 * @param array|NULL $attributes
 	 * @return $this
 	 * @throws InvalidArgumentException when given user id is empty string value
 	 * @throws InvalidArgumentException when given item id is empty string value
 	 * @throws InvalidArgumentException when given interaction id is empty string value
 	 */
-	public function addInteraction($userId, $itemId, $interactionId, DateTime $time = NULL)
+	public function addInteraction($userId, $itemId, $interactionId, DateTime $time = NULL, array $attributes = NULL)
 	{
 		if ($userId == '') {
 			throw new InvalidArgumentException("User id can't be empty value.");
@@ -40,10 +42,14 @@ class InteractionsBatch extends Batch
 		if ($interactionId == '') {
 			throw new InvalidArgumentException("Interaction id can't be empty value.");
 		}
+		$interactionDetails[self::INTERACTION_ID_KEY] = $interactionId;
+		if ($attributes != NULL) {
+			$interactionDetails[self::ATTRIBUTES_KEY] = $attributes;
+		}
 		$interaction = [
 			self::USER_ID_KEY => $userId,
 			self::ITEM_ID_KEY => $itemId,
-			self::INTERACTION_KEY => [self::INTERACTION_ID_KEY => $interactionId]
+			self::INTERACTION_KEY => $interactionDetails,
 		];
 		if ($time !== NULL) {
 			$interaction[self::TIMESTAMP_KEY] = $time->getTimestamp();
