@@ -42,14 +42,14 @@ class InteractionsBatch extends Batch
 		if ($interactionId == '') {
 			throw new InvalidArgumentException("Interaction id can't be empty value.");
 		}
-		$interactionArray[self::INTERACTION_ID_KEY] = $interactionId;
+		$interactionDetails[self::INTERACTION_ID_KEY] = $interactionId;
 		if ($attributes != NULL) {
-			$interactionArray[self::ATTRIBUTES_KEY] = $attributes;
+			$interactionDetails[self::ATTRIBUTES_KEY] = $attributes;
 		}
 		$interaction = [
 			self::USER_ID_KEY => $userId,
 			self::ITEM_ID_KEY => $itemId,
-			self::INTERACTION_KEY => $interactionArray,
+			self::INTERACTION_KEY => $interactionDetails,
 		];
 		if ($time !== NULL) {
 			$interaction[self::TIMESTAMP_KEY] = $time->getTimestamp();
