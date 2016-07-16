@@ -113,11 +113,20 @@ class Request
 	private function parseJson(ResponseInterface $response)
 	{
 		try {
-			return $response->json();
+			return $this->isJsonResponse($response) ? $response->json() : NULL;
 		}
 		catch (\RuntimeException $ex) {
 			throw new RequestFailedException($ex->getMessage(), $ex->getCode(), $ex);
 		}
+	}
+
+	/**
+	 * @param ResponseInterface $response
+	 * @return boolean
+	 */
+	private function isJsonResponse(ResponseInterface $response)
+	{
+		return strpos(strtolower($response->getHeader('content-type')), 'application/json') !== false;
 	}
 
 }
