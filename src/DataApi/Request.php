@@ -84,7 +84,12 @@ class Request
 			return $this->client->send($request);
 		}
 		catch (RequestException $ex) {
-			$message = $this->getErrorMessage($ex->getResponse());
+			$response = $ex->getResponse();
+			if ($response !== NULL) {
+				$message = $this->getErrorMessage($response);
+			} else {
+				$message = $ex->getMessage();
+			}
 			throw new RequestFailedException($message, $ex->getCode(), $ex);
 		}
 	}
