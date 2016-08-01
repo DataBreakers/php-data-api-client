@@ -29,6 +29,7 @@ class RecommendationSection extends Section
 	 * @param string|NULL|RecommendationEntitiesBatch $users
 	 * @param string|NULL|RecommendationEntitiesBatch $items
 	 * @param int $count
+	 * @param int|NULL $offset
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @return array
@@ -37,7 +38,7 @@ class RecommendationSection extends Section
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getRecommendations($users, $items, $count, $templateId = NULL,
+	public function getRecommendations($users, $items, $count, $offset = NULL, $templateId = NULL,
 									   RecommendationTemplateConfiguration $configuration = NULL)
 	{
 		if ($users !== NULL && is_string($users) && $users == '') {
@@ -50,7 +51,7 @@ class RecommendationSection extends Section
 			throw new InvalidArgumentException("Count must be integer value bigger than 0.");
 		}
 		$parameters = [self::MODEL_ID_PARAMETER => self::DEFAULT_MODEL_ID];
-		$content = RecommendationContentBuilder::construct($users, $items, $count, $templateId, $configuration);
+		$content = RecommendationContentBuilder::construct($users, $items, $count, $offset, $templateId, $configuration);
 		$restriction = new Restriction($parameters, $content);
 		return $this->performPost(self::GET_RECOMMENDATION_URL, $restriction);
 	}

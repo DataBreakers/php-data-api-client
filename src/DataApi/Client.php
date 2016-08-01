@@ -722,6 +722,7 @@ class Client
 	 * @param string|RecommendationEntitiesBatch|NULL $users user id or users batch
 	 * @param string|RecommendationEntitiesBatch|NULL $items item id or items batch
 	 * @param int $count
+	 * @param int|NULL $offset
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @return array
@@ -730,10 +731,10 @@ class Client
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getRecommendations($users, $items, $count, $templateId = NULL,
+	public function getRecommendations($users, $items, $count, $offset = NULL, $templateId = NULL,
 									   RecommendationTemplateConfiguration $configuration = NULL)
 	{
-		return $this->recommendationSection->getRecommendations($users, $items, $count, $templateId, $configuration);
+		return $this->recommendationSection->getRecommendations($users, $items, $count, $offset, $templateId, $configuration);
 	}
 
 	/**

@@ -14,6 +14,7 @@ class RecommendationContentBuilder
 	const ITEM_ID_PARAMETER = 'itemId';
 	const ITEMS_PARAMETER = 'items';
 	const COUNT_PARAMETER = 'count';
+	const OFFSET_PARAMETER = 'offset';	
 	const TEMPLATE_PARAMETER = 'template';
 	const TEMPLATE_ID_PARAMETER = 'templateId';
 	const FILTER_PARAMETER = 'filter';
@@ -38,14 +39,18 @@ class RecommendationContentBuilder
 	 * @param string|NULL|RecommendationEntitiesBatch $users
 	 * @param string|NULL|RecommendationEntitiesBatch $items
 	 * @param int $count
+	 * @param int|NULL $offset
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @return array
 	 */
-	public static function construct($users, $items, $count, $templateId = NULL,
+	public static function construct($users, $items, $count, $offset = NULL, $templateId = NULL,
 									 RecommendationTemplateConfiguration $configuration = NULL)
 	{
 		$data = [self::COUNT_PARAMETER => $count];
+		if ($offset !== NULL && is_int($offset)) {
+			$data[self::OFFSET_PARAMETER] = $offset;
+		}
 		if ($users !== NULL && is_string($users)) {
 			$data[self::USER_ID_PARAMETER] = $users;
 		}
