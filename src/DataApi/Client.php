@@ -722,21 +722,21 @@ class Client
 	 * @param string|RecommendationEntitiesBatch|NULL $users user id or users batch
 	 * @param string|RecommendationEntitiesBatch|NULL $items item id or items batch
 	 * @param int $count
-	 * @param int|NULL $offset
 	 * @param string|NULL $templateId
-	 * @param DateTime|NULL $time
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @param int|NULL $offset
+	 * @param DateTime|NULL $time
 	 * @return array
 	 * @throws InvalidArgumentException when given user id is empty string value
 	 * @throws InvalidArgumentException when given item id is empty string value
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getRecommendations($users, $items, $count, $offset = NULL, $templateId = NULL,
-									   DateTime $time = NULL,
-									   RecommendationTemplateConfiguration $configuration = NULL)
+	public function getRecommendations($users, $items, $count, $templateId = NULL,									   	
+									   RecommendationTemplateConfiguration $configuration = NULL,
+									   $offset = NULL, DateTime $time = NULL)
 	{
-		return $this->recommendationSection->getRecommendations($users, $items, $count, $offset, $templateId, $time, $configuration);
+		return $this->recommendationSection->getRecommendations($users, $items, $count, $templateId, $configuration, $offset, $time);
 	}
 
 	/**

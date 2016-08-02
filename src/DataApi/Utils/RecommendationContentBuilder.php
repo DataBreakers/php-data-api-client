@@ -41,14 +41,16 @@ class RecommendationContentBuilder
 	 * @param string|NULL|RecommendationEntitiesBatch $users
 	 * @param string|NULL|RecommendationEntitiesBatch $items
 	 * @param int $count
-	 * @param int|NULL $offset
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @param int|NULL $offset
+	 * @param DateTime|NULL $time
 	 * @return array
 	 */
-	public static function construct($users, $items, $count, $offset = NULL, $templateId = NULL,
-									 DateTime $time = NULL,
-									 RecommendationTemplateConfiguration $configuration = NULL)
+	public static function construct($users, $items, $count, $templateId = NULL,									 
+									 RecommendationTemplateConfiguration $configuration = NULL,
+									 $offset = NULL,
+									 DateTime $time = NULL)
 	{
 		$data = [self::COUNT_PARAMETER => $count];
 		if ($offset !== NULL && is_int($offset)) {

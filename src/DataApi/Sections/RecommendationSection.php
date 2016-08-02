@@ -30,19 +30,20 @@ class RecommendationSection extends Section
 	 * @param string|NULL|RecommendationEntitiesBatch $users
 	 * @param string|NULL|RecommendationEntitiesBatch $items
 	 * @param int $count
-	 * @param int|NULL $offset
 	 * @param string|NULL $templateId
-	 * @param DateTime|NULL $time
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @param int|NULL $offset
+	 * @param DateTime|NULL $time
 	 * @return array
 	 * @throws InvalidArgumentException when given user id is empty string value
 	 * @throws InvalidArgumentException when given item id is empty string value
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getRecommendations($users, $items, $count, $offset = NULL, $templateId = NULL,
-									   DateTime $time = NULL,
-									   RecommendationTemplateConfiguration $configuration = NULL)
+	public function getRecommendations($users, $items, $count, $templateId = NULL,									   
+									   RecommendationTemplateConfiguration $configuration = NULL,
+									   $offset = NULL,
+									   DateTime $time = NULL)
 	{
 		if ($users !== NULL && is_string($users) && $users == '') {
 			throw new InvalidArgumentException("User id can't be empty string value.");
@@ -54,7 +55,7 @@ class RecommendationSection extends Section
 			throw new InvalidArgumentException("Count must be integer value bigger than 0.");
 		}
 		$parameters = [self::MODEL_ID_PARAMETER => self::DEFAULT_MODEL_ID];
-		$content = RecommendationContentBuilder::construct($users, $items, $count, $offset, $templateId, $time, $configuration);
+		$content = RecommendationContentBuilder::construct($users, $items, $count, $templateId, $configuration, $offset, $time);
 		$restriction = new Restriction($parameters, $content);
 		return $this->performPost(self::GET_RECOMMENDATION_URL, $restriction);
 	}
