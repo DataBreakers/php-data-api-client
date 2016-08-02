@@ -9,6 +9,7 @@ use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use DataBreakers\DataApi\RecommendationTemplateConfiguration;
 use DataBreakers\DataApi\Utils\RecommendationContentBuilder;
 use DataBreakers\DataApi\Utils\Restriction;
+use DateTime;
 
 
 class RecommendationSection extends Section
@@ -31,6 +32,7 @@ class RecommendationSection extends Section
 	 * @param int $count
 	 * @param int|NULL $offset
 	 * @param string|NULL $templateId
+	 * @param DateTime|NULL $time
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @return array
 	 * @throws InvalidArgumentException when given user id is empty string value
@@ -39,6 +41,7 @@ class RecommendationSection extends Section
 	 * @throws RequestFailedException when request failed for some reason
 	 */
 	public function getRecommendations($users, $items, $count, $offset = NULL, $templateId = NULL,
+									   DateTime $time = NULL,
 									   RecommendationTemplateConfiguration $configuration = NULL)
 	{
 		if ($users !== NULL && is_string($users) && $users == '') {
@@ -51,7 +54,7 @@ class RecommendationSection extends Section
 			throw new InvalidArgumentException("Count must be integer value bigger than 0.");
 		}
 		$parameters = [self::MODEL_ID_PARAMETER => self::DEFAULT_MODEL_ID];
-		$content = RecommendationContentBuilder::construct($users, $items, $count, $offset, $templateId, $configuration);
+		$content = RecommendationContentBuilder::construct($users, $items, $count, $offset, $templateId, $time, $configuration);
 		$restriction = new Restriction($parameters, $content);
 		return $this->performPost(self::GET_RECOMMENDATION_URL, $restriction);
 	}

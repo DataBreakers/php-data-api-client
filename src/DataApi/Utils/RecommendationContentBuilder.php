@@ -4,6 +4,7 @@ namespace DataBreakers\DataApi\Utils;
 
 use DataBreakers\DataApi\Batch\RecommendationEntitiesBatch;
 use DataBreakers\DataApi\RecommendationTemplateConfiguration;
+use DateTime;
 
 
 class RecommendationContentBuilder
@@ -17,6 +18,7 @@ class RecommendationContentBuilder
 	const OFFSET_PARAMETER = 'offset';	
 	const TEMPLATE_PARAMETER = 'template';
 	const TEMPLATE_ID_PARAMETER = 'templateId';
+	const TIMESTAMP_KEY = 'userInteractionTime';	
 	const FILTER_PARAMETER = 'filter';
 	const BOOSTER_PARAMETER = 'booster';
 	const USER_WEIGHT_PARAMETER = 'userWeight';
@@ -45,6 +47,7 @@ class RecommendationContentBuilder
 	 * @return array
 	 */
 	public static function construct($users, $items, $count, $offset = NULL, $templateId = NULL,
+									 DateTime $time = NULL,
 									 RecommendationTemplateConfiguration $configuration = NULL)
 	{
 		$data = [self::COUNT_PARAMETER => $count];
@@ -72,6 +75,9 @@ class RecommendationContentBuilder
 			if ($items->getPrimaryEntityId() !== NULL) {
 				$data[self::ITEM_ID_PARAMETER] = $items->getPrimaryEntityId();
 			}
+		}
+		if ($time !== NULL) {
+			$data[self::TIMESTAMP_KEY] = $time->getTimestamp();
 		}
 		$template = self::getTemplateConfiguration($templateId, $configuration);
 		$data = self::setIfNotNull($data, self::TEMPLATE_PARAMETER, $template);
