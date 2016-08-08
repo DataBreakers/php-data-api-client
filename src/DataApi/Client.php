@@ -725,7 +725,6 @@ class Client
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @param int|NULL $offset
-	 * @param DateTime|NULL $time
 	 * @return array
 	 * @throws InvalidArgumentException when given user id is empty string value
 	 * @throws InvalidArgumentException when given item id is empty string value
@@ -733,10 +732,9 @@ class Client
 	 * @throws RequestFailedException when request failed for some reason
 	 */
 	public function getRecommendations($users, $items, $count, $templateId = NULL,									   	
-									   RecommendationTemplateConfiguration $configuration = NULL,
-									   $offset = NULL, DateTime $time = NULL)
+									   RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->recommendationSection->getRecommendations($users, $items, $count, $templateId, $configuration, $offset, $time);
+		return $this->recommendationSection->getRecommendations($users, $items, $count, $templateId, $configuration, $offset);
 	}
 
 	/**

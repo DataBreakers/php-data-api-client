@@ -33,7 +33,6 @@ class RecommendationSection extends Section
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @param int|NULL $offset
-	 * @param DateTime|NULL $time
 	 * @return array
 	 * @throws InvalidArgumentException when given user id is empty string value
 	 * @throws InvalidArgumentException when given item id is empty string value
@@ -42,8 +41,7 @@ class RecommendationSection extends Section
 	 */
 	public function getRecommendations($users, $items, $count, $templateId = NULL,									   
 									   RecommendationTemplateConfiguration $configuration = NULL,
-									   $offset = NULL,
-									   DateTime $time = NULL)
+									   $offset = NULL)
 	{
 		if ($users !== NULL && is_string($users) && $users == '') {
 			throw new InvalidArgumentException("User id can't be empty string value.");
@@ -55,7 +53,7 @@ class RecommendationSection extends Section
 			throw new InvalidArgumentException("Count must be integer value bigger than 0.");
 		}
 		$parameters = [self::MODEL_ID_PARAMETER => self::DEFAULT_MODEL_ID];
-		$content = RecommendationContentBuilder::construct($users, $items, $count, $templateId, $configuration, $offset, $time);
+		$content = RecommendationContentBuilder::construct($users, $items, $count, $templateId, $configuration, $offset);
 		$restriction = new Restriction($parameters, $content);
 		return $this->performPost(self::GET_RECOMMENDATION_URL, $restriction);
 	}
