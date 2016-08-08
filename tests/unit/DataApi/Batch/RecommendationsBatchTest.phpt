@@ -26,6 +26,7 @@ class RecommendationsBatchTest extends UnitTestCase
 	const TEMPLATE_ID = 'template1';
 	const FILTER = 'filter > 1';
 	const BOOSTER = 'booster < 2';
+	const OFFSET = 10;
 
 	/** @var RecommendationsBatch */
 	private $batch;
@@ -43,7 +44,8 @@ class RecommendationsBatchTest extends UnitTestCase
 			->requestRecommendations(
 				self::REQUEST_ID1, self::IMPORTANCE1,
 				self::USER_ID2, self::ITEM_ID2,
-				self::COUNT, self::TEMPLATE_ID
+				self::COUNT, self::TEMPLATE_ID,
+				NULL, self::OFFSET
 			);
 		$this->configuration = (new RecommendationTemplateConfiguration())
 			->setFilter(self::FILTER)
@@ -125,6 +127,32 @@ class RecommendationsBatchTest extends UnitTestCase
 			self::USER_ID1, self::ITEM_ID1,
 			-10, self::TEMPLATE_ID,
 			$this->configuration
+		);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenOffsetIsNegativeDuringRequestingRecommendations()
+	{
+		$this->batch->requestRecommendations(
+			self::REQUEST_ID2, self::IMPORTANCE2,
+			self::USER_ID1, self::ITEM_ID1,
+			self::COUNT, self::TEMPLATE_ID,
+			$this->configuration, -10
+		);
+	}
+
+	/**
+	 * @throws \DataBreakers\DataApi\Exceptions\InvalidArgumentException
+	 */
+	public function testThrowingExceptionWhenOffsetIsNotANumberNumberDuringRequestingRecommendations()
+	{
+		$this->batch->requestRecommendations(
+			self::REQUEST_ID2, self::IMPORTANCE2,
+			self::USER_ID1, self::ITEM_ID1,
+			self::COUNT, self::TEMPLATE_ID,
+			$this->configuration, 'foo'
 		);
 	}
 
@@ -419,7 +447,8 @@ class RecommendationsBatchTest extends UnitTestCase
 			RecommendationsBatch::IMPORTANCE_KEY => (float) self::IMPORTANCE1,
 			RecommendationsBatch::REQUEST_KEY => RecommendationContentBuilder::construct(
 				self::USER_ID2, self::ITEM_ID2,
-				self::COUNT, self::TEMPLATE_ID
+				self::COUNT, self::TEMPLATE_ID,
+				NULL, self::OFFSET
 			)
 		];
 		Assert::same($expectedFirstRecommendations, $recommendations[0]);

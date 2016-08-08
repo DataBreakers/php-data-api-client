@@ -32,6 +32,7 @@ class RecommendationsBatch extends Batch
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @param int|NULL $offset
 	 * @return $this
 	 * @throws InvalidArgumentException when given request id is empty string value
 	 * @throws InvalidArgumentException when given user id is empty string value
@@ -39,9 +40,9 @@ class RecommendationsBatch extends Batch
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 */
 	public function requestRecommendations($requestId, $importance, $users, $items, $count, $templateId = NULL,
-										   RecommendationTemplateConfiguration $configuration = NULL)
+										   RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->addRecommendationsRequest($requestId, $importance, $users, $items, $count, $templateId, $configuration);
+		return $this->addRecommendationsRequest($requestId, $importance, $users, $items, $count, $templateId, $configuration, $offset);
 	}
 
 	/**
@@ -51,15 +52,16 @@ class RecommendationsBatch extends Batch
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @param int|NULL $offset
 	 * @return $this
 	 * @throws InvalidArgumentException when given request id is empty string value
 	 * @throws InvalidArgumentException when given user id is empty string value
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 */
 	public function requestRecommendationsForUser($requestId, $importance, $userId, $count, $templateId = NULL,
-											      RecommendationTemplateConfiguration $configuration = NULL)
+											      RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->addRecommendationsRequest($requestId, $importance, $userId, NULL, $count, $templateId, $configuration);
+		return $this->addRecommendationsRequest($requestId, $importance, $userId, NULL, $count, $templateId, $configuration, $offset);
 	}
 
 	/**
@@ -69,14 +71,15 @@ class RecommendationsBatch extends Batch
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @param int|NULL $offset
 	 * @return $this
 	 * @throws InvalidArgumentException when given request id is empty string value
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 */
-	public function requestRecommendationsForUsers($requestId, $importance, RecommendationEntitiesBatch $users, $count,
-											       $templateId = NULL, RecommendationTemplateConfiguration $configuration = NULL)
+	public function requestRecommendationsForUsers($requestId, $importance, RecommendationEntitiesBatch $users, $count, $templateId = NULL,
+												   RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->addRecommendationsRequest($requestId, $importance, $users, NULL, $count, $templateId, $configuration);
+		return $this->addRecommendationsRequest($requestId, $importance, $users, NULL, $count, $templateId, $configuration, $offset);
 	}
 
 	/**
@@ -86,15 +89,16 @@ class RecommendationsBatch extends Batch
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @param int|NULL $offset
 	 * @return $this
 	 * @throws InvalidArgumentException when given request id is empty string value
 	 * @throws InvalidArgumentException when given item id is empty string value
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 */
 	public function requestRecommendationsForItem($requestId, $importance, $itemId, $count, $templateId = NULL,
-											      RecommendationTemplateConfiguration $configuration = NULL)
+											      RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->addRecommendationsRequest($requestId, $importance, NULL, $itemId, $count, $templateId, $configuration);
+		return $this->addRecommendationsRequest($requestId, $importance, NULL, $itemId, $count, $templateId, $configuration, $offset);
 	}
 
 	/**
@@ -104,14 +108,15 @@ class RecommendationsBatch extends Batch
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @param int|NULL $offset
 	 * @return $this
 	 * @throws InvalidArgumentException when given request id is empty string value
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 */
-	public function requestRecommendationsForItems($requestId, $importance, RecommendationEntitiesBatch $items, $count,
-											       $templateId = NULL, RecommendationTemplateConfiguration $configuration = NULL)
+	public function requestRecommendationsForItems($requestId, $importance, RecommendationEntitiesBatch $items, $count, $templateId = NULL,
+												   RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->addRecommendationsRequest($requestId, $importance, NULL, $items, $count, $templateId, $configuration);
+		return $this->addRecommendationsRequest($requestId, $importance, NULL, $items, $count, $templateId, $configuration, $offset);
 	}
 
 	/**
@@ -120,14 +125,15 @@ class RecommendationsBatch extends Batch
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @param int|NULL $offset
 	 * @return $this
 	 * @throws InvalidArgumentException when given request id is empty string value
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 */
 	public function requestGeneralRecommendations($requestId, $importance, $count, $templateId = NULL,
-												  RecommendationTemplateConfiguration $configuration = NULL)
+												  RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->addRecommendationsRequest($requestId, $importance, NULL, NULL, $count, $templateId, $configuration);
+		return $this->addRecommendationsRequest($requestId, $importance, NULL, NULL, $count, $templateId, $configuration, $offset);
 	}
 
 	/**
@@ -160,6 +166,7 @@ class RecommendationsBatch extends Batch
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @param int|NULL $offset
 	 * @return $this
 	 * @throws InvalidArgumentException when given request id is empty string value
 	 * @throws InvalidArgumentException when given user id is empty string value
@@ -167,7 +174,7 @@ class RecommendationsBatch extends Batch
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 */
 	private function addRecommendationsRequest($requestId, $importance, $users, $items, $count, $templateId = NULL,
-											   RecommendationTemplateConfiguration $configuration = NULL)
+											   RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
 		if ($requestId == '') {
 			throw new InvalidArgumentException("Request id can't be empty string value.");
@@ -181,7 +188,10 @@ class RecommendationsBatch extends Batch
 		if (!is_int($count) || $count <= 0) {
 			throw new InvalidArgumentException("Count must be integer value bigger than 0.");
 		}
-		$request = RecommendationContentBuilder::construct($users, $items, $count, $templateId, $configuration);
+		if ($offset !== NULL && (!is_int($offset) || $offset < 0)) {
+			throw new InvalidArgumentException("Offset must be integer value bigger or equal to 0.");
+		}
+		$request = RecommendationContentBuilder::construct($users, $items, $count, $templateId, $configuration, $offset);
 		$this->recommendations[] = [
 			self::REQUEST_ID_KEY => $requestId,
 			self::IMPORTANCE_KEY => (float) $importance,
