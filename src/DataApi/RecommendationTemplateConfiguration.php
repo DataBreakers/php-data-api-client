@@ -3,6 +3,7 @@
 namespace DataBreakers\DataApi;
 
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
+use DateTime;
 
 
 class RecommendationTemplateConfiguration extends TemplateConfiguration
@@ -40,6 +41,9 @@ class RecommendationTemplateConfiguration extends TemplateConfiguration
 	/** @var NULL|array */
 	private $similarityTypes = NULL;
 
+	/** @var DateTime|NULL */
+	private $userInteractionTime = NULL;
+
 
 	/**
 	 * @param string|NULL $filter
@@ -51,10 +55,12 @@ class RecommendationTemplateConfiguration extends TemplateConfiguration
 	 * @param float|NULL $diversityDecay
 	 * @param bool|NULL $recommendationFeedback
 	 * @param bool|NULL $categoryBlacklist
+	 * @param DateTime|NULL $userInteractionTime
 	 * @throws InvalidArgumentException when given diversity decay isn't number or in range <0,1>
 	 */
 	public function __construct($filter = NULL, $booster = NULL, $userWeight = NULL, $itemWeight = NULL, $diversity = NULL,
-								$details = false, $diversityDecay = NULL, $recommendationFeedback = NULL, $categoryBlacklist = NULL)
+								$details = false, $diversityDecay = NULL, $recommendationFeedback = NULL, $categoryBlacklist = NULL,
+								DateTime $userInteractionTime = NULL)
 	{
 		parent::__construct($filter, $booster, $userWeight, $itemWeight, $diversity);
 		$this->details = (bool) $details;
@@ -63,6 +69,7 @@ class RecommendationTemplateConfiguration extends TemplateConfiguration
 		}
 		$this->recommendationFeedback = $recommendationFeedback === NULL ? NULL : (bool) $recommendationFeedback;
 		$this->categoryBlacklist = $categoryBlacklist === NULL ? NULL : (bool) $categoryBlacklist;
+		$this->userInteractionTime = $userInteractionTime;
 	}
 
 	/**
@@ -267,6 +274,24 @@ class RecommendationTemplateConfiguration extends TemplateConfiguration
 	{
 		$this->diversityBySimilarity = true;
 		$this->similarityTypes = $similarityTypes;
+		return $this;
+	}
+
+	/**
+	 * @return DateTime|NULL
+	 */
+	public function getUserInteractionTime()
+	{
+		return $this->userInteractionTime;
+	}
+
+	/**
+	 * @param DateTime $userInteractionTime
+	 * @return $this
+	 */
+	public function setUserInteractionTime(DateTime $userInteractionTime)
+	{
+		$this->userInteractionTime = $userInteractionTime;
 		return $this;
 	}
 

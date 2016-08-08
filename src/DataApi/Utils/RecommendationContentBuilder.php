@@ -14,6 +14,7 @@ class RecommendationContentBuilder
 	const ITEM_ID_PARAMETER = 'itemId';
 	const ITEMS_PARAMETER = 'items';
 	const COUNT_PARAMETER = 'count';
+	const OFFSET_PARAMETER = 'offset';	
 	const TEMPLATE_PARAMETER = 'template';
 	const TEMPLATE_ID_PARAMETER = 'templateId';
 	const FILTER_PARAMETER = 'filter';
@@ -32,6 +33,7 @@ class RecommendationContentBuilder
 	const DIVERSITY_CATEGORIES_PARAMETER = 'diversityCategories';
 	const SIMILARITY_DIVERSITY_TYPE = 'similarity';
 	const CATEGORIES_DIVERSITY_TYPE = 'categories';
+	const USER_INTERACTION_TIME_PARAMETER = 'userInteractionTime';
 
 
 	/**
@@ -40,12 +42,16 @@ class RecommendationContentBuilder
 	 * @param int $count
 	 * @param string|NULL $templateId
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
+	 * @param int|NULL $offset
 	 * @return array
 	 */
-	public static function construct($users, $items, $count, $templateId = NULL,
-									 RecommendationTemplateConfiguration $configuration = NULL)
+	public static function construct($users, $items, $count, $templateId = NULL,									 
+									 RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
 		$data = [self::COUNT_PARAMETER => $count];
+		if ($offset !== NULL && is_int($offset)) {
+			$data[self::OFFSET_PARAMETER] = $offset;
+		}
 		if ($users !== NULL && is_string($users)) {
 			$data[self::USER_ID_PARAMETER] = $users;
 		}
@@ -100,6 +106,10 @@ class RecommendationContentBuilder
 		$data = self::setIfNotNull($data, self::CATEGORY_BLACKLIST_PARAMETER, $configuration->getCategoryBlacklist());
 		$data = self::setIfNotNull($data, self::DIVERSITY_DECAY_PARAMETER, $configuration->getDiversityDecay());
 		$data = self::setIfNotNull($data, self::DIVERSITY_TYPES_PARAMETER, self::getDiversityTypes($configuration));
+		$data = self::setIfNotNull($data, self::DIVERSITY_DECAY_PARAMETER, $configuration->getDiversityDecay());
+		if ($configuration->getUserInteractionTime() !== NULL) {
+			$data[self::USER_INTERACTION_TIME_PARAMETER] = $configuration->getUserInteractionTime()->getTimestamp();
+		}
 		return $data;
 	}
 

@@ -5,6 +5,7 @@ namespace DataBreakers\DataApi\Utils;
 use DataBreakers\DataApi\Batch\RecommendationEntitiesBatch;
 use DataBreakers\DataApi\RecommendationTemplateConfiguration;
 use DataBreakers\UnitTestCase;
+use DateTime;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../bootstrap.php';
@@ -27,6 +28,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 	const DIVERSITY_DECAY = 0.5;
 	const INTERACTION = 'interaction';
 	const INTERACTION_WEIGHT = 0.25;
+	const OFFSET = 10;
 
 	/** @var RecommendationContentBuilder */
 	private $builder;
@@ -406,17 +408,41 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
 	}
 
+	public function testSettingOffset()
+	{
+		$expected = [
+			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT,
+			RecommendationContentBuilder::OFFSET_PARAMETER => self::OFFSET
+		];
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, self::OFFSET);
+	}
+
+	public function testSettingUserInteractionTime()
+	{
+		$userInteractionTime = new DateTime();
+		$expected = [
+			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT,
+			RecommendationContentBuilder::TEMPLATE_PARAMETER => [
+				RecommendationContentBuilder::USER_INTERACTION_TIME_PARAMETER => $userInteractionTime->getTimestamp()
+			]
+		];
+		$configuration = (new RecommendationTemplateConfiguration())
+			->setUserInteractionTime($userInteractionTime);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+	}
+
 	/**
 	 * @param array|NULL $expectedContent
 	 * @param string|NULL|RecommendationEntitiesBatch $users
 	 * @param string|NULL|RecommendationEntitiesBatch $items
 	 * @param int $count
 	 * @param string|NULL $templateId
+	 * @param int|NULL $offset
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @return void
 	 */
 	private function validateRecommendationContent(array $expectedContent, $users, $items, $count, $templateId = NULL,
-												   RecommendationTemplateConfiguration $configuration = NULL)
+												   RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
 		if ($configuration !== NULL) {
 			$expectedContent[RecommendationContentBuilder::TEMPLATE_PARAMETER] = array_merge(
@@ -427,7 +453,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 				$expectedContent[RecommendationContentBuilder::TEMPLATE_PARAMETER]
 			);
 		}
-		$actualContent = RecommendationContentBuilder::construct($users, $items, $count, $templateId, $configuration);
+		$actualContent = RecommendationContentBuilder::construct($users, $items, $count, $templateId, $configuration, $offset);
 		Assert::equal($expectedContent, $actualContent);
 	}
 
