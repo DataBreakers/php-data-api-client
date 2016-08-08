@@ -33,6 +33,7 @@ class RecommendationContentBuilder
 	const DIVERSITY_CATEGORIES_PARAMETER = 'diversityCategories';
 	const SIMILARITY_DIVERSITY_TYPE = 'similarity';
 	const CATEGORIES_DIVERSITY_TYPE = 'categories';
+	const USER_INTERACTION_TIME_PARAMETER = 'userInteractionTime';
 
 
 	/**
@@ -105,6 +106,10 @@ class RecommendationContentBuilder
 		$data = self::setIfNotNull($data, self::CATEGORY_BLACKLIST_PARAMETER, $configuration->getCategoryBlacklist());
 		$data = self::setIfNotNull($data, self::DIVERSITY_DECAY_PARAMETER, $configuration->getDiversityDecay());
 		$data = self::setIfNotNull($data, self::DIVERSITY_TYPES_PARAMETER, self::getDiversityTypes($configuration));
+		$data = self::setIfNotNull($data, self::DIVERSITY_DECAY_PARAMETER, $configuration->getDiversityDecay());
+		if ($configuration->getUserInteractionTime() !== NULL) {
+			$data[self::USER_INTERACTION_TIME_PARAMETER] = $configuration->getUserInteractionTime()->getTimestamp();
+		}
 		return $data;
 	}
 

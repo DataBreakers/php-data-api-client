@@ -5,6 +5,7 @@ namespace DataBreakers\DataApi\Utils;
 use DataBreakers\DataApi\Batch\RecommendationEntitiesBatch;
 use DataBreakers\DataApi\RecommendationTemplateConfiguration;
 use DataBreakers\UnitTestCase;
+use DateTime;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../bootstrap.php';
@@ -414,6 +415,20 @@ class RecommendationContentBuilderTest extends UnitTestCase
 			RecommendationContentBuilder::OFFSET_PARAMETER => self::OFFSET
 		];
 		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, self::OFFSET);
+	}
+
+	public function testSettingUserInteractionTime()
+	{
+		$userInteractionTime = new DateTime();
+		$expected = [
+			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT,
+			RecommendationContentBuilder::TEMPLATE_PARAMETER => [
+				RecommendationContentBuilder::USER_INTERACTION_TIME_PARAMETER => $userInteractionTime->getTimestamp()
+			]
+		];
+		$configuration = (new RecommendationTemplateConfiguration())
+			->setUserInteractionTime($userInteractionTime);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
 	}
 
 	/**

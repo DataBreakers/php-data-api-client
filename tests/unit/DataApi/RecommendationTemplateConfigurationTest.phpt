@@ -3,6 +3,7 @@
 namespace DataBreakers\DataApi;
 
 use DataBreakers\UnitTestCase;
+use DateTime;
 use Tester\Assert;
 
 
@@ -302,6 +303,14 @@ class RecommendationTemplateConfigurationTest extends UnitTestCase
 		$similarityTypes = [4, 2, 10];
 		$this->configuration->setDiversityBySimilarity($similarityTypes);
 		Assert::same($similarityTypes, $this->configuration->getSimilarityTypes());
+	}
+
+	public function testGettingAndSettingUserInteractionTime()
+	{
+		Assert::null($this->configuration->getUserInteractionTime());
+		$time = new DateTime();
+		$this->configuration->setUserInteractionTime($time);
+		Assert::same($time->getTimestamp(), $this->configuration->getUserInteractionTime()->getTimestamp());
 	}
 
 }
