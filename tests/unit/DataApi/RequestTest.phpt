@@ -141,6 +141,7 @@ class RequestTest extends UnitTestCase
 	private function createMockResponse(array $body)
 	{
 		$response = \Mockery::mock('GuzzleHttp\Message\ResponseInterface');
+		$response->shouldReceive('getHeader')->once()->andReturn('application/json');
 		$response->shouldReceive('json')->once()->andReturn($body);
 		return $response;
 	}
