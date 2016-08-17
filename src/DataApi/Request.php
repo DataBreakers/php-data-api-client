@@ -87,7 +87,8 @@ class Request
 			$response = $ex->getResponse();
 			if ($response !== NULL) {
 				$message = $this->getErrorMessage($response);
-			} else {
+			}
+			else {
 				$message = $ex->getMessage();
 			}
 			throw new RequestFailedException($message, $ex->getCode(), $ex);
@@ -95,19 +96,15 @@ class Request
 	}
 
 	/**
-	 * @param ResponseInterface|NULL $response
+	 * @param ResponseInterface $response
 	 * @return NULL|string
 	 */
-	private function getErrorMessage(ResponseInterface $response = NULL)
+	private function getErrorMessage(ResponseInterface $response)
 	{
-		if ($response !== NULL) {
-			$json = $this->parseJson($response);
-
-			return is_array($json) && isset($json[self::ERROR_MESSAGE_KEY])
-				? $json[self::ERROR_MESSAGE_KEY]
-				: NULL;
-		}
-		return NULL;
+		$json = $this->parseJson($response);
+		return is_array($json) && isset($json[self::ERROR_MESSAGE_KEY])
+			? $json[self::ERROR_MESSAGE_KEY]
+			: NULL;
 	}
 
 	/**
