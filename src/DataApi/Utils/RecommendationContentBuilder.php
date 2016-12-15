@@ -60,7 +60,9 @@ class RecommendationContentBuilder
 		}
 		if ($users !== NULL && $users instanceof RecommendationEntitiesBatch) {
 			if (count($users->getEntities()) > 0) {
-				$data[self::USERS_PARAMETER] = self::convertEntitiesBatchToArray($users, self::USER_ID_PARAMETER);
+				$data[self::USERS_PARAMETER] = self::convertEntitiesBatchToArray(
+					$users, self::USER_ID_PARAMETER, self::USER_WEIGHT_PARAMETER
+				);
 			}
 			if ($users->getPrimaryEntityId() !== NULL) {
 				$data[self::USER_ID_PARAMETER] = $users->getPrimaryEntityId();
@@ -68,7 +70,9 @@ class RecommendationContentBuilder
 		}
 		if ($items !== NULL && $items instanceof RecommendationEntitiesBatch) {
 			if (count($items->getEntities()) > 0) {
-				$data[self::ITEMS_PARAMETER] = self::convertEntitiesBatchToArray($items, self::ITEM_ID_PARAMETER);
+				$data[self::ITEMS_PARAMETER] = self::convertEntitiesBatchToArray(
+					$items, self::ITEM_ID_PARAMETER, self::ITEM_WEIGHT_PARAMETER
+				);
 			}
 			if ($items->getPrimaryEntityId() !== NULL) {
 				$data[self::ITEM_ID_PARAMETER] = $items->getPrimaryEntityId();
@@ -154,14 +158,19 @@ class RecommendationContentBuilder
 	/**
 	 * @param RecommendationEntitiesBatch $batch
 	 * @param string $entityIdKey
+	 * @param string $entityWeightKey
 	 * @return array
 	 */
-	private static function convertEntitiesBatchToArray(RecommendationEntitiesBatch $batch, $entityIdKey)
+	private static function convertEntitiesBatchToArray(RecommendationEntitiesBatch $batch, $entityIdKey, $entityWeightKey)
 	{
 		return array_map(
-			function($entity) use($entityIdKey) {
+			function($entity) use($entityIdKey, $entityWeightKey) {
 				$entity[$entityIdKey] = $entity[RecommendationEntitiesBatch::ENTITY_ID_KEY];
 				unset($entity[RecommendationEntitiesBatch::ENTITY_ID_KEY]);
+				if (isset($entity[RecommendationEntitiesBatch::ENTITY_WEIGHT_KEY])) {
+					$entity[$entityWeightKey] = $entity[RecommendationEntitiesBatch::ENTITY_WEIGHT_KEY];
+					unset($entity[RecommendationEntitiesBatch::ENTITY_WEIGHT_KEY]);
+				}
 				return $entity;
 			},
 			$batch->getEntities()

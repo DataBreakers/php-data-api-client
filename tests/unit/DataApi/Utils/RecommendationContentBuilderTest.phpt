@@ -18,6 +18,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 	const USER_ID2 = 'user2';
 	const ITEM_ID1 = 'item1';
 	const ITEM_ID2 = 'item2';
+	const ITEM_ID3 = 'item3';
 	const COUNT = 10;
 	const TEMPLATE_ID = 'template1';
 	const FILTER = 'filter > 1';
@@ -141,12 +142,17 @@ class RecommendationContentBuilderTest extends UnitTestCase
 						self::INTERACTION => self::INTERACTION_WEIGHT
 					]
 				],
+				[
+					RecommendationContentBuilder::ITEM_ID_PARAMETER => self::ITEM_ID3,
+					RecommendationContentBuilder::ITEM_WEIGHT_PARAMETER => self::ITEM_WEIGHT
+				],
 			],
 			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT
 		];
 		$items = (new RecommendationEntitiesBatch())
 			->addEntity(self::ITEM_ID1)
-			->addEntity(self::ITEM_ID2, [self::INTERACTION => self::INTERACTION_WEIGHT]);
+			->addEntity(self::ITEM_ID2, [self::INTERACTION => self::INTERACTION_WEIGHT])
+			->addWeightedEntity(self::ITEM_ID3, self::ITEM_WEIGHT);
 		$this->validateRecommendationContent($expected, NULL, $items, self::COUNT);
 	}
 
@@ -157,16 +163,14 @@ class RecommendationContentBuilderTest extends UnitTestCase
 			RecommendationContentBuilder::ITEMS_PARAMETER => [
 				[
 					RecommendationContentBuilder::ITEM_ID_PARAMETER => self::ITEM_ID2,
-					RecommendationEntitiesBatch::INTERACTIONS_KEY => [
-						self::INTERACTION => self::INTERACTION_WEIGHT
-					]
+					RecommendationContentBuilder::ITEM_WEIGHT_PARAMETER => self::ITEM_WEIGHT
 				],
 			],
 			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT
 		];
 		$items = (new RecommendationEntitiesBatch())
 			->setPrimaryEntityId(self::ITEM_ID1)
-			->addEntity(self::ITEM_ID2, [self::INTERACTION => self::INTERACTION_WEIGHT]);
+			->addWeightedEntity(self::ITEM_ID2, self::ITEM_WEIGHT);
 		$this->validateRecommendationContent($expected, NULL, $items, self::COUNT);
 	}
 

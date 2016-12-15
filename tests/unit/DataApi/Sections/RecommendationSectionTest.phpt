@@ -18,6 +18,7 @@ class RecommendationSectionTest extends SectionTest
 	const USER_ID2 = 'user2';
 	const ITEM_ID1 = 'item1';
 	const ITEM_ID2 = 'item2';
+	const ITEM_ID3 = 'item3';
 	const COUNT = 10;
 	const TEMPLATE_ID = 'template1';
 	const FILTER = 'filter > 1';
@@ -62,7 +63,8 @@ class RecommendationSectionTest extends SectionTest
 			->addEntity(self::USER_ID1, [self::INTERACTION => self::INTERACTION_WEIGHT]);
 		$items = (new RecommendationEntitiesBatch())
 			->addEntity(self::ITEM_ID1)
-			->addEntity(self::ITEM_ID2, [self::INTERACTION => self::INTERACTION_WEIGHT]);
+			->addEntity(self::ITEM_ID2, [self::INTERACTION => self::INTERACTION_WEIGHT])
+			->addWeightedEntity(self::ITEM_ID3, self::ITEM_WEIGHT);
 		$content = RecommendationContentBuilder::construct($users, $items, self::COUNT);
 		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
 		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
@@ -202,7 +204,8 @@ class RecommendationSectionTest extends SectionTest
 	{
 		$items = (new RecommendationEntitiesBatch())
 			->addEntity(self::ITEM_ID1, [self::INTERACTION => self::INTERACTION_WEIGHT])
-			->addEntity(self::ITEM_ID2);
+			->addEntity(self::ITEM_ID2)
+			->addWeightedEntity(self::ITEM_ID3, self::ITEM_WEIGHT);
 		$content = RecommendationContentBuilder::construct(NULL, $items, self::COUNT, self::TEMPLATE_ID);
 		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
 		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
