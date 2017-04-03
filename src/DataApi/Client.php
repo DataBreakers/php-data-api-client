@@ -9,6 +9,7 @@ use DataBreakers\DataApi\Batch\RecommendationEntitiesBatch;
 use DataBreakers\DataApi\Batch\RecommendationsBatch;
 use DataBreakers\DataApi\Exceptions\InvalidArgumentException;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
+use DataBreakers\DataApi\Sections\AbTestsSection;
 use DataBreakers\DataApi\Sections\AttributesSection;
 use DataBreakers\DataApi\Sections\EntitySection;
 use DataBreakers\DataApi\Sections\InteractionsSection;
@@ -49,6 +50,9 @@ class Client
 	/** @var RecommendationSection */
 	private $recommendationSection;
 
+	/** @var AbTestsSection */
+	private $abTestsSection;
+
 
 	/**
 	 * @param string $accountId Unique identifier of account
@@ -79,6 +83,7 @@ class Client
 		$this->interactionsSection = new InteractionsSection($this->api);
 		$this->templatesSection = new TemplatesSection($this->api);
 		$this->recommendationSection = new RecommendationSection($this->api);
+		$this->abTestsSection = new AbTestsSection($this->api);
 	}
 
 
@@ -881,6 +886,23 @@ class Client
 	public function deleteTemplate($templateId)
 	{
 		return $this->templatesSection->deleteTemplate($templateId);
+	}
+
+
+
+	// ------------------------- AB TESTS SECTION ------------------------- //
+
+	/**
+	 * @param string $userId
+	 * @param string $abTestId
+	 * @return array
+	 * @throws InvalidArgumentException when given user id is empty string value
+	 * @throws InvalidArgumentException when given ab test id is empty string value
+	 * @throws RequestFailedException when request failed for some reason
+	 */
+	public function getUserAbTestGroup($userId, $abTestId)
+	{
+		return $this->abTestsSection->getUserAbTestGroup($userId, $abTestId);
 	}
 
 
