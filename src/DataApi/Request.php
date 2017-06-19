@@ -5,8 +5,8 @@ namespace DataBreakers\DataApi;
 use DataBreakers\DataApi\Exceptions\RequestFailedException;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Message\ResponseInterface;
-use GuzzleHttp\Stream\Stream;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
+use Psr\Http\Message\ResponseInterface;
 
 
 class Request
@@ -76,12 +76,17 @@ class Request
 	private function sendRequest($method, $url, array $content = [])
 	{
 		try {
-			$request = $this->client->createRequest($method, $url, $this->requestOptions);
-			$request->setHeader('Content-Type', 'application/json; charset=utf-8');
-			if (!empty($content)) {
-				$request->setBody(Stream::factory(json_encode($content)));
-			};
-			return $this->client->send($request);
+		    $request = new GuzzleRequest($method, $url);
+		    $requestOptions = [
+                'headers' => [
+                    'Content-Type' => 'application/json; charset=utf-8'
+                ]
+            ];
+		    $requestOptions = array_merge($requestOptions, $this->requestOptions);
+		    if (!empty($content)) {
+		        $requestOptions['json'] = $content;
+            }
+		    return $this->client->send($request, $requestOptions);
 		}
 		catch (RequestException $ex) {
 			$response = $ex->getResponse();
@@ -114,12 +119,10 @@ class Request
 	 */
 	private function parseJson(ResponseInterface $response)
 	{
-		try {
-			return $this->isJsonResponse($response) ? $response->json() : NULL;
-		}
-		catch (\RuntimeException $ex) {
-			throw new RequestFailedException($ex->getMessage(), $ex->getCode(), $ex);
-		}
+        if ($this->isJsonResponse($response)) {
+            return json_decode((string) $response->getBody(), true);
+        }
+        return NULL;
 	}
 
 	/**
@@ -128,7 +131,12 @@ class Request
 	 */
 	private function isJsonResponse(ResponseInterface $response)
 	{
-		return strpos(strtolower($response->getHeader('content-type')), 'application/json') !== false;
+	    foreach ($response->getHeader('content-type') as $contentType) {
+	        if (strpos(strtolower($contentType), 'application/json') !== false) {
+	            return true;
+            }
+        }
+	    return false;
 	}
 
 }
