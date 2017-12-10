@@ -21,6 +21,7 @@ class RecommendationSectionTest extends SectionTest
 	const ITEM_ID3 = 'item3';
 	const COUNT = 10;
 	const TEMPLATE_ID = 'template1';
+    const SEARCH_QUERY = 'search_query';
 	const FILTER = 'filter > 1';
 	const BOOSTER = 'booster < 2';
 	const USER_WEIGHT = 0.4;
@@ -51,10 +52,10 @@ class RecommendationSectionTest extends SectionTest
 			->setDiversity(self::DIVERSITY)
 			->disableDetails()
 			->addAttributeLimitInRequest(self::ATTRIBUTE_ID1, 10);
-		$content = RecommendationContentBuilder::construct(self::USER_ID1, self::ITEM_ID1, self::COUNT, NULL, $configuration, self::OFFSET);
+		$content = RecommendationContentBuilder::construct(self::USER_ID1, self::ITEM_ID1, self::COUNT, NULL, NULL, $configuration, self::OFFSET);
 		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
 		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
-		$this->recommendationSection->getRecommendations(self::USER_ID1, self::ITEM_ID1, self::COUNT, NULL, $configuration, self::OFFSET);
+		$this->recommendationSection->getRecommendations(self::USER_ID1, self::ITEM_ID1, self::COUNT, NULL, NULL, $configuration, self::OFFSET);
 	}
 
 	public function testGettingRecommendationsWhenEntitiesBatchesAreGiven()
@@ -108,7 +109,7 @@ class RecommendationSectionTest extends SectionTest
 	 */
 	public function testThrowingExceptionWhenOffsetIsNegativeDuringGettingRecommendations()
 	{
-		$this->recommendationSection->getRecommendations(self::USER_ID1, self::ITEM_ID1, self::COUNT, NULL, NULL, -10);
+		$this->recommendationSection->getRecommendations(self::USER_ID1, self::ITEM_ID1, self::COUNT, NULL, NULL, NULL, -10);
 	}
 
 	/**
@@ -116,7 +117,7 @@ class RecommendationSectionTest extends SectionTest
 	 */
 	public function testThrowingExceptionWhenCountIsNotANumberDuringGettingRecommendations()
 	{
-		$this->recommendationSection->getRecommendations(self::USER_ID1, self::ITEM_ID1, self::COUNT, NULL, NULL, 'foo');
+		$this->recommendationSection->getRecommendations(self::USER_ID1, self::ITEM_ID1, self::COUNT, NULL, NULL, NULL, 'foo');
 	}
 
 	public function testGettingRecommendationsForUser()
@@ -124,10 +125,10 @@ class RecommendationSectionTest extends SectionTest
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setBooster(self::BOOSTER)
 			->setDiversity(self::DIVERSITY);
-		$content = RecommendationContentBuilder::construct(self::USER_ID1, NULL, self::COUNT, self::TEMPLATE_ID, $configuration, self::OFFSET);
+		$content = RecommendationContentBuilder::construct(self::USER_ID1, NULL, self::COUNT, self::TEMPLATE_ID, self::SEARCH_QUERY, $configuration, self::OFFSET);
 		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
 		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
-		$this->recommendationSection->getRecommendationsForUser(self::USER_ID1, self::COUNT, self::TEMPLATE_ID, $configuration, self::OFFSET);
+		$this->recommendationSection->getRecommendationsForUser(self::USER_ID1, self::COUNT, self::TEMPLATE_ID, self::SEARCH_QUERY, $configuration, self::OFFSET);
 	}
 
 	/**
@@ -162,18 +163,18 @@ class RecommendationSectionTest extends SectionTest
 		$users = (new RecommendationEntitiesBatch())
 			->addEntity(self::USER_ID1, [self::INTERACTION => self::INTERACTION_WEIGHT])
 			->addEntity(self::USER_ID2);
-		$content = RecommendationContentBuilder::construct($users, NULL, self::COUNT, self::TEMPLATE_ID, $configuration, self::OFFSET);
+		$content = RecommendationContentBuilder::construct($users, NULL, self::COUNT, self::TEMPLATE_ID, self::SEARCH_QUERY, $configuration, self::OFFSET);
 		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
 		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
-		$this->recommendationSection->getRecommendationsForUsers($users, self::COUNT, self::TEMPLATE_ID, $configuration, self::OFFSET);
+		$this->recommendationSection->getRecommendationsForUsers($users, self::COUNT, self::TEMPLATE_ID, self::SEARCH_QUERY, $configuration, self::OFFSET);
 	}
 
 	public function testGettingRecommendationsForItem()
 	{
-		$content = RecommendationContentBuilder::construct(NULL, self::ITEM_ID1, self::COUNT, self::TEMPLATE_ID, NULL, self::OFFSET);
+		$content = RecommendationContentBuilder::construct(NULL, self::ITEM_ID1, self::COUNT, self::TEMPLATE_ID, self::SEARCH_QUERY, NULL, self::OFFSET);
 		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
 		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
-		$this->recommendationSection->getRecommendationsForItem(self::ITEM_ID1, self::COUNT, self::TEMPLATE_ID, NULL, self::OFFSET);
+		$this->recommendationSection->getRecommendationsForItem(self::ITEM_ID1, self::COUNT, self::TEMPLATE_ID, self::SEARCH_QUERY, NULL, self::OFFSET);
 	}
 
 	/**
@@ -206,10 +207,10 @@ class RecommendationSectionTest extends SectionTest
 			->addEntity(self::ITEM_ID1, [self::INTERACTION => self::INTERACTION_WEIGHT])
 			->addEntity(self::ITEM_ID2)
 			->addWeightedEntity(self::ITEM_ID3, self::ITEM_WEIGHT);
-		$content = RecommendationContentBuilder::construct(NULL, $items, self::COUNT, self::TEMPLATE_ID);
+		$content = RecommendationContentBuilder::construct(NULL, $items, self::COUNT, self::TEMPLATE_ID, self::SEARCH_QUERY);
 		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
 		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
-		$this->recommendationSection->getRecommendationsForItems($items, self::COUNT, self::TEMPLATE_ID);
+		$this->recommendationSection->getRecommendationsForItems($items, self::COUNT, self::TEMPLATE_ID, self::SEARCH_QUERY);
 	}
 
 	public function testGettingGeneralRecommendations()
@@ -220,10 +221,10 @@ class RecommendationSectionTest extends SectionTest
 			->enableRecommendationFeedback()
 			->enableCategoryBlacklist()
 			->setDiversityDecay(0.25);
-		$content = RecommendationContentBuilder::construct(NULL, NULL, self::COUNT, NULL, $configuration, self::OFFSET);
+		$content = RecommendationContentBuilder::construct(NULL, NULL, self::COUNT, NULL, NULL, $configuration, self::OFFSET);
 		$parameters = [RecommendationSection::MODEL_ID_PARAMETER => RecommendationSection::DEFAULT_MODEL_ID];
 		$this->mockPerformPost(RecommendationSection::GET_RECOMMENDATION_URL, $parameters, $content);
-		$this->recommendationSection->getGeneralRecommendations(self::COUNT, NULL, $configuration, self::OFFSET);
+		$this->recommendationSection->getGeneralRecommendations(self::COUNT, NULL, NULL, $configuration, self::OFFSET);
 	}
 
 	/**
@@ -245,7 +246,7 @@ class RecommendationSectionTest extends SectionTest
 	public function testGettingRecommendationsBatch()
 	{
 		$batch = (new RecommendationsBatch())
-			->requestRecommendationsForItem('request1', 2.0, self::ITEM_ID1, 10, self::TEMPLATE_ID)
+			->requestRecommendationsForItem('request1', 2.0, self::ITEM_ID1, 10, self::TEMPLATE_ID, self::SEARCH_QUERY)
 			->requestGeneralRecommendations('request2', 5.0, 50);
 		$content = [
 			RecommendationSection::REQUESTS_PARAMETER => $batch->getRecommendations(),
