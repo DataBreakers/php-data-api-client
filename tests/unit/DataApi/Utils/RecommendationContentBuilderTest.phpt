@@ -21,6 +21,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 	const ITEM_ID3 = 'item3';
 	const COUNT = 10;
 	const TEMPLATE_ID = 'template1';
+	const SEARCH_QUERY = 'search_query';
 	const FILTER = 'filter > 1';
 	const BOOSTER = 'booster < 2';
 	const USER_WEIGHT = 0.4;
@@ -47,6 +48,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 			RecommendationContentBuilder::USER_ID_PARAMETER => self::USER_ID1,
 			RecommendationContentBuilder::ITEM_ID_PARAMETER => self::ITEM_ID1,
 			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT,
+			RecommendationContentBuilder::SEARCH_QUERY_PARAMETER => self::SEARCH_QUERY,
 			RecommendationContentBuilder::TEMPLATE_PARAMETER => [
 				RecommendationContentBuilder::TEMPLATE_ID_PARAMETER => self::TEMPLATE_ID,
 				RecommendationContentBuilder::FILTER_PARAMETER => self::FILTER,
@@ -60,7 +62,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 			->setBooster(self::BOOSTER)
 			->setUserWeight(self::USER_WEIGHT)
 			->setItemWeight(self::ITEM_WEIGHT);
-		$this->validateRecommendationContent($expected, self::USER_ID1, self::ITEM_ID1, self::COUNT, self::TEMPLATE_ID, $configuration);
+		$this->validateRecommendationContent($expected, self::USER_ID1, self::ITEM_ID1, self::COUNT, self::TEMPLATE_ID, self::SEARCH_QUERY, $configuration);
 	}
 	
 	public function testSettingOnlyCount()
@@ -185,6 +187,15 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, self::TEMPLATE_ID);
 	}
 
+	public function testSettingSearchQuery()
+	{
+		$expected = [
+			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT,
+			RecommendationContentBuilder::SEARCH_QUERY_PARAMETER => self::SEARCH_QUERY
+		];
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, self::SEARCH_QUERY);
+	}
+
 	public function testSettingFilter()
 	{
 		$expected = [
@@ -195,7 +206,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setFilter(self::FILTER);
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingBooster()
@@ -208,7 +219,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setBooster(self::BOOSTER);
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingUserWeight()
@@ -221,7 +232,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setUserWeight(self::USER_WEIGHT);
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingItemWeight()
@@ -234,7 +245,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setItemWeight(self::ITEM_WEIGHT);
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingDiversity()
@@ -247,7 +258,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setDiversity(self::DIVERSITY);
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingDiversityDecay()
@@ -260,7 +271,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setDiversityDecay(self::DIVERSITY_DECAY);
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingRecommendationFeedback()
@@ -273,7 +284,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->enableRecommendationFeedback();
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingCategoryBlacklist()
@@ -286,7 +297,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->enableCategoryBlacklist();
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingDiversityByCategoriesWithoutDiversityCategories()
@@ -303,7 +314,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setDiversityByCategories();
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingDiversityByCategoriesWithDiversityCategories()
@@ -322,7 +333,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setDiversityByCategories($categories);
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingDiversityBySimilarityWithoutSimilarityTypes()
@@ -339,7 +350,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setDiversityBySimilarity();
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingDiversityBySimilarityWithSimilarityTypes()
@@ -358,7 +369,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setDiversityBySimilarity($similarityTypes);
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingBothDiversityTypes()
@@ -383,7 +394,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setDiversityBySimilarity($similarityTypes)
 			->setDiversityByCategories($categories);
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingAttributesLimits()
@@ -409,7 +420,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		$configuration = (new RecommendationTemplateConfiguration())
 			->addAttributeLimitInRequest($attribute1, 100)
 			->addAttributeLimitInTime($attribute2, 10, 20);
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	public function testSettingOffset()
@@ -418,7 +429,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 			RecommendationContentBuilder::COUNT_PARAMETER => self::COUNT,
 			RecommendationContentBuilder::OFFSET_PARAMETER => self::OFFSET
 		];
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, self::OFFSET);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, NULL, self::OFFSET);
 	}
 
 	public function testSettingUserInteractionTime()
@@ -432,7 +443,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 		];
 		$configuration = (new RecommendationTemplateConfiguration())
 			->setUserInteractionTime($userInteractionTime);
-		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, $configuration);
+		$this->validateRecommendationContent($expected, NULL, NULL, self::COUNT, NULL, NULL, $configuration);
 	}
 
 	/**
@@ -441,11 +452,12 @@ class RecommendationContentBuilderTest extends UnitTestCase
 	 * @param string|NULL|RecommendationEntitiesBatch $items
 	 * @param int $count
 	 * @param string|NULL $templateId
+	 * @param string|NULL $searchQuery
 	 * @param int|NULL $offset
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @return void
 	 */
-	private function validateRecommendationContent(array $expectedContent, $users, $items, $count, $templateId = NULL,
+	private function validateRecommendationContent(array $expectedContent, $users, $items, $count, $templateId = NULL, $searchQuery = NULL,
 												   RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
 		if ($configuration !== NULL) {
@@ -457,7 +469,7 @@ class RecommendationContentBuilderTest extends UnitTestCase
 				$expectedContent[RecommendationContentBuilder::TEMPLATE_PARAMETER]
 			);
 		}
-		$actualContent = RecommendationContentBuilder::construct($users, $items, $count, $templateId, $configuration, $offset);
+		$actualContent = RecommendationContentBuilder::construct($users, $items, $count, $templateId, $searchQuery, $configuration, $offset);
 		Assert::equal($expectedContent, $actualContent);
 	}
 

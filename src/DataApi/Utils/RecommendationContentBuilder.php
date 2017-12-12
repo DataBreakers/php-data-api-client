@@ -9,15 +9,16 @@ use DataBreakers\DataApi\RecommendationTemplateConfiguration;
 class RecommendationContentBuilder
 {
 
-	const USER_ID_PARAMETER = 'userId';
-	const USERS_PARAMETER = 'users';
-	const ITEM_ID_PARAMETER = 'itemId';
-	const ITEMS_PARAMETER = 'items';
-	const COUNT_PARAMETER = 'count';
-	const OFFSET_PARAMETER = 'offset';	
-	const TEMPLATE_PARAMETER = 'template';
-	const TEMPLATE_ID_PARAMETER = 'templateId';
-	const FILTER_PARAMETER = 'filter';
+    const USER_ID_PARAMETER = 'userId';
+    const USERS_PARAMETER = 'users';
+    const ITEM_ID_PARAMETER = 'itemId';
+    const ITEMS_PARAMETER = 'items';
+    const COUNT_PARAMETER = 'count';
+    const OFFSET_PARAMETER = 'offset';
+    const TEMPLATE_PARAMETER = 'template';
+    const TEMPLATE_ID_PARAMETER = 'templateId';
+    const SEARCH_QUERY_PARAMETER = 'searchQuery';
+    const FILTER_PARAMETER = 'filter';
 	const BOOSTER_PARAMETER = 'booster';
 	const USER_WEIGHT_PARAMETER = 'userWeight';
 	const ITEM_WEIGHT_PARAMETER = 'itemWeight';
@@ -41,11 +42,12 @@ class RecommendationContentBuilder
 	 * @param string|NULL|RecommendationEntitiesBatch $items
 	 * @param int $count
 	 * @param string|NULL $templateId
+	 * @param string|NULL $searchQuery
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @param int|NULL $offset
 	 * @return array
 	 */
-	public static function construct($users, $items, $count, $templateId = NULL,									 
+	public static function construct($users, $items, $count, $templateId = NULL, $searchQuery = NULL,
 									 RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
 		$data = [self::COUNT_PARAMETER => $count];
@@ -58,6 +60,9 @@ class RecommendationContentBuilder
 		if ($items !== NULL && is_string($items)) {
 			$data[self::ITEM_ID_PARAMETER] = $items;
 		}
+        if ($searchQuery !== NULL && is_string($searchQuery)) {
+            $data[self::SEARCH_QUERY_PARAMETER] = $searchQuery;
+        }
 		if ($users !== NULL && $users instanceof RecommendationEntitiesBatch) {
 			if (count($users->getEntities()) > 0) {
 				$data[self::USERS_PARAMETER] = self::convertEntitiesBatchToArray(

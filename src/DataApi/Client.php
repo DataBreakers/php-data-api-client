@@ -728,6 +728,7 @@ class Client
 	 * @param string|RecommendationEntitiesBatch|NULL $items item id or items batch
 	 * @param int $count
 	 * @param string|NULL $templateId
+     * @param string|NULL $searchQuery
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @param int|NULL $offset
 	 * @return array
@@ -736,16 +737,17 @@ class Client
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getRecommendations($users, $items, $count, $templateId = NULL,									   	
+	public function getRecommendations($users, $items, $count, $templateId = NULL, $searchQuery = NULL,
 									   RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->recommendationSection->getRecommendations($users, $items, $count, $templateId, $configuration, $offset);
+		return $this->recommendationSection->getRecommendations($users, $items, $count, $templateId, $searchQuery, $configuration, $offset);
 	}
 
 	/**
 	 * @param string $userId
 	 * @param int $count
 	 * @param string|NULL $templateId
+     * @param string|NULL $searchQuery
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @param int|NULL $offset
 	 * @return array
@@ -753,32 +755,34 @@ class Client
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getRecommendationsForUser($userId, $count, $templateId = NULL,
+	public function getRecommendationsForUser($userId, $count, $templateId = NULL, $searchQuery = NULL,
 											  RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->recommendationSection->getRecommendationsForUser($userId, $count, $templateId, $configuration, $offset);
+		return $this->recommendationSection->getRecommendationsForUser($userId, $count, $templateId, $searchQuery, $configuration, $offset);
 	}
 
 	/**
 	 * @param RecommendationEntitiesBatch $users
 	 * @param int $count
 	 * @param string|NULL $templateId
+     * @param string|NULL $searchQuery
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @param int|NULL $offset
 	 * @return array
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getRecommendationsForUsers(RecommendationEntitiesBatch $users, $count, $templateId = NULL,
+	public function getRecommendationsForUsers(RecommendationEntitiesBatch $users, $count, $templateId = NULL, $searchQuery = NULL,
 											   RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->recommendationSection->getRecommendationsForUsers($users, $count, $templateId, $configuration, $offset);
+		return $this->recommendationSection->getRecommendationsForUsers($users, $count, $templateId, $searchQuery, $configuration, $offset);
 	}
 
 	/**
 	 * @param string $itemId
 	 * @param int $count
 	 * @param string|NULL $templateId
+     * @param string|NULL $searchQuery
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @param int|NULL $offset
 	 * @return array
@@ -786,41 +790,43 @@ class Client
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getRecommendationsForItem($itemId, $count, $templateId = NULL,
+	public function getRecommendationsForItem($itemId, $count, $templateId = NULL, $searchQuery = NULL,
 											  RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->recommendationSection->getRecommendationsForItem($itemId, $count, $templateId, $configuration, $offset);
+		return $this->recommendationSection->getRecommendationsForItem($itemId, $count, $templateId, $searchQuery, $configuration, $offset);
 	}
 
 	/**
 	 * @param RecommendationEntitiesBatch $items
 	 * @param int $count
 	 * @param string|NULL $templateId
+     * @param string|NULL $searchQuery
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @param int|NULL $offset
 	 * @return array
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getRecommendationsForItems(RecommendationEntitiesBatch $items, $count, $templateId = NULL,
+	public function getRecommendationsForItems(RecommendationEntitiesBatch $items, $count, $templateId = NULL, $searchQuery = NULL,
 											   RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->recommendationSection->getRecommendationsForItems($items, $count, $templateId, $configuration, $offset);
+		return $this->recommendationSection->getRecommendationsForItems($items, $count, $templateId, $searchQuery, $configuration, $offset);
 	}
 
 	/**
 	 * @param int $count
 	 * @param string|NULL $templateId
+     * @param string|NULL $searchQuery
 	 * @param RecommendationTemplateConfiguration|NULL $configuration
 	 * @param int|NULL $offset
 	 * @return array
 	 * @throws InvalidArgumentException when given count isn't integer value or is zero or negative
 	 * @throws RequestFailedException when request failed for some reason
 	 */
-	public function getGeneralRecommendations($count, $templateId = NULL,
+	public function getGeneralRecommendations($count, $templateId = NULL, $searchQuery = NULL,
 											  RecommendationTemplateConfiguration $configuration = NULL, $offset = NULL)
 	{
-		return $this->recommendationSection->getGeneralRecommendations($count, $templateId, $configuration, $offset);
+		return $this->recommendationSection->getGeneralRecommendations($count, $templateId, $searchQuery, $configuration, $offset);
 	}
 
 	/**
